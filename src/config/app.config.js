@@ -8,7 +8,7 @@ export const APP_CONFIG = {
   appName: 'Fix It First',
   tagline: 'Decide with clarity: Repair, Reuse, Repurpose, or Replace.',
   version: '1.0.0',
-  round: 'Code Variant Build 01 — Problem Statement 01',
+  round: 'Decision Workshop',
   date: '24 Oct 2026',
 
   // Currency & units

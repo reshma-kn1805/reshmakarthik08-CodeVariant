@@ -33,6 +33,10 @@ import { COPY } from '../copy/en.js';
 import { CanvasProvider, DataCard, ActionZone, PRIORITY_WEIGHTS } from '../canvas/index.js';
 import { Breadcrumbs } from '../components/common/Breadcrumbs.jsx';
 import { DonutGauge } from '../components/common/DonutGauge.jsx';
+import { RadarChart } from '../components/verdict/RadarChart.jsx';
+import { BreakEvenChart } from '../components/verdict/BreakEvenChart.jsx';
+import { RepairQuoteSlider } from '../components/verdict/RepairQuoteSlider.jsx';
+import { MatrixHeatmap } from '../components/verdict/MatrixHeatmap.jsx';
 import { tippingPoint } from '../engine/index.js';
 
 const CHECKLIST_STORAGE_KEY = 'fix_it_first_checklist_ticks_v2';
@@ -447,6 +451,52 @@ export function VerdictPage() {
               );
             })}
           </div>
+        </section>
+
+        {/* Phase B: Decision Visuals Bento Grid (Radar Chart, Break-even Line Chart, Sensitivity Slider) */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 animate-bento-2">
+          {/* Radar Chart: 6 Factors comparing Winner vs Runner-up */}
+          <div className="lg:col-span-5 p-5 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between space-y-3">
+            <div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen block">
+                Factor Trade-off Radar
+              </span>
+              <h3 className="font-heading font-extrabold text-base text-ink">
+                #1 {winner?.name} vs #2 {options[1]?.name || 'Runner-up'}
+              </h3>
+              <p className="text-[11px] text-ink-muted leading-relaxed">
+                6-dimensional polygon overlay comparing multi-factor balance across cost, feasibility, and carbon.
+              </p>
+            </div>
+            <RadarChart winner={winner} runnerUp={options[1]} />
+          </div>
+
+          {/* Right Column: Break-Even Projections & Live Repair Quote Sensitivity Slider */}
+          <div className="lg:col-span-7 space-y-4">
+            <div className="p-5 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle">
+              <BreakEvenChart
+                repairCost={Number(assessment.repairCost) || 250}
+                replaceCost={Number(assessment.replaceCost) || 3500}
+                years={5}
+              />
+            </div>
+
+            <RepairQuoteSlider
+              currentRepairCost={Number(assessment.repairCost) || 250}
+              replaceCost={Number(assessment.replaceCost) || 3500}
+              tipPoint={tipPoint}
+              onCostChange={(newCost) => updateAssessment({ repairCost: newCost })}
+            />
+          </div>
+        </section>
+
+        {/* Phase B: The Matrix Heatmap (Options × Factors with Weights & Hover Reasons) */}
+        <section className="animate-bento-3">
+          <MatrixHeatmap
+            options={options}
+            weights={decisionResult.weights || {}}
+            gated={gated}
+          />
         </section>
 
         {/* Action Zones Grid: Commit, Compare, Keep, Discard, Export */}

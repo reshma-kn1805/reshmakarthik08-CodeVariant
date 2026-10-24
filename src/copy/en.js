@@ -45,7 +45,7 @@ export const COPY = {
   },
 
   hero: {
-    eyebrow: 'Code Variant Build 01 • 12-Hour Live Round',
+    eyebrow: 'Workshop Decision Engine • Circular Evaluation',
     title: 'Before you discard or replace, find out if it is truly worth fixing.',
     subtitle: 'Every year, 53 million tons of items are thrown away when a 20-minute fix or simple repurpose would keep them working. Enter any broken item and get a transparent, unbiased comparison across 5 paths.',
     ctaPrimary: 'Start Item Assessment',

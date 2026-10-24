@@ -4,10 +4,12 @@ import { Search, Wrench, Sparkles, ShieldAlert, ArrowRight, Layers, Tag } from '
 import { useAssessment } from '../state/AssessmentContext.jsx';
 import { COPY } from '../copy/en.js';
 import { EstimateBadge } from '../components/common/EstimateBadge.jsx';
+import { Breadcrumbs } from '../components/common/Breadcrumbs.jsx';
+import { MatrixHeatmap } from '../components/verdict/MatrixHeatmap.jsx';
 
 export function CatalogPage() {
   const navigate = useNavigate();
-  const { rules, updateAssessment } = useAssessment();
+  const { rules, updateAssessment, decisionResult } = useAssessment();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -57,16 +59,29 @@ export function CatalogPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+      {/* Breadcrumbs Navigation */}
+      <Breadcrumbs items={[{ label: 'The Workbench', path: '/' }, { label: 'The Decision Matrix' }]} showActions={false} />
+
       {/* Page Header */}
-      <div className="space-y-2">
-        <h1 className="font-heading font-extrabold text-3xl text-ink">
-          {COPY.catalog.title}
+      <div className="space-y-1 pb-2 border-b border-ink-border/50">
+        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen block">
+          Parallel Circular Scoring
+        </span>
+        <h1 className="font-heading font-black text-3xl text-ink">
+          The Decision Matrix
         </h1>
-        <p className="text-sm text-ink-muted">
-          {COPY.catalog.subtitle}
+        <p className="text-xs text-ink-muted">
+          Multi-dimensional breakdown across all 5 circular pathways and 6 weighted decision factors.
         </p>
       </div>
+
+      {/* Phase B: Matrix Heatmap with Option × Factor Weights & Hover Reasons */}
+      <MatrixHeatmap
+        options={decisionResult.options}
+        weights={decisionResult.weights || {}}
+        gated={decisionResult.gated}
+      />
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row gap-3">
