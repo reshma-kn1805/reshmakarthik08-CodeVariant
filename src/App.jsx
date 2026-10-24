@@ -12,6 +12,7 @@ import { VerdictPage } from './pages/VerdictPage.jsx';
 import { HistoryPage } from './pages/HistoryPage.jsx';
 import { ActionPage } from './pages/ActionPage.jsx';
 import { CatalogPage } from './pages/CatalogPage.jsx';
+import { DemoVideoPage } from './pages/DemoVideoPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
                 {/* Extended capability routes */}
                 <Route path="/action" element={<ActionPage />} />
                 <Route path="/explore" element={<CatalogPage />} />
+                <Route path="/demo" element={<DemoVideoPage />} />
 
                 {/* 404 Page */}
                 <Route path="*" element={<NotFoundPage />} />

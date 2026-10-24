@@ -34,6 +34,7 @@ export function Sidebar({ onOpenExamples }) {
     { name: 'Assess an item', path: '/assess', icon: PlusCircle },
     { name: 'History', path: '/history', icon: History, count: sessionCount },
     { name: 'The Matrix', path: '/explore', icon: LayoutGrid },
+    { name: '48s Demo Video', path: '/demo', icon: Sparkles },
   ];
 
   return (

@@ -87,6 +87,15 @@ export function Navbar() {
 
           {/* Right Action Area */}
           <div className="flex items-center gap-2">
+            {/* Demo Video Showcase Link */}
+            <Link
+              to="/demo"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-deepGreen/15 hover:bg-deepGreen/25 text-deepGreen border border-deepGreen/40 font-mono text-[11px] font-bold shadow-xs transition-all"
+              title="Watch 48-second Demo Video Tour"
+            >
+              <span>▶ 48s Demo</span>
+            </Link>
+
             {/* Canvas Mode Chip (Phase 7 requirement) */}
             <button
               type="button"
