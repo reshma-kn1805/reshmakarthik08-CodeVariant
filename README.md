@@ -79,7 +79,24 @@ The home page (`/`) features 3 instant scenarios jumping straight into live scor
 
 ---
 
-## 5. Technology Stack
+## 5. The Canvas Protocol Interaction Layer
+
+Under **The Canvas Protocol**, traditional action buttons for primary operations (Submit, Save, Delete, Assess, Compare, etc.) are strictly prohibited. All primary actions are performed by dragging and dropping data cards into designated **Action Zones**:
+
+- **The Workbench (`/`)**: Drag category cards or preloaded example cards into the **"Start assessment"** zone (`zone-start-assessment`).
+- **The Case File Canvas (`/assess`)**: Replaces the multi-step wizard with a single interactive surface. Drag category, fault, and safety sign cards into slots, tune the Priorities Ladder, and drop the live **Case File** card into **"Run assessment"** (`zone-run-assessment`).
+- **The Decision Table (`/verdict/:id`)**: Drag option cards into **"Commit to this option"** (`zone-commit`), **"Compare"** (`zone-compare`), **"Keep"** (`zone-keep`), **"Discard"** (`zone-discard`), or **"Export summary"** (`zone-export`). If safety red-lines are detected, DIY options are locked with rust badges and bounce back upon drop.
+- **The Archive (`/history`)**: Drag history cards into **"Reopen & Edit"**, **"Compare"**, or **"Discard"**.
+- **Full Accessibility**: Space/Enter lifts a card, arrow keys cycle through valid target zones, Space/Enter drops, and Esc cancels.
+
+### Where Zones and Actions are Configured
+- **Zone Registry**: [`src/config/zones.js`](file:///c:/dev/reshmakarthik08-CodeVariant/src/config/zones.js)
+- **Drop Reducer Logic**: [`src/canvas/actions.js`](file:///c:/dev/reshmakarthik08-CodeVariant/src/canvas/actions.js) (`applyDrop`)
+- **Detailed Protocol Reference**: See [`SURPRISE_CHALLENGE.md`](file:///c:/dev/reshmakarthik08-CodeVariant/SURPRISE_CHALLENGE.md)
+
+---
+
+## 6. Technology Stack
 
 - **Core**: React 18, Vite 6, Plain JavaScript (JSX)
 - **Styling**: Vanilla Tailwind CSS 3.4 with custom design tokens:
