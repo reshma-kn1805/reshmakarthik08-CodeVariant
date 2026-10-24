@@ -105,9 +105,18 @@ Instead of treating drag-and-drop as a decorative novelty or an MVP gimmick, we 
   - `src/canvas/__tests__/no-buttons.test.js` *(Created)*: Strict test asserting zero prohibited action buttons in UI.
   - `src/canvas/__tests__/journey.test.js` *(Created)*: End-to-end user journey tests for all 3 examples, safety gating, compare, and discard/restore.
 
+## 6. How to See It in the Live App
+
+Live URL: **[https://reshma-kn1805.github.io/reshmakarthik08-CodeVariant/](https://reshma-kn1805.github.io/reshmakarthik08-CodeVariant/)**
+
+1. **Workbench (`#/`)**: Notice the amber **Canvas Mode** chip in the header. Drag any of the 8 Category cards (e.g. *Kitchen Appliances*) or 3 Example cards (e.g. *Mixer Grinder*) into the prominent glowing dashed **"Drop card to start assessment"** zone.
+2. **Case File (`#/assess`)**: Drag equipment cards into the Category slot, diagnose fault cards into the What's Wrong zone, drop hazard flags into Safety Signs, and re-arrange the Priorities Ladder. Finally, grab the live **Case File** card and drop it into **"Drop Case File to run assessment"**.
+3. **Decision Table (`#/verdict/:id`)**: View the 6-factor SVG Radar Chart, Break-even Line Chart, and Repair Quote Sensitivity Slider. Drag any option into **Commit**, **Compare** (side-by-side modal), **Keep**, **Discard**, or **Export** (copies summary and opens print dialog).
+4. **History Archive (`#/history`)**: Drag past evaluation cards into **Reopen & Edit**, **Compare 2 Cases**, or **Discard**.
+
 ---
 
-## 6. 60-Second Demo Script for Judges
+## 7. 60-Second Demo Script for Judges
 
 1. **Workbench (00:00 - 00:15)**:
    - Notice the header chip **"Canvas Mode"** — click it to see the 3-line protocol summary.

@@ -13,9 +13,9 @@ export const APP_CONFIG = {
 
   // Currency & units
   currency: {
-    symbol: '$',
-    code: 'USD',
-    label: 'USD ($)',
+    symbol: '₹',
+    code: 'INR',
+    label: 'INR (₹)',
   },
 
   // Scoring weights (Sum = 1.0)

@@ -69,7 +69,23 @@ The engine sweeps the repair cost from current to $3\times$ replacement benchmar
 
 ---
 
-## 4. 1-Click Instant Test Scenarios
+## 4. Visual Interface & Architecture
+
+### The Workbench (`#/`)
+![Fix It First Workbench](./docs/workbench.png)
+*Tactile Parts Bin with 8 equipment categories, 3 instant scenarios, and the glowing Start Assessment action zone.*
+
+### Assess Case File Canvas (`#/assess`)
+![Assess Case File Canvas](./docs/case_file.png)
+*Unified Case File workspace: Category slot, What's Wrong diagnosis, Safety warning signs, and Priorities Ladder.*
+
+### The Decision Table (`#/verdict/:id`)
+![The Decision Table](./docs/decision_table.png)
+*5-way parallel scoring, 6-factor SVG Radar Chart, Break-even Line Chart, Quote Sensitivity Slider, and Commit / Compare / Keep / Discard / Export Action Zones.*
+
+---
+
+## 5. 1-Click Instant Test Scenarios
 
 The home page (`/`) features 3 instant scenarios jumping straight into live scored verdicts:
 
@@ -79,7 +95,7 @@ The home page (`/`) features 3 instant scenarios jumping straight into live scor
 
 ---
 
-## 5. The Canvas Protocol Interaction Layer
+## 6. The Canvas Protocol Interaction Layer
 
 Under **The Canvas Protocol**, traditional action buttons for primary operations (Submit, Save, Delete, Assess, Compare, etc.) are strictly prohibited. All primary actions are performed by dragging and dropping data cards into designated **Action Zones**:
 
@@ -96,21 +112,22 @@ Under **The Canvas Protocol**, traditional action buttons for primary operations
 
 ---
 
-## 6. Technology Stack
+## 7. Technology Stack
 
 - **Core**: React 18, Vite 6, Plain JavaScript (JSX)
-- **Styling**: Vanilla Tailwind CSS 3.4 with custom design tokens:
-  - **Amber (`#E39A2D` / `#E09F3E`)**: Exclusively reserved for primary action CTAs and interactive sliders.
+- **Approved D&D Primitives**: `@dnd-kit/core`, `@dnd-kit/utilities`
+- **Styling**: Vanilla Tailwind CSS 3.4 with Workshop theme tokens:
+  - **Amber (`#E39A2D` / `#E09F3E`)**: Exclusively reserved for primary action CTAs and interactive affordances.
   - **Rust (`#C8553D`)**: Exclusively reserved for safety hazards and the lockout screen.
   - **Deep Green (`#1D4D3F`) & Green (`#2E7D5B`)**: Sustainability indicators and brand hierarchy.
 - **Routing**: `HashRouter` (ensures zero 404s on GitHub Pages browser refresh)
 - **State & Persistence**: React Context + `sessionStorage` (100% private, zero telemetry, persists across page refreshes)
 - **Icons**: `lucide-react`
-- **Testing**: `vitest` unit test suite covering scoring math, edge cases, and safety rules
+- **Testing**: `vitest` unit test suite covering scoring math, edge cases, button ban enforcement, and user journeys (67 tests passing)
 
 ---
 
-## 6. Running Locally
+## 8. Running Locally
 
 ```bash
 # 1. Clone repository
@@ -120,7 +137,7 @@ cd reshmakarthik08-CodeVariant
 # 2. Install dependencies
 npm install
 
-# 3. Run unit tests
+# 3. Run unit tests (67 tests across 5 suites)
 npm test
 
 # 4. Start local development server
@@ -132,8 +149,9 @@ npm run build
 
 ---
 
-## 7. Verification & Deployment
+## 9. Verification & Deployment
 
 - **Continuous Deployment**: Automated via `.github/workflows/deploy.yml` on push to `main` using Node 20.
 - **Live URL**: [https://reshma-kn1805.github.io/reshmakarthik08-CodeVariant/](https://reshma-kn1805.github.io/reshmakarthik08-CodeVariant/)
 - **Architecture Documentation**: See [ARCHITECTURE.md](file:///c:/dev/reshmakarthik08-CodeVariant/ARCHITECTURE.md) for the "Where to Change What" map.
+- **Surprise Challenge Documentation**: See [SURPRISE_CHALLENGE.md](file:///c:/dev/reshmakarthik08-CodeVariant/SURPRISE_CHALLENGE.md) for protocol details and 60s demo script.

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HelpCircle, ArrowLeft, Wrench } from 'lucide-react';
-import { PageContainer, Button, Card } from '../components/ui/index.js';
+import { PageContainer, Card } from '../components/ui/index.js';
 
 export function NotFoundPage() {
   const navigate = useNavigate();
@@ -9,15 +9,15 @@ export function NotFoundPage() {
   return (
     <PageContainer maxWidth="3xl">
       <Card className="text-center py-16 px-6 space-y-6 max-w-lg mx-auto">
-        <div className="w-16 h-16 rounded-full bg-tint text-green flex items-center justify-center mx-auto shadow-xs">
+        <div className="w-16 h-16 rounded-full bg-tint text-deepGreen flex items-center justify-center mx-auto shadow-xs">
           <HelpCircle className="w-8 h-8" />
         </div>
 
         <div className="space-y-2">
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-green">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-deepGreen">
             Error 404
           </span>
-          <h1 className="font-heading font-extrabold text-3xl text-ink">
+          <h1 className="font-heading font-black text-3xl sm:text-4xl text-ink">
             Page Not Found
           </h1>
           <p className="text-sm text-ink-muted leading-relaxed">

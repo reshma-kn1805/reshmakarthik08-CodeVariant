@@ -168,7 +168,7 @@ export function CatalogPage() {
                 <div className="flex justify-between items-center text-xs">
                   <div>
                     <span className="text-ink-faint text-[10px] block">Est. Parts</span>
-                    <span className="font-mono font-bold text-ink">${fault.partsCostEstimate}</span>
+                    <span className="font-mono font-bold text-ink">₹{fault.partsCostEstimate}</span>
                     <EstimateBadge className="text-[9px] px-1 py-0 ml-1" />
                   </div>
                   <div>

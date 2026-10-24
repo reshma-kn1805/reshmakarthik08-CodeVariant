@@ -69,6 +69,17 @@ export function Navbar() {
                   : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
               }`}
             >
+              <span>Verdict</span>
+            </Link>
+
+            <Link
+              to="/explore"
+              className={`hidden sm:flex px-3 py-1.5 rounded-brand transition-colors items-center gap-1.5 ${
+                isActive('/explore')
+                  ? 'bg-tint text-deepGreen font-bold'
+                  : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
+              }`}
+            >
               <Layers className="w-4 h-4 text-green" />
               <span>The Matrix</span>
             </Link>

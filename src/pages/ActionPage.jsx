@@ -18,6 +18,7 @@ import {
 import { useAssessment } from '../state/AssessmentContext.jsx';
 import { COPY } from '../copy/en.js';
 import { EstimateBadge } from '../components/common/EstimateBadge.jsx';
+import { Breadcrumbs } from '../components/common/Breadcrumbs.jsx';
 
 export function ActionPage() {
   const { decisionResult, selectedOption, setSelectedOptionId, rules } = useAssessment();
@@ -44,16 +45,22 @@ export function ActionPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+      {/* Breadcrumbs Navigation */}
+      <Breadcrumbs
+        items={[
+          { label: 'The Workbench', path: '/' },
+          { label: 'Decision Table', path: '/verdict' },
+          { label: 'Action Playbook' },
+        ]}
+        showActions={false}
+      />
+
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-ink-border/60">
         <div>
-          <Link
-            to="/verdict"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-deep hover:text-brand mb-1 transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Return to Decision Matrix</span>
-          </Link>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen block">
+            Step-by-Step Playbook
+          </span>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-ink">
             {COPY.actionPlaybook.title}
           </h1>
@@ -112,7 +119,7 @@ export function ActionPage() {
         <div className="shrink-0 flex items-center gap-3">
           <div className="text-right">
             <span className="text-[11px] text-ink-faint block">Estimated Cost</span>
-            <span className="font-mono font-bold text-lg text-ink">${activeOption.costEstimate}</span>
+            <span className="font-mono font-bold text-lg text-ink">₹{activeOption.costEstimate}</span>
             <EstimateBadge className="text-[9px] px-1 py-0 mt-0.5 block" />
           </div>
         </div>
@@ -146,7 +153,7 @@ export function ActionPage() {
                 <EstimateBadge />
               </div>
               <p className="text-xs text-ink-muted">
-                Estimated replacement parts cost: <strong className="text-ink">${activeOption.costEstimate}</strong>
+                Estimated replacement parts cost: <strong className="text-ink">₹{activeOption.costEstimate}</strong>
               </p>
               <p className="text-[11px] text-ink-faint leading-relaxed">
                 Check reliable replacement part sources: manufacturer official parts portal, iFixit, or local hardware specialist.
