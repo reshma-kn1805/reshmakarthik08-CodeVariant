@@ -4,11 +4,13 @@ import { Wrench, Sparkles, RotateCcw, BookOpen, Layers, CheckCircle2 } from 'luc
 import { COPY } from '../../copy/en.js';
 import { useAssessment } from '../../state/AssessmentContext.jsx';
 import { JudgeDemosModal } from '../modals/JudgeDemosModal.jsx';
+import { WhatChangedModal } from '../modals/WhatChangedModal.jsx';
 
 export function Navbar() {
   const location = useLocation();
   const { assessment, resetAssessment } = useAssessment();
   const [showDemoModal, setShowDemoModal] = useState(false);
+  const [showWhatChanged, setShowWhatChanged] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -74,6 +76,17 @@ export function Navbar() {
 
           {/* Right Action Area */}
           <div className="flex items-center gap-2">
+            {/* Canvas Mode Chip (Phase 7 requirement) */}
+            <button
+              type="button"
+              onClick={() => setShowWhatChanged(true)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber/20 hover:bg-amber/30 text-ink border border-amber/50 font-mono text-[11px] font-bold shadow-xs transition-all cursor-pointer"
+              title="Learn about The Canvas Protocol"
+            >
+              <Sparkles className="w-3 h-3 text-amber fill-amber" />
+              <span>Canvas Mode</span>
+            </button>
+
             {/* Judge Demo Quick Launcher: Essential for 30s judging */}
             <button
               onClick={() => setShowDemoModal(true)}
@@ -101,6 +114,11 @@ export function Navbar() {
       {/* Judge Demos Modal */}
       {showDemoModal && (
         <JudgeDemosModal onClose={() => setShowDemoModal(false)} />
+      )}
+
+      {/* What Changed Modal (Phase 7 requirement) */}
+      {showWhatChanged && (
+        <WhatChangedModal onClose={() => setShowWhatChanged(false)} />
       )}
     </>
   );

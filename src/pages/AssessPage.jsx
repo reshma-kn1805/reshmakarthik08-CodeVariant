@@ -620,6 +620,7 @@ export function AssessPage() {
                 id="zone-run-assessment"
                 label="Drop Case File to run assessment"
                 hint="Drop the Case File above to calculate the 5-way decision matrix, log to history, and view the verdict."
+                mobileSticky={true}
                 className="min-h-[140px] bg-white border-brand shadow-card"
               />
             </div>

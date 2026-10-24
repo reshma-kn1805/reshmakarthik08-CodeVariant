@@ -26,6 +26,16 @@ export const COPY = {
     allRightsReserved: 'Fix It First — Code Variant Build 01 (Problem Statement 01)',
   },
 
+  canvasProtocol: {
+    chipLabel: 'Canvas Mode',
+    whatChangedTitle: 'What Changed: The Canvas Protocol',
+    whatChangedLines: [
+      'Primary action buttons are eliminated; decisions are made strictly by dragging data cards into designated action zones.',
+      'Multi-step wizards are replaced by a single-screen Case File canvas with interactive priority ladders and hazard red-lines.',
+      'Complete accessibility with touch-action drag handles and keyboard cycling across valid drop zones using arrow keys.',
+    ],
+  },
+
   nav: {
     home: 'Home',
     assess: 'New Decision',

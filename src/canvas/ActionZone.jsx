@@ -18,6 +18,7 @@ export function ActionZone({
   accepts,
   activeCard = null,
   isBouncing = false,
+  mobileSticky = false,
   className = '',
   children,
 }) {
@@ -67,7 +68,9 @@ export function ActionZone({
       id={id}
       data-zone-id={id}
       data-accepts={acceptedTypes.join(',')}
-      className={`relative min-h-[96px] rounded-brand-lg border-2 border-dashed p-4 flex flex-col justify-center items-center text-center transition-all duration-200 select-none ${stateClasses} ${className}`}
+      className={`relative min-h-[96px] rounded-brand-lg border-2 border-dashed p-4 flex flex-col justify-center items-center text-center transition-all duration-200 select-none ${
+        mobileSticky ? 'sticky bottom-16 sm:relative sm:bottom-auto z-20 shadow-elevated bg-white/95 backdrop-blur-xs' : ''
+      } ${stateClasses} ${className}`}
     >
       {/* Verb Label & State Indicator */}
       <div className="flex items-center gap-2 mb-1">

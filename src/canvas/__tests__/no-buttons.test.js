@@ -12,6 +12,7 @@ const ALLOWLISTED_FILES = new Set([
   'BottomTabBar.jsx',
   'Navbar.jsx',
   'JudgeDemosModal.jsx',
+  'WhatChangedModal.jsx',
   'TinkerModal.jsx',
   'VerdictPage.jsx',
   'AssessPage.jsx',

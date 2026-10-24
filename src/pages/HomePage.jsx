@@ -163,6 +163,7 @@ export function HomePage() {
             id="zone-start-assessment"
             label="Drop card to start assessment"
             hint="Drag any category card from below to configure diagnosis, or drag an example card for an instant verdict."
+            mobileSticky={true}
             className="min-h-[140px] bg-white border-brand-deep/30 shadow-card"
           />
 
