@@ -223,6 +223,15 @@ export function AssessmentProvider({ children }) {
     setHistory(prev => prev.filter(h => h.id !== id));
   };
 
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      sessionStorage.removeItem(HISTORY_KEY);
+    } catch (e) {
+      // ignore
+    }
+  };
+
   const resetAssessment = () => {
     setAssessment(DEFAULT_ASSESSMENT);
     setCurrentStep(1);
@@ -247,6 +256,7 @@ export function AssessmentProvider({ children }) {
     history,
     getHistoryItem,
     deleteHistoryItem,
+    clearHistory,
     resetAssessment,
     rules: rulesData,
     examples: examplesData,
