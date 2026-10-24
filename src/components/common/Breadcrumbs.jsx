@@ -64,14 +64,14 @@ export function Breadcrumbs({ items = [], showActions = true }) {
             <span>Back to home</span>
           </Link>
 
-          <button
-            type="button"
-            onClick={handleAssessAnother}
+          <Link
+            to="/assess"
+            onClick={resetAssessment}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-brand bg-amber hover:bg-action-amberHover text-ink hover:text-white shadow-amber-glow font-bold transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-amber"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Assess another item</span>
-          </button>
+          </Link>
         </div>
       )}
     </nav>

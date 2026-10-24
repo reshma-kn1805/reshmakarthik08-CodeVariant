@@ -82,13 +82,12 @@ export function JudgeDemosModal({ onClose }) {
                   </div>
                 </div>
 
-                <button
-                  type="button"
+                <span
                   className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-brand text-xs font-semibold bg-action-amber text-ink group-hover:bg-action-amberHover hover:text-white transition-colors shrink-0 shadow-xs"
                 >
                   <span>{COPY.judgeDemosModal.buttonLoad}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                </span>
               </div>
             );
           })}

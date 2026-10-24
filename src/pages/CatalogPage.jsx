@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, Wrench, Sparkles, ShieldAlert, ArrowRight, Layers, Tag } from 'lucide-react';
 import { useAssessment } from '../state/AssessmentContext.jsx';
 import { COPY } from '../copy/en.js';
@@ -166,14 +166,14 @@ export function CatalogPage() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
+                <Link
+                  to="/assess"
                   onClick={() => handleStartWithFault(category.id, item.id, faultId, item.defaultNewPrice)}
                   className="w-full py-2 px-3 rounded-brand text-xs font-bold bg-brand-surfaceAlt hover:bg-brand text-brand-deep hover:text-white transition-colors flex items-center justify-center gap-1.5"
                 >
                   <span>Evaluate this Fault</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                </Link>
               </div>
             </div>
           );

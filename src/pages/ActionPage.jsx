@@ -62,14 +62,13 @@ export function ActionPage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="px-3 py-2 rounded-brand bg-white hover:bg-brand-surfaceAlt text-brand-deep border border-ink-border text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 shrink-0 no-print"
+        <Link
+          to="/verdict"
+          className="px-3 py-2 rounded-brand bg-white hover:bg-brand-surfaceAlt text-brand-deep border border-ink-border text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 shrink-0"
         >
-          <Printer className="w-4 h-4" />
-          <span>Print Action Checklist</span>
-        </button>
+          <Layers className="w-4 h-4 text-amber" />
+          <span>Decision Table (Export via Zone)</span>
+        </Link>
       </div>
 
       {/* Path Selector Tabs (Allows viewing playbook for any of the 5 options) */}

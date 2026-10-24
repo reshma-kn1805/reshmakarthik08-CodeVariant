@@ -26,19 +26,19 @@ export function NotFoundPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <Button
-            variant="primary"
-            onClick={() => navigate('/assess')}
+          <Link
+            to="/assess"
+            className="inline-flex items-center justify-center px-4 py-2.5 rounded-brand bg-brand text-white font-bold text-sm shadow-xs hover:bg-brand-deep transition-colors"
           >
             Assess an item
-          </Button>
+          </Link>
 
-          <Button
-            variant="outline"
-            onClick={() => navigate('/')}
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center px-4 py-2.5 rounded-brand border border-ink-border bg-white text-ink font-semibold text-sm hover:bg-brand-surfaceAlt transition-colors"
           >
             Return Home
-          </Button>
+          </Link>
         </div>
       </Card>
     </PageContainer>

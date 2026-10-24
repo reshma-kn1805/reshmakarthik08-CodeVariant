@@ -218,11 +218,12 @@ export function TinkerModal({ onClose }) {
             </button>
 
             <button
-              type="submit"
+              type="button"
+              onClick={handleApply}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-brand bg-action-amber hover:bg-action-amberHover text-ink hover:text-white font-bold text-xs shadow-xs transition-colors"
             >
               <Check className="w-4 h-4" />
-              <span>{COPY.tinkerModal.applyChanges}</span>
+              <span>Done</span>
             </button>
           </div>
         </form>
