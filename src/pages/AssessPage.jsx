@@ -1,96 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowRight,
-  ArrowLeft,
   Wrench,
-  Check,
   AlertTriangle,
-  Info,
-  Calendar,
-  Sparkles,
   ShieldAlert,
   ShieldCheck,
+  Sparkles,
   Sliders,
   DollarSign,
   Leaf,
+  Clock,
+  Layers,
+  ChevronDown,
+  Info,
+  Check,
+  Flame,
   Zap,
 } from 'lucide-react';
 import { useAssessment } from '../state/AssessmentContext.jsx';
-import { COPY } from '../copy/en.js';
-import { Stepper } from '../components/assessment/Stepper.jsx';
-import { EstimateBadge } from '../components/common/EstimateBadge.jsx';
+import { CanvasProvider, DataCard, ActionZone, applyDrop, PRIORITY_WEIGHTS } from '../canvas/index.js';
+import { Breadcrumbs } from '../components/common/Breadcrumbs.jsx';
+import { ZONES } from '../config/zones.js';
 
 export function AssessPage() {
   const navigate = useNavigate();
   const {
     assessment,
     updateAssessment,
-    currentStep,
-    setCurrentStep,
     rules,
     saveCurrentToHistory,
+    history,
   } = useAssessment();
 
-  const [validationError, setValidationError] = useState('');
-
-  // Scroll to top on step change
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setValidationError('');
-  }, [currentStep]);
+  const [validationPulse, setValidationPulse] = useState(null); // string or null
+  const [missingSlots, setMissingSlots] = useState([]);
 
   const activeCategory =
-    rules.categories.find(c => c.id === assessment.category) || rules.categories[0];
+    rules.categories.find((c) => c.id === assessment.category) || rules.categories[0];
   const categoryFaults = activeCategory?.commonFaults || [];
   const categorySafetyFlags = activeCategory?.safetyFlags || [];
 
-  // Handle category change
-  const handleCategoryChange = (catId) => {
-    const newCat = rules.categories.find(c => c.id === catId);
-    const firstFault = newCat?.commonFaults?.[0];
-    const defaultItem = newCat?.items?.[0];
-
-    updateAssessment({
-      category: catId,
-      itemName: defaultItem?.name || newCat?.name || '',
-      itemId: defaultItem?.id || '',
-      replaceCost: newCat?.replaceCost?.default || 3500,
-      faultId: firstFault?.id || '',
-      repairCost: firstFault?.repairCost?.default || 250,
-      safetyFlags: [],
-    });
-  };
-
-  // Handle fault chip selection
-  const handleFaultSelect = (fault) => {
-    updateAssessment({
-      faultId: fault.id,
-      repairCost: fault.repairCost?.default || assessment.repairCost,
-      severity: typeof fault.severity === 'number' ? Math.min(Math.max(fault.severity, 1), 3) : 2,
-      problemText: assessment.problemText || fault.description || fault.label,
-    });
-    setValidationError('');
-  };
-
-  // Step 3 Safety flag toggle
-  const handleSafetyToggle = (flagId) => {
-    const currentFlags = assessment.safetyFlags || [];
-    let updated;
-    if (flagId === 'none') {
-      updated = [];
-    } else {
-      if (currentFlags.includes(flagId)) {
-        updated = currentFlags.filter(f => f !== flagId);
-      } else {
-        updated = [...currentFlags.filter(f => f !== 'none'), flagId];
-      }
-    }
-    updateAssessment({ safetyFlags: updated });
-  };
-
-  // Check if critical flag is active in step 3
-  const hasCriticalFlag = (assessment.safetyFlags || []).some(f => {
+  // Check if critical flag is present
+  const hasCriticalFlag = (assessment.safetyFlags || []).some((f) => {
     const s = String(f).toLowerCase();
     return (
       s.includes('swollen') ||
@@ -98,616 +49,583 @@ export function AssessPage() {
       s.includes('burning') ||
       s.includes('sparks') ||
       s.includes('exposed_mains') ||
-      s.includes('exposed mains')
+      s.includes('structural')
     );
   });
 
-  // Navigation handlers with validation
-  const handleNext = () => {
-    if (currentStep === 1) {
-      if (!assessment.category) {
-        setValidationError('Please select an item category to continue.');
-        return;
-      }
-      setCurrentStep(2);
-    } else if (currentStep === 2) {
-      if (!assessment.problemText || !assessment.problemText.trim()) {
-        setValidationError('Please describe what is wrong in your own words before proceeding.');
-        return;
-      }
-      setValidationError('');
-      setCurrentStep(3);
-    } else if (currentStep === 3) {
-      setCurrentStep(4);
-    } else if (currentStep === 4) {
-      // Complete flow
+  const priorityRanks = assessment.priorityRanks || ['money', 'waste', 'effort'];
+
+  const PRIORITY_LABELS = {
+    money: { title: 'Save Money', desc: 'Focus on direct pocket savings', icon: DollarSign },
+    waste: { title: 'Reduce Waste', desc: 'Prioritize landfill diversion & circularity', icon: Leaf },
+    effort: { title: 'Save Effort', desc: 'Minimize troubleshooting & physical labor', icon: Clock },
+  };
+
+  const handleDropSuccess = (result) => {
+    setValidationPulse(null);
+    setMissingSlots([]);
+
+    if (result.effects?.isCritical !== undefined) {
+      // Safety drop
+    }
+
+    if (result.state?.assessment) {
+      updateAssessment(result.state.assessment);
+    }
+
+    // Dropped into run-assessment
+    if (result.effects?.caseId) {
       const id = saveCurrentToHistory();
-      navigate(`/verdict/${id}`);
+      navigate(`/verdict/${id || result.effects.caseId}`);
     }
   };
 
-  const handleBack = () => {
-    setValidationError('');
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    } else {
-      navigate('/');
+  const handleCustomDrop = (result) => {
+    if (!result.success) {
+      setValidationPulse(result.effects?.message || 'Incomplete case file');
+      if (result.effects?.missingSlots) {
+        setMissingSlots(result.effects.missingSlots);
+      }
+      setTimeout(() => {
+        setValidationPulse(null);
+        setMissingSlots([]);
+      }, 3000);
+      return;
     }
+    handleDropSuccess(result);
   };
+
+  // Build live summary data for Case File Card
+  const primaryFaultLabel =
+    categoryFaults.find((f) => f.id === assessment.faultId)?.label ||
+    assessment.problemText?.slice(0, 45) ||
+    'Not yet diagnosed';
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
-      {/* 4-Step Progress Bar */}
-      <Stepper currentStep={currentStep} onStepClick={(step) => step < currentStep && setCurrentStep(step)} />
+    <CanvasProvider
+      stateContext={{ assessment, history, gated: hasCriticalFlag }}
+      onDropSuccess={handleCustomDrop}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+        {/* Breadcrumb Navigation */}
+        <Breadcrumbs items={[{ label: 'Workbench', path: '/' }, { label: 'Case File Canvas' }]} showActions={false} />
 
-      {/* Main Assessment Container */}
-      <div className="bg-white rounded-brand-lg border border-ink-border/80 shadow-subtle p-6 sm:p-8 space-y-6">
-        {/* Step Header */}
-        <div className="border-b border-ink-border/50 pb-4 space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-brand-tint text-brand-deep font-mono font-bold text-xs uppercase tracking-wider">
-              Step {currentStep} of 4
-            </span>
-            <span className="text-xs font-semibold text-ink-faint">
-              {COPY.steps[`step${currentStep}`]?.shortTitle}
-            </span>
+        {/* Case File Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-ink-border/60">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen bg-tint px-2 py-0.5 rounded-full border border-green/20">
+                The Canvas Protocol • Case File
+              </span>
+              {hasCriticalFlag && (
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-safety-rust px-2 py-0.5 rounded-full animate-pulse">
+                  Critical Hazard Active
+                </span>
+              )}
+            </div>
+            <h1 className="font-heading font-black text-2xl sm:text-3xl text-ink mt-1">
+              {activeCategory.name} Case File
+            </h1>
+            <p className="text-xs text-ink-muted mt-0.5">
+              Drag cards to diagnose equipment, tune weights on the priorities ladder, and drag the Case File to Run Assessment.
+            </p>
           </div>
-          <h1 className="font-heading font-extrabold text-2xl text-ink">
-            {COPY.steps[`step${currentStep}`]?.title}
-          </h1>
-          <p className="text-xs sm:text-sm text-ink-muted">
-            {COPY.steps[`step${currentStep}`]?.description}
-          </p>
+
+          {/* Validation Notice Banner if bounced */}
+          {validationPulse && (
+            <div className="p-3 rounded-brand bg-safety-rustLight border border-safety-rust/40 text-safety-rust text-xs font-semibold flex items-center gap-2 animate-bounce">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>{validationPulse}</span>
+            </div>
+          )}
         </div>
 
-        {/* Inline Validation Error Banner */}
-        {validationError && (
-          <div
-            role="alert"
-            className="p-3.5 rounded-brand bg-safety-rustLight border border-safety-rust text-safety-rust text-xs sm:text-sm font-semibold flex items-center gap-2.5 animate-fadeIn"
-          >
-            <AlertTriangle className="w-4 h-4 shrink-0 text-safety-rust" />
-            <span>{validationError}</span>
-          </div>
-        )}
+        {/* Canvas Layout: Left Workspace + Right Live Case File Card & Run Zone */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Main Left Canvas Work Area (7 cols) */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Slot 1: Category Slot */}
+            <section
+              className={`p-5 rounded-brand-lg bg-white border transition-all ${
+                missingSlots.includes('Category')
+                  ? 'border-safety-rust ring-2 ring-safety-rust/40'
+                  : 'border-ink-border/80 shadow-subtle'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-tint text-deepGreen font-mono font-bold text-xs flex items-center justify-center">
+                    1
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-ink">
+                    Category Slot
+                  </h3>
+                </div>
+                <span className="text-xs font-mono font-bold text-deepGreen">
+                  Active: {activeCategory.name}
+                </span>
+              </div>
 
-        {/* STEP 1: ITEM DETAILS */}
-        {currentStep === 1 && (
-          <div className="space-y-6">
-            {/* Category Cards */}
-            <div className="space-y-2.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-ink block">
-                Select Item Category
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {rules.categories.map((cat) => {
-                  const isSelected = assessment.category === cat.id;
-                  return (
-                    <button
+              <ActionZone
+                id="zone-category-slot"
+                label={`Drop category card here to switch equipment`}
+                hint={`Currently loaded: ${activeCategory.name}. Drag another category card into this slot to replace.`}
+                className="bg-brand-surfaceAlt/20 min-h-[80px]"
+              />
+
+              {/* Category selector bin */}
+              <div className="mt-4 pt-3 border-t border-ink-border/30">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-ink-muted block mb-2">
+                  Available Equipment Types (Drag to switch):
+                </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {rules.categories.map((cat) => (
+                    <DataCard
                       key={cat.id}
+                      id={cat.id}
+                      type="category"
+                      title={cat.name}
+                      data={cat}
+                      className={cat.id === activeCategory.id ? 'border-amber ring-1 ring-amber/50' : ''}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Slot 2: What's Wrong Zone */}
+            <section
+              className={`p-5 rounded-brand-lg bg-white border transition-all ${
+                missingSlots.includes("What's wrong")
+                  ? 'border-safety-rust ring-2 ring-safety-rust/40'
+                  : 'border-ink-border/80 shadow-subtle'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-tint text-deepGreen font-mono font-bold text-xs flex items-center justify-center">
+                    2
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-ink">
+                    What's Wrong Zone
+                  </h3>
+                </div>
+                <span className="text-[11px] text-ink-muted">
+                  First card dropped is primary fault
+                </span>
+              </div>
+
+              <ActionZone
+                id="zone-faults"
+                label="Drop diagnosed fault cards here"
+                hint="Multi-drop accepted. The first card becomes the primary diagnosis for repair calculations."
+                className="bg-brand-surfaceAlt/20 min-h-[80px]"
+              />
+
+              {/* Category Fault Bin */}
+              <div className="mt-4 pt-3 border-t border-ink-border/30 space-y-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-ink-muted block">
+                  Common Faults for {activeCategory.name} (Drag to add):
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {categoryFaults.map((f) => (
+                    <DataCard
+                      key={f.id}
+                      id={f.id}
+                      type="fault"
+                      title={f.label}
+                      subtitle={`Est. part: ₹${f.repairCost?.default || 250}`}
+                      badge={f.id === assessment.faultId ? 'Primary' : undefined}
+                      data={f}
+                      className={f.id === assessment.faultId ? 'border-amber ring-2 ring-amber/40' : ''}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Free-text description (required) */}
+              <div className="mt-4 pt-3 border-t border-ink-border/30 space-y-1.5">
+                <label
+                  htmlFor="problem-text-input"
+                  className="block text-xs font-semibold text-ink"
+                >
+                  Specific Symptom or Problem Description <span className="text-safety-rust">*</span>
+                </label>
+                <textarea
+                  id="problem-text-input"
+                  rows={2}
+                  value={assessment.problemText}
+                  onChange={(e) => updateAssessment({ problemText: e.target.value })}
+                  placeholder="e.g. Coupler teeth stripped; motor hums but blades don't turn under load..."
+                  className="w-full p-2.5 rounded-brand bg-white border border-ink-border text-xs text-ink placeholder-ink-faint focus:outline-none focus:ring-2 focus:ring-amber shadow-xs"
+                />
+              </div>
+
+              {/* Severity Segmented Selector */}
+              <div className="mt-3 flex items-center justify-between gap-3 pt-3 border-t border-ink-border/30">
+                <span className="text-xs font-semibold text-ink">Failure Severity:</span>
+                <div className="flex rounded-brand bg-brand-surfaceAlt p-0.5 border border-ink-border/60">
+                  {[
+                    { val: 1, label: 'Mild (Functional)' },
+                    { val: 2, label: 'Moderate (Failing)' },
+                    { val: 3, label: 'Severe (Dead)' },
+                  ].map((s) => (
+                    <button
+                      key={s.val}
                       type="button"
-                      onClick={() => handleCategoryChange(cat.id)}
-                      className={`p-3.5 rounded-brand border text-left transition-all cursor-pointer flex flex-col justify-between gap-2 min-h-[92px] ${
-                        isSelected
-                          ? 'border-brand bg-brand-tint text-brand-deep ring-2 ring-brand/30 shadow-xs'
-                          : 'border-ink-border/80 bg-white hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink hover:border-brand/40'
+                      onClick={() => updateAssessment({ severity: s.val })}
+                      className={`px-3 py-1 rounded text-[11px] font-bold transition-all ${
+                        assessment.severity === s.val
+                          ? 'bg-white text-ink shadow-xs'
+                          : 'text-ink-muted hover:text-ink'
                       }`}
                     >
-                      <div className="flex items-center justify-between w-full">
-                        <span className="font-heading font-bold text-xs block truncate">
-                          {cat.name}
-                        </span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-brand shrink-0" />}
-                      </div>
-                      <span className="text-[11px] text-ink-faint leading-tight">
-                        Typical life: ~{cat.expectedLifespanYears} yrs
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Item Name */}
-            <div className="space-y-2">
-              <label htmlFor="item-name-input" className="text-xs font-bold uppercase tracking-wider text-ink block">
-                Item Name or Model
-              </label>
-              <input
-                id="item-name-input"
-                type="text"
-                placeholder="e.g. Mixer Grinder, ThinkPad Laptop, Office Swivel Chair"
-                value={assessment.itemName || ''}
-                onChange={(e) => updateAssessment({ itemName: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-brand border border-ink-border bg-white text-ink text-sm focus:border-brand focus:ring-1 focus:ring-brand outline-none"
-              />
-              {activeCategory?.items?.length > 0 && (
-                <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                  <span className="text-[11px] text-ink-faint">Presets:</span>
-                  {activeCategory.items.map((preset) => (
-                    <button
-                      key={preset.id}
-                      type="button"
-                      onClick={() =>
-                        updateAssessment({
-                          itemName: preset.name,
-                          itemId: preset.id,
-                          replaceCost: preset.defaultNewPrice || assessment.replaceCost,
-                        })
-                      }
-                      className="px-2 py-0.5 rounded-full bg-brand-surfaceAlt hover:bg-brand-tint text-[11px] font-medium text-ink-muted hover:text-brand-deep border border-ink-border/60 transition-colors cursor-pointer"
-                    >
-                      {preset.name}
+                      {s.label}
                     </button>
                   ))}
                 </div>
-              )}
-            </div>
-
-            {/* Age in Years */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label htmlFor="item-age-input" className="text-xs font-bold uppercase tracking-wider text-ink block">
-                  How Old Is This Item? (Years)
-                </label>
-                <span className="font-mono font-bold text-sm text-brand-deep">
-                  {assessment.ageYears} {assessment.ageYears === 1 ? 'year' : 'years'}
-                </span>
               </div>
-              <div className="flex items-center gap-3">
-                <input
-                  id="item-age-slider"
-                  type="range"
-                  min="0"
-                  max={Math.max(15, activeCategory.expectedLifespanYears * 2)}
-                  value={assessment.ageYears}
-                  onChange={(e) =>
-                    updateAssessment({
-                      ageYears: Number(e.target.value),
-                      itemAgeYears: Number(e.target.value),
-                    })
-                  }
-                  className="w-full accent-brand h-2 bg-ink-border/40 rounded-lg cursor-pointer"
-                />
-                <input
-                  id="item-age-input"
-                  type="number"
-                  min="0"
-                  max="50"
-                  value={assessment.ageYears}
-                  onChange={(e) => {
-                    const val = Math.max(0, Number(e.target.value) || 0);
-                    updateAssessment({ ageYears: val, itemAgeYears: val });
-                  }}
-                  className="w-20 px-2.5 py-1.5 rounded-brand border border-ink-border text-center text-sm font-mono font-bold text-ink"
-                />
-              </div>
-              <p className="text-[11px] text-ink-faint">
-                Category baseline lifespan: ~{activeCategory.expectedLifespanYears} years. Remaining life will be calculated automatically.
-              </p>
-            </div>
-          </div>
-        )}
+            </section>
 
-        {/* STEP 2: WHAT'S WRONG */}
-        {currentStep === 2 && (
-          <div className="space-y-6">
-            {/* Fault Chips adapting to Category */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-ink block">
-                Common Symptoms for {activeCategory.name}
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {categoryFaults.map((fault) => {
-                  const isSelected = assessment.faultId === fault.id;
-                  return (
-                    <button
-                      key={fault.id}
-                      type="button"
-                      onClick={() => handleFaultSelect(fault)}
-                      className={`px-3 py-2 rounded-brand text-xs font-medium border transition-all cursor-pointer flex items-center gap-1.5 ${
-                        isSelected
-                          ? 'border-brand bg-brand-tint text-brand-deep font-bold ring-1 ring-brand'
-                          : 'border-ink-border/80 bg-white hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
-                      }`}
-                    >
-                      <span>{fault.label || fault.name}</span>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-brand shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* REQUIRED Free-Text Box */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="problem-text-input" className="text-xs font-bold uppercase tracking-wider text-ink block">
-                  Describe What's Wrong in Your Own Words <span className="text-safety-rust">*</span>
-                </label>
-                <span className="text-[10px] font-mono text-ink-faint">
-                  {assessment.problemText?.trim().length || 0} chars • Required
-                </span>
-              </div>
-              <textarea
-                id="problem-text-input"
-                rows={3}
-                required
-                placeholder="e.g. Motor hums loudly but blades won't turn; or handle snapped when closing."
-                value={assessment.problemText || ''}
-                onChange={(e) => {
-                  updateAssessment({ problemText: e.target.value });
-                  if (e.target.value.trim()) setValidationError('');
-                }}
-                className={`w-full p-3 rounded-brand border text-sm text-ink outline-none transition-all focus-visible:ring-2 focus-visible:ring-amber ${
-                  validationError
-                    ? 'border-safety-rust focus:ring-1 focus:ring-safety-rust bg-safety-rustLight/20'
-                    : 'border-ink-border bg-white focus:border-brand'
-                }`}
-              />
-              <p className="text-[11px] text-ink-faint">
-                Be as specific as possible about sounds, physical cracks, or how the failure occurred.
-              </p>
-            </div>
-
-            {/* 3-Level Severity Selector */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-ink block">
-                How Severe Is the Issue?
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {[
-                  {
-                    level: 1,
-                    title: 'Mild',
-                    desc: 'Still partially works or cosmetic flaw only',
-                  },
-                  {
-                    level: 2,
-                    title: 'Moderate',
-                    desc: 'Core function impaired; incomplete or annoying',
-                  },
-                  {
-                    level: 3,
-                    title: 'High',
-                    desc: 'Completely non-functional or stopped working',
-                  },
-                ].map((s) => {
-                  const isSelected = assessment.severity === s.level;
-                  return (
-                    <button
-                      key={s.level}
-                      type="button"
-                      onClick={() => updateAssessment({ severity: s.level })}
-                      className={`p-3.5 rounded-brand border text-left transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-brand bg-brand-tint text-brand-deep ring-2 ring-brand/30 shadow-xs'
-                          : 'border-ink-border/80 bg-white hover:bg-brand-surfaceAlt text-ink-muted'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-heading font-bold text-xs uppercase">
-                          {s.level}. {s.title}
-                        </span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-brand" />}
-                      </div>
-                      <span className="text-[11px] text-ink-muted block leading-tight">
-                        {s.desc}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3: SAFETY CHECK */}
-        {currentStep === 3 && (
-          <div className="space-y-6">
-            {/* Category-Specific Warning Signs */}
-            <div className="space-y-2.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-ink block">
-                Safety Checklist for {activeCategory.name}
-              </label>
-              <p className="text-xs text-ink-muted">
-                Items with severe electrical, chemical, or battery damage require caution. Check any that apply:
-              </p>
-
-              <div className="space-y-2 pt-1">
-                {categorySafetyFlags.map((flag) => {
-                  const isChecked = (assessment.safetyFlags || []).includes(flag.id);
-                  return (
-                    <button
-                      key={flag.id}
-                      type="button"
-                      onClick={() => handleSafetyToggle(flag.id)}
-                      className={`w-full p-3.5 rounded-brand border text-left transition-all cursor-pointer flex items-start gap-3 ${
-                        isChecked
-                          ? flag.isCritical
-                            ? 'border-safety-rust bg-safety-rustLight/60 text-ink ring-1 ring-safety-rust'
-                            : 'border-brand bg-brand-tint text-brand-deep ring-1 ring-brand'
-                          : 'border-ink-border/80 bg-white hover:bg-brand-surfaceAlt text-ink-muted'
-                      }`}
-                    >
-                      <div
-                        className={`w-4 h-4 rounded mt-0.5 border flex items-center justify-center shrink-0 ${
-                          isChecked
-                            ? flag.isCritical
-                              ? 'bg-safety-rust border-safety-rust text-white'
-                              : 'bg-brand border-brand text-white'
-                            : 'border-ink-border bg-white'
-                        }`}
-                      >
-                        {isChecked && <Check className="w-3 h-3 stroke-[2.5]" />}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-ink block">
-                            {flag.label}
-                          </span>
-                          {flag.isCritical && (
-                            <span className="px-1.5 py-0.2 rounded text-[10px] font-bold uppercase bg-safety-rust text-white">
-                              Critical Risk
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-
-                {/* "None of these" option */}
-                <button
-                  type="button"
-                  onClick={() => handleSafetyToggle('none')}
-                  className={`w-full p-3.5 rounded-brand border text-left transition-all cursor-pointer flex items-center gap-3 ${
-                    (assessment.safetyFlags || []).length === 0
-                      ? 'border-brand bg-brand-surface text-brand-deep font-semibold'
-                      : 'border-ink-border/80 bg-white text-ink-muted hover:bg-brand-surfaceAlt'
-                  }`}
-                >
-                  <div
-                    className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
-                      (assessment.safetyFlags || []).length === 0
-                        ? 'bg-brand border-brand text-white'
-                        : 'border-ink-border bg-white'
+            {/* Slot 3: Safety Signs Zone */}
+            <section
+              className={`p-5 rounded-brand-lg border transition-all ${
+                hasCriticalFlag
+                  ? 'bg-safety-rustLight/20 border-safety-rust/50 shadow-card'
+                  : 'bg-white border-ink-border/80 shadow-subtle'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-5 h-5 rounded-full font-mono font-bold text-xs flex items-center justify-center ${
+                      hasCriticalFlag ? 'bg-safety-rust text-white' : 'bg-tint text-deepGreen'
                     }`}
                   >
-                    {(assessment.safetyFlags || []).length === 0 && <Check className="w-3 h-3 stroke-[2.5]" />}
-                  </div>
-                  <span className="text-xs">
-                    None of these — No smoke, burning odor, battery swelling, or exposed wiring detected.
+                    3
                   </span>
-                </button>
-              </div>
-            </div>
-
-            {/* Instant Rust Warning if Critical Flag is checked */}
-            {hasCriticalFlag && (
-              <div
-                role="alert"
-                className="p-5 rounded-brand bg-safety-rustLight border-2 border-safety-rust text-ink space-y-2 animate-fadeIn"
-              >
-                <div className="flex items-center gap-2 text-safety-rust">
-                  <ShieldAlert className="w-5 h-5 text-safety-rust shrink-0" />
-                  <h3 className="font-heading font-extrabold text-sm uppercase tracking-wide">
-                    Critical Safety Red Line Detected
+                  <h3 className="font-heading font-bold text-base text-ink">
+                    Safety Signs Zone
                   </h3>
                 </div>
-                <p className="text-xs leading-relaxed text-ink font-medium">
-                  One or more acute hazards (such as battery bulge, burning odor, or exposed mains voltage) have been flagged.
-                  For your safety, our decision engine will <strong>gate the verdict against DIY repair</strong> and recommend certified authorized servicing or safe e-waste disposal.
-                </p>
+                {hasCriticalFlag ? (
+                  <span className="text-xs font-mono font-bold text-safety-rust flex items-center gap-1">
+                    <Flame className="w-3.5 h-3.5" />
+                    Rust Hazard Triggered
+                  </span>
+                ) : (
+                  <span className="text-xs font-mono text-ink-muted">Safe condition affirmed</span>
+                )}
               </div>
-            )}
-          </div>
-        )}
 
-        {/* STEP 4: COSTS AND PRIORITIES */}
-        {currentStep === 4 && (
-          <div className="space-y-6">
-            {/* Cost Inputs */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Repair Cost */}
-              <div className="p-4 rounded-brand border border-ink-border bg-brand-surface space-y-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="repair-cost-input" className="text-xs font-bold uppercase tracking-wider text-ink block">
-                    Estimated Repair Cost (₹)
-                  </label>
-                  <EstimateBadge />
+              <ActionZone
+                id="zone-safety"
+                label="Drop safety warning sign cards here"
+                hint="Critical signs lock DIY repair and redirect to professional technicians or recycling."
+                className="bg-brand-surfaceAlt/20 min-h-[80px]"
+              />
+
+              {/* Safety Sign Bin */}
+              <div className="mt-4 pt-3 border-t border-ink-border/30 space-y-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-ink-muted block">
+                  Available Warning Signs (Drag to toggle):
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {/* None of these card */}
+                  <DataCard
+                    id="none"
+                    type="safety"
+                    title="None of these"
+                    subtitle="Item operates without sparks, swelling, or odor"
+                    badge="Safe"
+                    data={{ id: 'none', label: 'None of these' }}
+                    className={
+                      (assessment.safetyFlags || []).length === 0
+                        ? 'border-deepGreen ring-2 ring-deepGreen/30'
+                        : ''
+                    }
+                  />
+
+                  {categorySafetyFlags.map((flag) => {
+                    const isActive = (assessment.safetyFlags || []).includes(flag.id);
+                    return (
+                      <DataCard
+                        key={flag.id}
+                        id={flag.id}
+                        type="safety"
+                        title={flag.label}
+                        subtitle={flag.isCritical ? 'Critical Safety Gate' : 'Precautionary warning'}
+                        badge={flag.isCritical ? 'Hazard' : 'Warning'}
+                        isLocked={false}
+                        data={flag}
+                        className={isActive ? 'border-safety-rust ring-2 ring-safety-rust/50' : ''}
+                      />
+                    );
+                  })}
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-sm font-bold text-ink-muted font-mono">₹</span>
+              </div>
+            </section>
+
+            {/* Slot 4: Priorities Ladder */}
+            <section className="p-5 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-tint text-deepGreen font-mono font-bold text-xs flex items-center justify-center">
+                    4
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-ink">
+                    Priorities Ladder (Ranked 1–3)
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-ink-muted">
+                  Drag priority cards into Slots 1, 2, or 3
+                </span>
+              </div>
+
+              {/* 3 Ranked Slots */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[1, 2, 3].map((rank) => {
+                  const key = priorityRanks[rank - 1] || 'money';
+                  const weight = PRIORITY_WEIGHTS[rank];
+                  const info = PRIORITY_LABELS[key] || PRIORITY_LABELS.money;
+
+                  return (
+                    <div key={rank} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs font-mono">
+                        <span className="font-bold text-ink">Slot #{rank}</span>
+                        <span className="font-bold text-amber px-1.5 py-0.2 rounded bg-amberLight">
+                          {weight}% Weight
+                        </span>
+                      </div>
+
+                      <ActionZone
+                        id={`zone-priority-${rank}`}
+                        label={`#${rank} Priority Slot`}
+                        hint={`Drop priority card here to assign ${weight}% weight`}
+                        className="min-h-[100px] bg-brand-surfaceAlt/25 p-2"
+                      >
+                        <div className="p-2 rounded bg-white border border-ink-border text-left">
+                          <span className="font-bold text-xs text-ink block">{info.title}</span>
+                          <span className="text-[10px] text-ink-muted block">{info.desc}</span>
+                        </div>
+                      </ActionZone>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Draggable Priority Cards */}
+              <div className="pt-2 border-t border-ink-border/30">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-ink-muted block mb-2">
+                  Priority Cards (Drag to swap ladder):
+                </span>
+                <div className="grid grid-cols-3 gap-2">
+                  {['money', 'waste', 'effort'].map((k) => {
+                    const info = PRIORITY_LABELS[k];
+                    return (
+                      <DataCard
+                        key={k}
+                        id={k}
+                        type="priority"
+                        title={info.title}
+                        subtitle={info.desc}
+                        icon={info.icon}
+                        data={{ key: k, label: info.title }}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+
+            {/* Slot 5: Age, Cost Estimates & Condition (Sliders & Inputs) */}
+            <section
+              className={`p-5 rounded-brand-lg bg-white border transition-all ${
+                missingSlots.includes('Cost estimates')
+                  ? 'border-safety-rust ring-2 ring-safety-rust/40'
+                  : 'border-ink-border/80 shadow-subtle'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-tint text-deepGreen font-mono font-bold text-xs flex items-center justify-center">
+                    5
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-ink">
+                    Age & Economic Estimates
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-ink-muted">Inputs & Sliders</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Age Slider */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <label htmlFor="age-years-slider" className="font-semibold text-ink">Item Age:</label>
+                    <span className="font-mono font-bold text-ink">
+                      {assessment.itemAgeYears || assessment.ageYears || 3} years
+                    </span>
+                  </div>
+                  <input
+                    id="age-years-slider"
+                    type="range"
+                    min="0"
+                    max="15"
+                    step="1"
+                    value={assessment.itemAgeYears || assessment.ageYears || 3}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      updateAssessment({ ageYears: val, itemAgeYears: val });
+                    }}
+                    className="w-full accent-deepGreen cursor-pointer"
+                    aria-label="Item Age in years"
+                  />
+                  <div className="flex justify-between text-[10px] text-ink-faint font-mono">
+                    <span>New (0y)</span>
+                    <span>Average ({activeCategory.expectedLifespanYears}y)</span>
+                    <span>Old (15y)</span>
+                  </div>
+                </div>
+
+                {/* Rest of Condition Selector */}
+                <div className="space-y-1">
+                  <span className="block text-xs font-semibold text-ink">Rest-of-Item Condition:</span>
+                  <div className="flex rounded-brand bg-brand-surfaceAlt p-0.5 border border-ink-border/60">
+                    {['good', 'fair', 'poor'].map((cond) => (
+                      <button
+                        key={cond}
+                        type="button"
+                        onClick={() => updateAssessment({ restCondition: cond })}
+                        className={`flex-1 py-1.5 rounded text-[11px] font-bold capitalize transition-all ${
+                          assessment.restCondition === cond
+                            ? 'bg-white text-ink shadow-xs'
+                            : 'text-ink-muted hover:text-ink'
+                        }`}
+                      >
+                        {cond}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Repair Cost Estimate */}
+                <div className="space-y-1">
+                  <label htmlFor="repair-cost-input" className="block text-xs font-semibold text-ink">
+                    Estimated Part / Repair Cost (₹):
+                  </label>
                   <input
                     id="repair-cost-input"
                     type="number"
                     min="0"
                     step="50"
                     value={assessment.repairCost}
-                    onChange={(e) => updateAssessment({ repairCost: Math.max(0, Number(e.target.value) || 0) })}
-                    className="w-full pl-8 pr-3 py-2 rounded-brand border border-ink-border bg-white font-mono font-bold text-ink text-base focus:border-brand focus:ring-1 focus:ring-brand outline-none"
+                    onChange={(e) => updateAssessment({ repairCost: Number(e.target.value) })}
+                    className="w-full p-2 rounded-brand bg-white border border-ink-border text-xs font-mono text-ink focus:outline-none focus:ring-2 focus:ring-amber"
                   />
                 </div>
-                <span className="text-[11px] text-ink-faint block">
-                  Prefilled from rule database; edit if you have a local quote.
-                </span>
-              </div>
 
-              {/* Replacement Cost */}
-              <div className="p-4 rounded-brand border border-ink-border bg-brand-surface space-y-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="replace-cost-input" className="text-xs font-bold uppercase tracking-wider text-ink block">
-                    New Replacement Cost (₹)
+                {/* Replacement Cost Estimate */}
+                <div className="space-y-1">
+                  <label htmlFor="replace-cost-input" className="block text-xs font-semibold text-ink">
+                    Cost of Brand-New Replacement (₹):
                   </label>
-                  <EstimateBadge />
-                </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-sm font-bold text-ink-muted font-mono">₹</span>
                   <input
                     id="replace-cost-input"
                     type="number"
                     min="100"
                     step="100"
                     value={assessment.replaceCost}
-                    onChange={(e) => updateAssessment({ replaceCost: Math.max(1, Number(e.target.value) || 1) })}
-                    className="w-full pl-8 pr-3 py-2 rounded-brand border border-ink-border bg-white font-mono font-bold text-ink text-base focus:border-brand focus:ring-1 focus:ring-brand outline-none"
+                    onChange={(e) => updateAssessment({ replaceCost: Number(e.target.value) })}
+                    className="w-full p-2 rounded-brand bg-white border border-ink-border text-xs font-mono text-ink focus:outline-none focus:ring-2 focus:ring-amber"
                   />
                 </div>
-                <span className="text-[11px] text-ink-faint block">
-                  Price to buy a comparable brand-new replacement today.
+              </div>
+            </section>
+          </div>
+
+          {/* Right Sticky Area: The Draggable Case File Card & Run Assessment Zone (5 cols) */}
+          <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+            {/* Live Case File Card (Draggable) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber">
+                  Live Case File • Grab Handle to Run
+                </span>
+                <span className="text-[10px] font-mono text-ink-muted">
+                  Drag ↓ into Run Zone
                 </span>
               </div>
-            </div>
 
-            {/* Rest-of-Item Condition */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-ink block">
-                Rest of Item Physical Condition (Excluding the Fault)
-              </label>
-              <div className="grid grid-cols-3 gap-2.5">
-                {[
-                  { id: 'good', label: 'Good', desc: 'Clean, well-cared for' },
-                  { id: 'fair', label: 'Fair', desc: 'Visible scuffs & scratches' },
-                  { id: 'poor', label: 'Poor', desc: 'Heavily worn or damaged' },
-                ].map((c) => {
-                  const isSelected = assessment.restCondition === c.id;
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => updateAssessment({ restCondition: c.id, itemCondition: c.id })}
-                      className={`p-3 rounded-brand border text-left transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-brand bg-brand-tint text-brand-deep font-bold ring-1 ring-brand'
-                          : 'border-ink-border bg-white text-ink-muted hover:bg-brand-surfaceAlt'
+              <DataCard
+                id="active-case-file"
+                type="case-file"
+                title={`${activeCategory.name} Case File`}
+                subtitle={primaryFaultLabel}
+                badge={hasCriticalFlag ? 'Hazard Alert' : 'Diagnosed'}
+                icon={hasCriticalFlag ? ShieldAlert : ShieldCheck}
+                className={`border-2 ${
+                  hasCriticalFlag
+                    ? 'border-safety-rust bg-safety-rustLight/20 shadow-card'
+                    : 'border-brand-deep/50 shadow-card'
+                }`}
+                data={assessment}
+              >
+                <div className="space-y-2 text-[11px] pt-1">
+                  <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                    <span className="text-ink-muted">Equipment:</span>
+                    <span className="font-bold text-ink">{activeCategory.name}</span>
+                  </div>
+
+                  <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                    <span className="text-ink-muted">Primary Fault:</span>
+                    <span className="font-bold text-ink truncate max-w-[170px]">{primaryFaultLabel}</span>
+                  </div>
+
+                  <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                    <span className="text-ink-muted">Safety Status:</span>
+                    <span
+                      className={`font-bold ${
+                        hasCriticalFlag ? 'text-safety-rust' : 'text-deepGreen'
                       }`}
                     >
-                      <span className="font-heading font-bold text-xs block mb-0.5">{c.label}</span>
-                      <span className="text-[10px] text-ink-faint leading-tight block">{c.desc}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                      {hasCriticalFlag ? 'Critical Gate Triggered' : 'Operating Safely'}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                    <span className="text-ink-muted">Priority Ladder:</span>
+                    <span className="font-mono font-bold text-amber">
+                      #{priorityRanks[0]} &gt; #{priorityRanks[1]} &gt; #{priorityRanks[2]}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                    <span className="text-ink-muted">Est. Economics:</span>
+                    <span className="font-mono font-bold text-ink">
+                      Fix ₹{assessment.repairCost} vs New ₹{assessment.replaceCost}
+                    </span>
+                  </div>
+
+                  <p className="text-[10px] text-ink-faint italic pt-1 text-center">
+                    Grip the handle top-right and drop into the zone below to run the decision engine.
+                  </p>
+                </div>
+              </DataCard>
             </div>
 
-            {/* Three Priority Sliders */}
-            <div className="space-y-4 pt-2 border-t border-ink-border/50">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink">
-                  <Sliders className="w-3.5 h-3.5 text-brand" />
-                  <span>Your Priorities (0–100)</span>
-                </div>
-                <p className="text-[11px] text-ink-muted">
-                  The decision engine automatically shifts factor weights to reflect your personal balance:
-                </p>
-              </div>
-
-              {/* Slider 1: Save Money */}
-              <div className="p-3.5 rounded-brand bg-white border border-ink-border/70 space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-ink flex items-center gap-1.5">
-                    <span className="font-mono text-brand font-bold">₹</span> Save Money
-                  </span>
-                  <span className="font-mono font-bold text-brand-deep">
-                    {assessment.priorities?.money ?? 50}/100
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={assessment.priorities?.money ?? 50}
-                  onChange={(e) =>
-                    updateAssessment({
-                      priorities: { ...assessment.priorities, money: Number(e.target.value) },
-                    })
-                  }
-                  className="w-full accent-brand h-2 bg-ink-border/30 rounded cursor-pointer"
-                />
-                <span className="text-[10px] text-ink-faint block">
-                  Higher priority puts heavier weight on lowest out-of-pocket spend.
-                </span>
-              </div>
-
-              {/* Slider 2: Reduce Waste */}
-              <div className="p-3.5 rounded-brand bg-white border border-ink-border/70 space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-ink flex items-center gap-1.5">
-                    <Leaf className="w-3.5 h-3.5 text-brand" /> Reduce Waste
-                  </span>
-                  <span className="font-mono font-bold text-brand-deep">
-                    {assessment.priorities?.waste ?? 50}/100
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={assessment.priorities?.waste ?? 50}
-                  onChange={(e) =>
-                    updateAssessment({
-                      priorities: { ...assessment.priorities, waste: Number(e.target.value) },
-                    })
-                  }
-                  className="w-full accent-brand h-2 bg-ink-border/30 rounded cursor-pointer"
-                />
-                <span className="text-[10px] text-ink-faint block">
-                  Higher priority emphasizes embodied carbon avoidance and extending remaining life.
-                </span>
-              </div>
-
-              {/* Slider 3: Save Effort */}
-              <div className="p-3.5 rounded-brand bg-white border border-ink-border/70 space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-ink flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-action-amberHover" /> Save Effort
-                  </span>
-                  <span className="font-mono font-bold text-brand-deep">
-                    {assessment.priorities?.effort ?? 50}/100
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={assessment.priorities?.effort ?? 50}
-                  onChange={(e) =>
-                    updateAssessment({
-                      priorities: { ...assessment.priorities, effort: Number(e.target.value) },
-                    })
-                  }
-                  className="w-full accent-brand h-2 bg-ink-border/30 rounded cursor-pointer"
-                />
-                <span className="text-[10px] text-ink-faint block">
-                  Higher priority favors convenient paths (buy new or simple discard) over complex repairs.
-                </span>
-              </div>
+            {/* Action Zone: Large "Run Assessment" Target */}
+            <div className="space-y-2">
+              <ActionZone
+                id="zone-run-assessment"
+                label="Drop Case File to run assessment"
+                hint="Drop the Case File above to calculate the 5-way decision matrix, log to history, and view the verdict."
+                className="min-h-[140px] bg-white border-brand shadow-card"
+              />
             </div>
           </div>
-        )}
-
-        {/* Action Controls */}
-        <div className="flex items-center justify-between pt-4 border-t border-ink-border/60">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="px-4 py-2.5 rounded-brand text-xs font-semibold text-ink-muted hover:text-ink hover:bg-brand-surfaceAlt border border-ink-border/80 transition-all cursor-pointer flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-amber"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>{currentStep === 1 ? 'Cancel' : 'Back'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            className="px-6 py-2.5 rounded-brand font-bold text-xs bg-amber hover:bg-action-amberHover text-ink hover:text-white shadow-amber-glow transition-all flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-amber"
-          >
-            <span>{currentStep === 4 ? 'Calculate Decision Matrix' : 'Next Step'}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
-    </div>
+    </CanvasProvider>
   );
 }
