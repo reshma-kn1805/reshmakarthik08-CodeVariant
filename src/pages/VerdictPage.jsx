@@ -204,7 +204,7 @@ export function VerdictPage() {
             <button
               type="button"
               onClick={() => navigate('/assess')}
-              className="w-full sm:w-auto px-6 py-3 rounded-brand font-bold text-xs bg-brand text-white hover:bg-brand-deep transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+              className="w-full sm:w-auto px-6 py-3 rounded-brand font-bold text-xs bg-amber hover:bg-action-amberHover text-ink hover:text-white shadow-amber-glow transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Start an Alternate Assessment</span>
               <ArrowRight className="w-4 h-4" />

@@ -76,7 +76,7 @@ export function HistoryPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-ink-border/60">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase text-brand-leaf tracking-wider">
+              <span className="text-xs font-mono font-bold uppercase text-deepGreen tracking-wider">
                 Session Log
               </span>
               <Badge variant="green" size="sm">
@@ -113,7 +113,7 @@ export function HistoryPage() {
                     setSelectedIds([]);
                   }
                 }}
-                className="inline-flex items-center gap-1.5 text-xs text-ink-faint hover:text-brand-rust px-2.5 py-1.5 rounded border border-ink-border/60 hover:border-brand-rust/40 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs text-ink-faint hover:text-rust px-2.5 py-1.5 rounded border border-ink-border/60 hover:border-rust/40 transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Clear</span>
@@ -124,9 +124,9 @@ export function HistoryPage() {
 
         {/* Comparison floating banner if exactly 2 are selected */}
         {selectedIds.length > 0 && (
-          <div className="p-3.5 rounded-brand-lg bg-brand-surface border-2 border-brand-amber/50 shadow-subtle flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="p-3.5 rounded-brand-lg bg-brand-surface border-2 border-amber/50 shadow-subtle flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded bg-brand-amber/10 text-brand-amber">
+              <div className="p-2 rounded bg-action-amberLight text-action-amberHover">
                 <Scale className="w-4 h-4" />
               </div>
               <div className="text-xs">
@@ -148,7 +148,7 @@ export function HistoryPage() {
                 <button
                   type="button"
                   onClick={() => setShowCompareModal(true)}
-                  className="px-3 py-1.5 rounded-brand bg-brand-amber text-white text-xs font-bold hover:bg-brand-amber/90 transition-all flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1.5 rounded-brand bg-amber text-ink hover:text-white text-xs font-bold hover:bg-action-amberHover transition-all flex items-center gap-1 cursor-pointer shadow-amber-glow"
                 >
                   <ArrowLeftRight className="w-3.5 h-3.5" />
                   <span>View Side-by-Side</span>
@@ -168,7 +168,7 @@ export function HistoryPage() {
         {/* Empty state */}
         {history.length === 0 ? (
           <Card className="text-center py-12 px-4 space-y-5">
-            <div className="w-14 h-14 rounded-full bg-brand-surface text-brand-leaf border border-ink-border flex items-center justify-center mx-auto">
+            <div className="w-14 h-14 rounded-full bg-brand-surface text-green border border-ink-border flex items-center justify-center mx-auto">
               <History className="w-7 h-7" />
             </div>
             <div className="space-y-1.5 max-w-md mx-auto">
@@ -207,7 +207,7 @@ export function HistoryPage() {
                       const id = loadExample(ex.id);
                       navigate(`/verdict/${id}`);
                     }}
-                    className="p-2.5 rounded-brand bg-white border border-ink-border hover:border-brand-amber text-xs hover:shadow-subtle transition-all cursor-pointer"
+                    className="p-2.5 rounded-brand bg-white border border-ink-border hover:border-amber text-xs hover:shadow-subtle transition-all cursor-pointer"
                   >
                     <span className="font-bold text-ink block truncate">{ex.title}</span>
                     <span className="text-[11px] text-ink-muted block truncate mt-0.5">
@@ -230,7 +230,7 @@ export function HistoryPage() {
                   key={item.id}
                   className={`p-4 rounded-brand-lg bg-white border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                     isSelected
-                      ? 'border-brand-amber ring-2 ring-brand-amber/20 bg-amber-50/20'
+                      ? 'border-amber ring-2 ring-amber/20 bg-action-amberLight/30'
                       : 'border-ink-border hover:border-ink-muted'
                   }`}
                 >
@@ -242,8 +242,8 @@ export function HistoryPage() {
                       title={isSelected ? 'Remove from comparison' : 'Select for side-by-side comparison'}
                       className={`mt-1 w-5 h-5 rounded border flex items-center justify-center transition-all cursor-pointer shrink-0 ${
                         isSelected
-                          ? 'bg-brand-amber border-brand-amber text-white'
-                          : 'border-ink-border/80 hover:border-brand-amber text-transparent'
+                          ? 'bg-amber border-amber text-ink'
+                          : 'border-ink-border/80 hover:border-amber text-transparent'
                       }`}
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
@@ -257,8 +257,8 @@ export function HistoryPage() {
                         <span>•</span>
                         <span>{item.dateStr || 'Recent'}</span>
                         {isGated && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-brand-rust bg-brand-rust/10 px-1.5 py-0.5 rounded">
-                            <ShieldAlert className="w-3 h-3" />
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rust bg-safety-rustLight px-1.5 py-0.5 rounded border border-safety-rustBorder">
+                            <ShieldAlert className="w-3 h-3 text-rust" />
                             Gated Hazard
                           </span>
                         )}
@@ -282,7 +282,7 @@ export function HistoryPage() {
                       </span>
                       <span
                         className={`text-xs font-bold block ${
-                          isGated ? 'text-brand-rust' : 'text-brand-leaf'
+                          isGated ? 'text-rust' : 'text-deepGreen'
                         }`}
                       >
                         {item.winner}
@@ -299,7 +299,7 @@ export function HistoryPage() {
                       <span className="font-mono text-sm font-bold text-ink">
                         ₹{(item.savings || 0).toLocaleString()}
                       </span>
-                      <span className="text-[10px] text-brand-leaf block font-medium">
+                      <span className="text-[10px] text-green block font-medium">
                         +{item.carbon || 0} kg CO₂
                       </span>
                     </div>
@@ -310,7 +310,7 @@ export function HistoryPage() {
                     <button
                       type="button"
                       onClick={() => handleOpenVerdict(item.id)}
-                      className="px-3 py-1.5 rounded-brand bg-brand-surface hover:bg-brand-amber hover:text-white border border-ink-border/80 text-ink text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                      className="px-3 py-1.5 rounded-brand bg-amber hover:bg-action-amberHover text-ink hover:text-white shadow-xs text-xs font-bold transition-all inline-flex items-center gap-1.5 cursor-pointer"
                       title="View full decision verdict"
                     >
                       <span>Verdict</span>
@@ -320,7 +320,7 @@ export function HistoryPage() {
                     <button
                       type="button"
                       onClick={() => handleEditAndRerun(item)}
-                      className="p-1.5 rounded hover:bg-brand-surface text-ink-muted hover:text-ink transition-colors cursor-pointer"
+                      className="p-1.5 rounded hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink transition-colors cursor-pointer"
                       title="Edit parameters and re-evaluate"
                     >
                       <Edit3 className="w-4 h-4" />
@@ -329,7 +329,7 @@ export function HistoryPage() {
                     <button
                       type="button"
                       onClick={() => deleteHistoryItem(item.id)}
-                      className="p-1.5 rounded hover:bg-brand-rust/10 text-ink-faint hover:text-brand-rust transition-colors cursor-pointer"
+                      className="p-1.5 rounded hover:bg-safety-rustLight text-ink-faint hover:text-rust transition-colors cursor-pointer"
                       title="Delete from session history"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -347,7 +347,7 @@ export function HistoryPage() {
             <div className="bg-white rounded-brand-lg border border-ink-border max-w-4xl w-full p-6 shadow-xl space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between pb-3 border-b border-ink-border">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded bg-brand-amber/10 text-brand-amber">
+                  <div className="p-2 rounded bg-action-amberLight text-action-amberHover">
                     <ArrowLeftRight className="w-5 h-5" />
                   </div>
                   <div>
@@ -362,7 +362,7 @@ export function HistoryPage() {
                 <button
                   type="button"
                   onClick={() => setShowCompareModal(false)}
-                  className="p-1.5 rounded hover:bg-brand-surface text-ink-muted hover:text-ink transition-colors cursor-pointer"
+                  className="p-1.5 rounded hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -373,7 +373,7 @@ export function HistoryPage() {
                 {/* Item A */}
                 <div className="p-4 rounded-brand-lg bg-brand-surface/40 border border-ink-border/80 space-y-4">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-brand-leaf tracking-wider block">
+                    <span className="text-[10px] font-mono uppercase text-green tracking-wider block">
                       Item A • {compareItemA.category}
                     </span>
                     <h3 className="font-heading font-bold text-lg text-ink">
@@ -385,7 +385,7 @@ export function HistoryPage() {
                   <div className="p-3 rounded bg-white border border-ink-border space-y-2">
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-ink-muted">Top Verdict:</span>
-                      <span className="font-bold text-brand-leaf">{compareItemA.winner}</span>
+                      <span className="font-bold text-deepGreen">{compareItemA.winner}</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-ink-muted">Overall Score:</span>
@@ -399,7 +399,7 @@ export function HistoryPage() {
                     </div>
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-ink-muted">Net Purchase Savings:</span>
-                      <span className="font-mono font-bold text-brand-leaf">
+                      <span className="font-mono font-bold text-green">
                         ₹{(compareItemA.savings || 0).toLocaleString()}
                       </span>
                     </div>
@@ -439,7 +439,7 @@ export function HistoryPage() {
                 {/* Item B */}
                 <div className="p-4 rounded-brand-lg bg-brand-surface/40 border border-ink-border/80 space-y-4">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-brand-leaf tracking-wider block">
+                    <span className="text-[10px] font-mono uppercase text-green tracking-wider block">
                       Item B • {compareItemB.category}
                     </span>
                     <h3 className="font-heading font-bold text-lg text-ink">
@@ -451,7 +451,7 @@ export function HistoryPage() {
                   <div className="p-3 rounded bg-white border border-ink-border space-y-2">
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-ink-muted">Top Verdict:</span>
-                      <span className="font-bold text-brand-leaf">{compareItemB.winner}</span>
+                      <span className="font-bold text-deepGreen">{compareItemB.winner}</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-ink-muted">Overall Score:</span>
@@ -465,7 +465,7 @@ export function HistoryPage() {
                     </div>
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-ink-muted">Net Purchase Savings:</span>
-                      <span className="font-mono font-bold text-brand-leaf">
+                      <span className="font-mono font-bold text-green">
                         ₹{(compareItemB.savings || 0).toLocaleString()}
                       </span>
                     </div>

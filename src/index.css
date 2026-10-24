@@ -27,8 +27,30 @@
 
 /* Accessible focus styling */
 :focus-visible {
-  outline: 2px solid #2E7D5B;
+  outline: 2px solid #E39A2D;
   outline-offset: 2px;
+}
+
+/* Custom Range Input styling - Amber action thumb */
+input[type="range"] {
+  accent-color: #E39A2D;
+}
+input[type="range"]::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #E39A2D;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #C9831F;
+}
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(227, 154, 45, 0.4);
 }
 
 /* Custom scrollbars */

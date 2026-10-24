@@ -325,7 +325,9 @@ export function AssessPage() {
                 <label htmlFor="problem-text-input" className="text-xs font-bold uppercase tracking-wider text-ink block">
                   Describe What's Wrong in Your Own Words <span className="text-safety-rust">*</span>
                 </label>
-                <span className="text-[10px] uppercase font-mono text-ink-faint">Required</span>
+                <span className="text-[10px] font-mono text-ink-faint">
+                  {assessment.problemText?.trim().length || 0} chars • Required
+                </span>
               </div>
               <textarea
                 id="problem-text-input"
@@ -337,10 +339,10 @@ export function AssessPage() {
                   updateAssessment({ problemText: e.target.value });
                   if (e.target.value.trim()) setValidationError('');
                 }}
-                className={`w-full p-3 rounded-brand border text-sm text-ink outline-none transition-all ${
+                className={`w-full p-3 rounded-brand border text-sm text-ink outline-none transition-all focus-visible:ring-2 focus-visible:ring-amber ${
                   validationError
                     ? 'border-safety-rust focus:ring-1 focus:ring-safety-rust bg-safety-rustLight/20'
-                    : 'border-ink-border bg-white focus:border-brand focus:ring-1 focus:ring-brand'
+                    : 'border-ink-border bg-white focus:border-brand'
                 }`}
               />
               <p className="text-[11px] text-ink-faint">
@@ -690,7 +692,7 @@ export function AssessPage() {
           <button
             type="button"
             onClick={handleBack}
-            className="px-4 py-2.5 rounded-brand text-xs font-semibold text-ink-muted hover:text-ink hover:bg-brand-surfaceAlt border border-ink-border/80 transition-all cursor-pointer flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-brand text-xs font-semibold text-ink-muted hover:text-ink hover:bg-brand-surfaceAlt border border-ink-border/80 transition-all cursor-pointer flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-amber"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{currentStep === 1 ? 'Cancel' : 'Back'}</span>
@@ -699,7 +701,7 @@ export function AssessPage() {
           <button
             type="button"
             onClick={handleNext}
-            className="px-6 py-2.5 rounded-brand font-bold text-xs bg-brand hover:bg-brand-deep text-white shadow-xs transition-all flex items-center gap-2 cursor-pointer"
+            className="px-6 py-2.5 rounded-brand font-bold text-xs bg-amber hover:bg-action-amberHover text-ink hover:text-white shadow-amber-glow transition-all flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-amber"
           >
             <span>{currentStep === 4 ? 'Calculate Decision Matrix' : 'Next Step'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
