@@ -1,312 +1,318 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowRight,
   Sparkles,
-  ShieldCheck,
-  Sliders,
-  Leaf,
-  Wrench,
-  Share2,
-  Layers,
+  Search,
+  Coffee,
+  Smartphone,
+  Zap,
+  Headphones,
+  Wind,
+  Armchair,
+  Bike,
   ShoppingBag,
-  Recycle,
-  CheckCircle2,
-  Clock,
+  Wrench,
   AlertTriangle,
-  Compass,
+  RotateCcw,
+  CheckCircle2,
+  Layers,
 } from 'lucide-react';
 import { COPY } from '../copy/en.js';
 import { useAssessment } from '../state/AssessmentContext.jsx';
-import { JudgeDemosModal } from '../components/modals/JudgeDemosModal.jsx';
-import { Button, Card, Badge, PageContainer } from '../components/ui/index.js';
+import { CanvasProvider, DataCard, ActionZone } from '../canvas/index.js';
+import { Breadcrumbs } from '../components/common/Breadcrumbs.jsx';
+import { DonutGauge } from '../components/common/DonutGauge.jsx';
 import examplesData from '../data/examples.json';
+
+const CATEGORY_ICONS = {
+  kitchen_appliance: Coffee,
+  phone_or_laptop: Smartphone,
+  charger_or_cable: Zap,
+  audio_device: Headphones,
+  fan_or_cooler: Wind,
+  furniture: Armchair,
+  bicycle: Bike,
+  bag_or_footwear: ShoppingBag,
+};
 
 export function HomePage() {
   const navigate = useNavigate();
-  const { rules, loadDemo, loadExample } = useAssessment();
-  const [showDemoModal, setShowDemoModal] = useState(false);
+  const { rules, loadExample, updateAssessment, assessment, history } = useAssessment();
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleStartFresh = () => {
-    navigate('/assess');
+  // Ghost card disappears once user successfully drops a card
+  const [hasSucceeded, setHasSucceeded] = useState(() => {
+    try {
+      return localStorage.getItem('fix_it_first_has_dropped') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const categories = rules.categories || [];
+  const query = searchQuery.trim().toLowerCase();
+
+  // Filter 3 target example cards
+  const targetExampleIds = ['mixer_grinder_spin', 'swollen_battery_phone', 'chair_expensive_repair'];
+  const threeExamples = useMemo(() => {
+    return examplesData.filter((e) => targetExampleIds.includes(e.id));
+  }, []);
+
+  const handleDropSuccess = (result) => {
+    try {
+      localStorage.setItem('fix_it_first_has_dropped', 'true');
+    } catch (e) {
+      // ignore
+    }
+    setHasSucceeded(true);
+
+    if (result.effects?.loadExampleId) {
+      loadExample(result.effects.loadExampleId);
+    }
+    if (result.effects?.navigate) {
+      if (result.state?.assessment) {
+        updateAssessment(result.state.assessment);
+      }
+      navigate(result.effects.navigate);
+    }
   };
 
-  const handleRunDemo = (demoId) => {
-    loadDemo(demoId);
-    navigate(`/verdict/${demoId}`);
+  // Check matching status for live highlight
+  const isCategoryMatch = (cat) => {
+    if (!query) return true;
+    return (
+      cat.name?.toLowerCase().includes(query) ||
+      cat.description?.toLowerCase().includes(query) ||
+      cat.id?.toLowerCase().includes(query)
+    );
   };
 
-  const handleRunExample = (exampleId) => {
-    const id = loadExample(exampleId);
-    navigate(`/verdict/${id}`);
+  const isExampleMatch = (ex) => {
+    if (!query) return true;
+    return (
+      ex.title?.toLowerCase().includes(query) ||
+      ex.subtitle?.toLowerCase().includes(query) ||
+      ex.highlight?.toLowerCase().includes(query)
+    );
   };
+
+  const sessionSavings = history.reduce((acc, h) => acc + (h.savings || 0), 0);
+  const sessionCarbon = history.reduce((acc, h) => acc + (h.carbon || 0), 0);
 
   return (
-    <div className="space-y-16 py-8 sm:py-12">
-      {/* Hero Section */}
-      <section className="text-center max-w-4xl mx-auto px-4 space-y-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-tint border border-green/20 text-deepGreen text-xs font-semibold tracking-wide">
-          <Sparkles className="w-3.5 h-3.5 text-amber fill-amber" />
-          <span>Code Variant Build 01 • 12-Hour Live Round</span>
-        </div>
+    <CanvasProvider
+      stateContext={{ assessment, history }}
+      onDropSuccess={handleDropSuccess}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-10">
+        {/* Breadcrumb Navigation */}
+        <Breadcrumbs items={[{ label: 'The Workbench (Canvas Mode)' }]} showActions={false} />
 
-        {/* Mandatory Heading: "Don't toss it. Decide it." */}
-        <h1 className="font-heading font-black text-4xl sm:text-6xl lg:text-7xl text-ink tracking-tight leading-[1.08]">
-          Don't toss it.<br />
-          <span className="text-deepGreen italic font-serif">Decide it.</span>
-        </h1>
-
-        <p className="text-base sm:text-lg text-ink-muted max-w-2xl mx-auto leading-relaxed">
-          Before you discard or replace a damaged item, see if it is truly worth fixing.
-          Get a transparent, unbiased comparison across <strong>Repair, Reuse, Repurpose, Replace, and Recycle</strong> with net costs, carbon impact, and zero sponsored nudges to buy new.
-        </p>
-
-        {/* Primary CTA: "Assess an item" */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={handleStartFresh}
-            className="w-full sm:w-auto"
-          >
-            <span>Assess an item</span>
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => setShowDemoModal(true)}
-            className="w-full sm:w-auto"
-          >
-            <Sparkles className="w-4 h-4 text-amber fill-amber" />
-            <span>Try a 30-Second Judge Demo</span>
-          </Button>
-        </div>
-
-        {/* Restrained Hand-Designed Stats Row */}
-        <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          <div className="p-4 rounded-brand bg-white border border-ink-border/80 shadow-xs text-left">
-            <span className="font-heading font-extrabold text-2xl text-deepGreen block">5-Way</span>
-            <span className="text-xs text-ink-muted mt-0.5 block leading-snug">Parallel circular evaluation (Repair, Reuse, Repurpose, Replace, Recycle)</span>
+        {/* Hero Section - The Workbench */}
+        <section className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber/15 border border-amber/40 text-ink text-xs font-semibold tracking-wide shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-amber fill-amber" />
+            <span className="font-mono uppercase font-bold tracking-wider">Canvas Protocol Active</span>
+            <span className="text-ink-muted">• Drag to Act</span>
           </div>
-          <div className="p-4 rounded-brand bg-white border border-ink-border/80 shadow-xs text-left">
-            <span className="font-heading font-extrabold text-2xl text-deepGreen block">100%</span>
-            <span className="text-xs text-ink-muted mt-0.5 block leading-snug">Transparent and user-tunable cost & lifespan estimates</span>
-          </div>
-          <div className="p-4 rounded-brand bg-white border border-ink-border/80 shadow-xs text-left">
-            <span className="font-heading font-extrabold text-2xl text-deepGreen block">0 sec</span>
-            <span className="text-xs text-ink-muted mt-0.5 block leading-snug">No login, zero telemetry, runs pure math in your browser</span>
-          </div>
-        </div>
-      </section>
 
-      {/* Try an Example Row (Phase 2 Requirement) */}
-      <section className="max-w-5xl mx-auto px-4 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-ink-border/50 pb-2">
-          <div>
-            <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-brand-deep">
-              <Sparkles className="w-3.5 h-3.5 text-action-amber fill-action-amber" />
-              <span>Instant Test Scenarios</span>
-            </div>
-            <h2 className="font-heading font-extrabold text-2xl text-ink mt-0.5">
-              Try an Example (1-Click Verdicts)
-            </h2>
-          </div>
-          <span className="text-xs text-ink-muted">
-            Jump straight into real-world scored decision matrices
-          </span>
-        </div>
+          <h1 className="font-heading font-black text-4xl sm:text-6xl text-ink tracking-tight leading-[1.08]">
+            The Workbench.<br />
+            <span className="text-deepGreen italic font-serif">Don't toss it. Decide it.</span>
+          </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {examplesData.map((ex) => {
-            const isSafety = ex.expectedWinner === 'recycle';
-            const isRepair = ex.expectedWinner === 'repair';
-
-            return (
-              <button
-                key={ex.id}
-                type="button"
-                onClick={() => handleRunExample(ex.id)}
-                className="p-5 rounded-brand-lg bg-white border border-ink-border/80 hover:border-brand/50 shadow-subtle hover:shadow-card transition-all text-left group cursor-pointer flex flex-col justify-between gap-4"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
-                        isSafety
-                          ? 'bg-safety-rustLight text-safety-rust'
-                          : isRepair
-                          ? 'bg-brand-tint text-brand-deep'
-                          : 'bg-action-amberLight text-action-amberHover'
-                      }`}
-                    >
-                      {ex.badge}
-                    </span>
-                    <span className="text-xs font-mono text-ink-faint">1-click</span>
-                  </div>
-
-                  <h3 className="font-heading font-bold text-lg text-ink group-hover:text-brand-deep transition-colors">
-                    {ex.title}
-                  </h3>
-                  <p className="text-xs text-ink-muted leading-relaxed">
-                    {ex.subtitle}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-ink-border/40 flex items-center justify-between text-xs font-semibold text-brand-deep group-hover:text-brand">
-                  <span>{ex.highlight}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 3-Step "How It Works" Row */}
-      <section className="max-w-5xl mx-auto px-4 space-y-6">
-        <div className="text-center space-y-1">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-green">
-            The Decision Workflow
-          </span>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-ink">
-            How It Works
-          </h2>
-          <p className="text-xs sm:text-sm text-ink-muted">
-            Three simple steps to arrive at the most economical and sustainable choice:
+          <p className="text-sm sm:text-base text-ink-muted max-w-xl mx-auto leading-relaxed">
+            Drag items from the parts bin directly into the action zone to begin diagnosis or test real-world scenarios. All primary decisions are driven by physical drag-and-drop.
           </p>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Step 1 */}
-          <div className="relative p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-full bg-tint text-deepGreen font-heading font-extrabold text-sm flex items-center justify-center">
-                  1
-                </span>
-                <span className="text-[11px] font-mono text-ink-faint uppercase font-semibold">Diagnosis</span>
+          {/* Search Field (Only highlights matching cards; strictly NO submit button) */}
+          <div className="pt-2 max-w-md mx-auto relative">
+            <div className="relative">
+              <Search className="w-4 h-4 text-ink-faint absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                id="parts-bin-search"
+                type="text"
+                placeholder="Highlight cards in parts bin (e.g. mixer, phone, chair)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-brand bg-white border border-ink-border text-xs text-ink placeholder-ink-faint focus:outline-none focus:ring-2 focus:ring-amber shadow-xs transition-colors"
+                aria-label="Filter parts bin"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-ink-faint hover:text-ink font-mono font-bold"
+                  aria-label="Clear filter"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            {searchQuery && (
+              <p className="text-[11px] text-ink-muted mt-1 text-left font-mono">
+                Highlighting cards matching "{searchQuery}" — Drag any card into the Action Zone below.
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* Action Zone: Large "Start Assessment" Target */}
+        <section className="max-w-2xl mx-auto space-y-3">
+          <ActionZone
+            id="zone-start-assessment"
+            label="Drop card to start assessment"
+            hint="Drag any category card from below to configure diagnosis, or drag an example card for an instant verdict."
+            className="min-h-[140px] bg-white border-brand-deep/30 shadow-card"
+          />
+
+          {/* First visit animated ghost card */}
+          {!hasSucceeded && (
+            <div className="flex flex-col items-center justify-center p-3 rounded-brand bg-amber/10 border border-amber/40 animate-pulse text-center space-y-1">
+              <div className="flex items-center gap-2 text-amber text-xs font-bold uppercase tracking-wider font-mono">
+                <Sparkles className="w-4 h-4 animate-spin text-amber" />
+                <span>Drag a card into the glowing zone</span>
               </div>
-              <h3 className="font-heading font-bold text-lg text-ink">
-                Identify & Diagnose
-              </h3>
-              <p className="text-xs text-ink-muted leading-relaxed">
-                Enter your item and observe the primary fault. The engine checks parts cost, repair difficulty, and runs a strict safety red-line test for electrical or battery hazards.
+              <p className="text-[11px] text-ink-muted">
+                Pick up a Category card or Example card below and drop it into the zone above to begin.
               </p>
             </div>
-          </div>
+          )}
+        </section>
 
-          {/* Step 2 */}
-          <div className="relative p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-full bg-tint text-deepGreen font-heading font-extrabold text-sm flex items-center justify-center">
-                  2
-                </span>
-                <span className="text-[11px] font-mono text-ink-faint uppercase font-semibold">Scoring</span>
-              </div>
-              <h3 className="font-heading font-bold text-lg text-ink">
-                Compare All 5 Paths
-              </h3>
-              <p className="text-xs text-ink-muted leading-relaxed">
-                The pure decision engine scores Repair (DIY vs Pro), Reuse, Repurpose, Replace, and Recycle against economic return, personal effort, and embodied CO₂e diverted.
-              </p>
-            </div>
-          </div>
-
-          {/* Step 3 */}
-          <div className="relative p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-full bg-tint text-deepGreen font-heading font-extrabold text-sm flex items-center justify-center">
-                  3
-                </span>
-                <span className="text-[11px] font-mono text-ink-faint uppercase font-semibold">Execution</span>
-              </div>
-              <h3 className="font-heading font-bold text-lg text-ink">
-                Action Playbook
-              </h3>
-              <p className="text-xs text-ink-muted leading-relaxed">
-                Follow actionable instructions tailored to your winner: DIY tool checklists, questions for local repair technicians, creative upcycling recipes, or safe recycling depot rules.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 30-Second Judge Quick-Test Showcase */}
-      <section className="max-w-5xl mx-auto px-4">
-        <div className="rounded-brand-lg border border-green/30 bg-gradient-to-b from-tint/60 to-white p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* 3 Real-World Example Cards Section */}
+        <section className="space-y-3">
+          <div className="flex items-center justify-between border-b border-ink-border/50 pb-2">
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase text-deepGreen tracking-wider block mb-1">
-                30-Second Judge Evaluation
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber block">
+                Instant Scenarios (3 Preloaded Demos)
               </span>
-              <h2 className="font-heading font-extrabold text-2xl text-ink">
-                Preloaded Real-World Scenarios
+              <h2 className="font-heading font-extrabold text-xl text-ink">
+                Drag an Example to Verdict
               </h2>
-              <p className="text-sm text-ink-muted mt-1">
-                Click any scenario to see the complete mathematical engine, safety flags, and cost calculations instantly:
-              </p>
             </div>
-
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setShowDemoModal(true)}
-              className="shrink-0"
-            >
-              View All 4 Scenarios
-            </Button>
+            <span className="text-xs text-ink-muted hidden sm:inline">
+              Grab handle & drop above to run instant calculation
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {rules.judgeDemos?.map((demo) => {
-              const isSafety = demo.id === 'demo_microwave_safety';
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {threeExamples.map((ex) => {
+              const matches = isExampleMatch(ex);
+              const isSafety = ex.expectedWinner === 'recycle';
+
               return (
                 <div
-                  key={demo.id}
-                  onClick={() => handleRunDemo(demo.id)}
-                  className={`cursor-pointer p-4 rounded-brand border transition-all text-left flex flex-col justify-between group ${
-                    isSafety
-                      ? 'bg-safety-rustLight/30 border-safety-rustBorder/50 hover:border-rust hover:shadow-subtle'
-                      : 'bg-white border-ink-border/80 hover:border-green hover:shadow-subtle'
+                  key={ex.id}
+                  className={`transition-opacity duration-200 ${
+                    matches ? 'opacity-100 ring-2 ring-amber/30 rounded-brand-lg' : 'opacity-40'
                   }`}
                 >
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono text-ink-faint">
-                        {demo.category.replace('_', ' ')}
-                      </span>
-                      {isSafety && (
-                        <AlertTriangle className="w-3.5 h-3.5 text-rust" />
-                      )}
-                    </div>
-                    <h3 className="font-heading font-bold text-sm text-ink group-hover:text-deepGreen transition-colors">
-                      {demo.title}
-                    </h3>
-                    <p className="text-xs text-ink-muted line-clamp-2">
-                      {demo.subtitle}
+                  <DataCard
+                    id={ex.id}
+                    type="example"
+                    title={ex.title}
+                    subtitle={ex.subtitle}
+                    badge={ex.badge}
+                    icon={isSafety ? AlertTriangle : Wrench}
+                    data={ex}
+                  >
+                    <p className="text-[11px] text-ink leading-relaxed font-medium">
+                      {ex.highlight}
                     </p>
-                  </div>
-
-                  <div className="pt-3 mt-3 border-t border-ink-border/40 flex items-center justify-between text-xs font-semibold text-deepGreen">
-                    <span className="group-hover:translate-x-0.5 transition-transform">
-                      Run Engine →
-                    </span>
-                  </div>
+                    <div className="pt-2 border-t border-ink-border/30 flex items-center justify-between text-[10px] font-mono text-ink-muted">
+                      <span>Category: {ex.assessment?.category?.replace(/_/g, ' ')}</span>
+                      <span className="text-amber font-bold">Drag to Zone ↑</span>
+                    </div>
+                  </DataCard>
                 </div>
               );
             })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Demos Modal */}
-      {showDemoModal && (
-        <JudgeDemosModal onClose={() => setShowDemoModal(false)} />
-      )}
-    </div>
+        {/* 8 Draggable Category Cards Section (Parts Bin) */}
+        <section className="space-y-3">
+          <div className="flex items-center justify-between border-b border-ink-border/50 pb-2">
+            <div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen block">
+                The Parts Bin (8 Categories)
+              </span>
+              <h2 className="font-heading font-extrabold text-xl text-ink">
+                Choose an Equipment Type
+              </h2>
+            </div>
+            <span className="text-xs text-ink-muted hidden sm:inline">
+              Drag into the Start Assessment zone to open /assess prefilled
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+            {categories.map((cat) => {
+              const IconComp = CATEGORY_ICONS[cat.id] || Wrench;
+              const matches = isCategoryMatch(cat);
+
+              return (
+                <div
+                  key={cat.id}
+                  className={`transition-opacity duration-200 ${
+                    matches ? 'opacity-100' : 'opacity-35'
+                  }`}
+                >
+                  <DataCard
+                    id={cat.id}
+                    type="category"
+                    title={cat.name}
+                    subtitle={`Lifespan: ${cat.expectedLifespanYears || 5}y`}
+                    icon={IconComp}
+                    data={cat}
+                    badge="Category"
+                  >
+                    <p className="text-[11px] text-ink-muted line-clamp-2">
+                      {cat.description}
+                    </p>
+                  </DataCard>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Session Impact Summary Row with DonutGauge */}
+        <section className="p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1 text-center md:text-left">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen">
+              Session Telemetry
+            </span>
+            <h3 className="font-heading font-bold text-lg text-ink">
+              100% Offline Decision Engine
+            </h3>
+            <p className="text-xs text-ink-muted max-w-md leading-relaxed">
+              Every evaluation scores net repair economics, embodied carbon, and personal effort without sponsored recommendations.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <div className="text-center">
+              <span className="text-[10px] font-mono text-ink-muted uppercase block">Cases Evaluated</span>
+              <span className="font-heading font-black text-2xl text-ink">{history.length}</span>
+            </div>
+            <div className="h-10 w-px bg-ink-border/50" />
+            <div className="text-center">
+              <span className="text-[10px] font-mono text-ink-muted uppercase block">Net Savings</span>
+              <span className="font-heading font-black text-2xl text-deepGreen">₹{sessionSavings.toLocaleString('en-IN')}</span>
+            </div>
+            <div className="h-10 w-px bg-ink-border/50" />
+            <DonutGauge
+              score={Math.min(sessionCarbon * 5, 100)}
+              size={64}
+              strokeWidth={6}
+              sublabel="kg CO₂"
+              color="#2E7D5B"
+            />
+          </div>
+        </section>
+      </div>
+    </CanvasProvider>
   );
 }
