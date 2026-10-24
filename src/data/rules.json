@@ -1,1216 +1,3665 @@
 {
   "categories": [
     {
-      "id": "small_appliances",
-      "name": "Small Appliances",
+      "id": "kitchen_appliance",
+      "name": "Kitchen Appliance",
+      "slug": "kitchen appliance",
+      "aliases": [
+        "kitchen_appliance",
+        "kitchen appliance",
+        "small_appliances"
+      ],
       "icon": "Coffee",
-      "description": "Kitchen and household electric appliances",
-      "averageLifespanYears": 7,
+      "description": "Mixers, kettles, toasters, blenders, and countertop cooking appliances",
+      "expectedLifespanYears": 7,
+      "isElectronics": true,
       "embodiedCo2Kg": 35,
+      "replaceCost": {
+        "min": 1500,
+        "max": 12000,
+        "default": 3500
+      },
+      "safetyFlags": [
+        {
+          "id": "burning_smell",
+          "label": "Burning smell or melting plastic odor",
+          "isCritical": true
+        },
+        {
+          "id": "exposed_mains_wiring",
+          "label": "Exposed mains wiring or frayed power cord",
+          "isCritical": true
+        },
+        {
+          "id": "water_ingress",
+          "label": "Liquid entered motor or electronics enclosure",
+          "isCritical": false
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "ka_planter",
+          "title": "Stainless Steel Herb Planter",
+          "description": "Transform durable stainless kettle or blender carafe into a rustic kitchen planter."
+        },
+        {
+          "id": "ka_organizer",
+          "title": "Workshop Hardware Organizer",
+          "description": "Use glass or heavy plastic canisters to sort nails, bolts, and small workshop items."
+        },
+        {
+          "id": "ka_lamp",
+          "title": "Industrial Accent Lamp",
+          "description": "Repurpose the vintage metallic appliance chassis into a striking bedside lamp housing."
+        }
+      ],
+      "reuseRoutes": [
+        "Donate to community soup kitchen or student flat if non-critical features still function",
+        "Pass along to an appliance repair trainee for bench practice",
+        "Offer as 'for parts / spares' on local marketplace or Freecycle"
+      ],
+      "checklists": {
+        "repair": [
+          "Unplug from 230V mains socket and let heating elements cool completely.",
+          "Inspect cord and plug pins for scorch marks or copper wire fatigue.",
+          "Remove bottom base plate with insulated screwdriver to examine switches and thermal fuse.",
+          "Test continuity across heating coils using a digital multimeter before reassembly."
+        ],
+        "reuse": [
+          "Wipe exterior with food-safe vinegar solution and clear crumbs or scale.",
+          "Tag with clear label noting any minor cosmetic or switch quirks.",
+          "Bundle with original lid, attachments, and power lead."
+        ],
+        "repurpose": [
+          "Completely remove motor core and internal electrical harnesses.",
+          "File down sharp metal edges and seal screw holes with silicone.",
+          "Drill base drainage holes if repurposing into a garden pot."
+        ],
+        "replace": [
+          "Look for BEE 5-star energy rated models with minimum 2-year warranty.",
+          "Check manufacturer commitment to 5-year spare parts availability.",
+          "Avail old appliance exchange discount to ensure responsible retailer pickup."
+        ],
+        "recycle": [
+          "Do not dispose in municipal wet/dry garbage bin.",
+          "Separate detachable glass carafes and stainless vessels for scrap metal collection.",
+          "Drop off electrical motor base at authorized e-waste collection kiosk."
+        ]
+      },
       "items": [
         {
           "id": "toaster",
           "name": "Pop-up Toaster",
-          "defaultNewPrice": 45,
-          "embodiedCo2Kg": 18,
+          "defaultNewPrice": 2000,
           "typicalLifespanYears": 6,
-          "commonFaults": ["lever_wont_latch", "heating_uneven", "frayed_cord", "crumbs_jamming"]
+          "commonFaults": [
+            "ka_crumbs_jamming",
+            "ka_lever_latch",
+            "ka_heating_element",
+            "ka_mains_cord_frayed"
+          ]
         },
         {
           "id": "electric_kettle",
           "name": "Electric Kettle",
-          "defaultNewPrice": 40,
-          "embodiedCo2Kg": 15,
+          "defaultNewPrice": 1800,
           "typicalLifespanYears": 5,
-          "commonFaults": ["heating_element_dead", "leaking_base", "switch_auto_shutoff_broken"]
+          "commonFaults": [
+            "ka_kettle_switch",
+            "ka_heating_element",
+            "ka_mains_cord_frayed",
+            "ka_burning_smell"
+          ]
         },
         {
-          "id": "blender",
-          "name": "Kitchen Blender",
-          "defaultNewPrice": 80,
-          "embodiedCo2Kg": 28,
+          "id": "mixer_grinder",
+          "name": "Mixer Grinder",
+          "defaultNewPrice": 4200,
           "typicalLifespanYears": 8,
-          "commonFaults": ["blade_assembly_seized", "motor_humming_no_spin", "pitcher_cracked", "coupler_stripped"]
-        },
-        {
-          "id": "coffee_maker",
-          "name": "Drip Coffee Maker",
-          "defaultNewPrice": 65,
-          "embodiedCo2Kg": 25,
-          "typicalLifespanYears": 6,
-          "commonFaults": ["mineral_scale_clog", "carafe_broken", "heating_element_dead", "water_pump_weak"]
+          "commonFaults": [
+            "ka_blender_coupler",
+            "ka_motor_carbon_brushes",
+            "ka_burning_smell",
+            "ka_mains_cord_frayed"
+          ]
         },
         {
           "id": "microwave",
           "name": "Countertop Microwave",
-          "defaultNewPrice": 120,
-          "embodiedCo2Kg": 75,
+          "defaultNewPrice": 7500,
           "typicalLifespanYears": 9,
-          "commonFaults": ["sparks_inside", "turntable_wont_rotate", "door_latch_broken", "no_heat_magnetron"]
+          "commonFaults": [
+            "ka_heating_element",
+            "ka_burning_smell",
+            "ka_mains_cord_frayed",
+            "ka_motor_carbon_brushes"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "ka_blender_coupler",
+          "label": "Stripped Drive Coupler Teeth",
+          "name": "Stripped Drive Coupler Teeth",
+          "severity": 2,
+          "repairCost": {
+            "min": 100,
+            "max": 350,
+            "default": 180
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Rubber or nylon drive teeth rounded off from ice overload, causing motor to spin freely.",
+          "diySteps": [
+            "Unplug appliance completely.",
+            "Hold motor shaft underneath with flathead screwdriver or cloth.",
+            "Unscrew coupler clockwise (reverse thread) and replace with identical replacement coupler.",
+            "Tighten securely and test with empty jar."
+          ],
+          "toolsRequired": [
+            "Flathead screwdriver",
+            "Replacement rubber coupler",
+            "Clean cloth"
+          ]
+        },
+        {
+          "id": "ka_kettle_switch",
+          "label": "Auto-Shutoff Bimetal Switch Stuck",
+          "name": "Auto-Shutoff Bimetal Switch Stuck",
+          "severity": 2,
+          "repairCost": {
+            "min": 150,
+            "max": 400,
+            "default": 220
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Steam bimetal strip fails to trigger switch off automatically when boiling.",
+          "diySteps": [
+            "Unplug base and open kettle handle access screws.",
+            "Inspect steam tube channel for lime-scale deposits blocking vapor flow.",
+            "Gently clean contacts with isopropyl alcohol or replace standard T125 thermostat switch.",
+            "Reassemble handle and boil clean water to verify auto cut-off."
+          ],
+          "toolsRequired": [
+            "Phillips screwdriver",
+            "Isopropyl alcohol",
+            "Descaling powder"
+          ]
+        },
+        {
+          "id": "ka_motor_carbon_brushes",
+          "label": "Worn Motor Carbon Brushes",
+          "name": "Worn Motor Carbon Brushes",
+          "severity": 3,
+          "repairCost": {
+            "min": 200,
+            "max": 600,
+            "default": 320
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Motor sparks intermittently and runs sluggishly due to carbon brushes worn past minimum length.",
+          "diySteps": [
+            "Unscrew motor base enclosure.",
+            "Unclip brass brush retainer springs.",
+            "Slide out worn carbon blocks and measure commutator ring surface.",
+            "Insert fresh brush pair and clip retainers back."
+          ],
+          "toolsRequired": [
+            "Screwdriver set",
+            "Replacement carbon brush set",
+            "Needle nose pliers"
+          ]
+        },
+        {
+          "id": "ka_heating_element",
+          "label": "Blown Heating Element / Coil",
+          "name": "Blown Heating Element / Coil",
+          "severity": 3,
+          "repairCost": {
+            "min": 350,
+            "max": 950,
+            "default": 550
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Appliance powers on indicator light but base produces zero heat.",
+          "diySteps": [
+            "Check continuity across element terminals using multimeter resistance mode.",
+            "Detach heat-resistant push terminals and remove mounting flange nuts.",
+            "Fit matching OEM replacement heating ring or cartridge with new heatproof silicone gasket."
+          ],
+          "toolsRequired": [
+            "Multimeter",
+            "Spanner / Socket set",
+            "Replacement element"
+          ]
+        },
+        {
+          "id": "ka_burning_smell",
+          "label": "Acrid Burning Odor / Coil Insulation Melting",
+          "name": "Acrid Burning Odor / Coil Insulation Melting",
+          "severity": 5,
+          "repairCost": {
+            "min": 1200,
+            "max": 2800,
+            "default": 1800
+          },
+          "diyDifficulty": "hard",
+          "partsCommon": false,
+          "safetyFlags": [
+            "burning_smell"
+          ],
+          "description": "Burnt varnish or melted wire sheath causing intense smoking and severe short circuit hazard.",
+          "diySteps": [
+            "DO NOT USE DIY FIX. Requires professional coil rewinding or high-voltage insulation bench testing."
+          ],
+          "toolsRequired": [
+            "Certified bench test station"
+          ]
+        },
+        {
+          "id": "ka_mains_cord_frayed",
+          "label": "Exposed Mains Copper Wire / Frayed Cable",
+          "name": "Exposed Mains Copper Wire / Frayed Cable",
+          "severity": 4,
+          "repairCost": {
+            "min": 150,
+            "max": 400,
+            "default": 220
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [
+            "exposed_mains_wiring"
+          ],
+          "description": "Outer PVC jacket torn at strain-relief boot, revealing live mains conductors.",
+          "diySteps": [
+            "Unplug immediately. Do not attempt tape-only repairs on 16A mains.",
+            "Open bottom cord clamp, trim off fatigued cable section.",
+            "Strip fresh insulation, crimp spade connectors, and anchor firmly into strain relief boot."
+          ],
+          "toolsRequired": [
+            "Wire strippers",
+            "16A 3-core replacement cord",
+            "Crimping pliers"
+          ]
         }
       ]
     },
     {
-      "id": "consumer_electronics",
-      "name": "Consumer Electronics",
+      "id": "phone_or_laptop",
+      "name": "Phone or Laptop",
+      "slug": "phone or laptop",
+      "aliases": [
+        "phone_or_laptop",
+        "phone or laptop",
+        "consumer_electronics"
+      ],
       "icon": "Smartphone",
-      "description": "Personal tech, communication, and audio devices",
-      "averageLifespanYears": 4,
-      "embodiedCo2Kg": 90,
+      "description": "Smartphones, notebooks, ultrabooks, and touch tablets",
+      "expectedLifespanYears": 4,
+      "isElectronics": true,
+      "embodiedCo2Kg": 85,
+      "replaceCost": {
+        "min": 12000,
+        "max": 85000,
+        "default": 32000
+      },
+      "safetyFlags": [
+        {
+          "id": "swollen_battery",
+          "label": "Swollen puffy lithium pouch or pushed-out screen",
+          "isCritical": true
+        },
+        {
+          "id": "burning_smell",
+          "label": "Hot thermal scorch smell or smoking port",
+          "isCritical": true
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "pl_webcam",
+          "title": "Dedicated HD Wireless Security Cam",
+          "description": "Install IP Webcam software to turn old phone into an always-on pet or front door camera."
+        },
+        {
+          "id": "pl_dashboard",
+          "title": "Wall-Mounted Smart Home Dashboard",
+          "description": "Mount tablet to wall running Home Assistant, Spotify controller, or digital calendar."
+        },
+        {
+          "id": "pl_homeserver",
+          "title": "Low-Power Linux Home Server",
+          "description": "Install Ubuntu Server on old laptop to host local backups, Pi-hole DNS, or media vault."
+        }
+      ],
+      "reuseRoutes": [
+        "Wipe clean and pass to student or elderly relative for video calls and web browsing",
+        "Trade in via official manufacturer or Cashify exchange for cash credit",
+        "Keep as emergency dual-SIM backup device in car or desk drawer"
+      ],
+      "checklists": {
+        "repair": [
+          "Back up all local documents and personal photos to cloud or USB.",
+          "Perform full system shutdown and disconnect charger.",
+          "Use ESD anti-static wrist strap and plastic spudgers when prying casing.",
+          "Test touch digitizer, microphones, and camera before sealing adhesive."
+        ],
+        "reuse": [
+          "Log out of Google/Apple ID accounts and perform full factory reset.",
+          "Clean chassis with 70% isopropyl wipes.",
+          "Apply fresh tempered glass screen guard to protect display."
+        ],
+        "repurpose": [
+          "Enable developer options and USB debugging if deploying as server.",
+          "Configure battery charge limiter to 60-80% to protect battery under 24/7 power.",
+          "Uninstall bloatware apps to maximize CPU performance."
+        ],
+        "replace": [
+          "Check manufacturer OS software update support window (prefer 5+ years).",
+          "Select model with modular user-replaceable battery if possible.",
+          "Opt for standard USB-PD charging port compliance."
+        ],
+        "recycle": [
+          "Cryptographically wipe internal NAND flash or remove SSD storage drive.",
+          "Never discard lithium battery into municipal trash bins.",
+          "Drop at authorized R2 or e-Stewards certified electronics recycler."
+        ]
+      },
       "items": [
         {
           "id": "smartphone",
           "name": "Smartphone",
-          "defaultNewPrice": 750,
-          "embodiedCo2Kg": 70,
+          "defaultNewPrice": 22000,
           "typicalLifespanYears": 4,
-          "commonFaults": ["cracked_screen", "battery_degraded", "charging_port_loose", "swollen_battery", "speaker_crackling"]
+          "commonFaults": [
+            "pl_battery_swollen",
+            "pl_cracked_screen",
+            "pl_charging_port_clogged",
+            "pl_battery_degraded"
+          ]
         },
         {
           "id": "laptop",
           "name": "Laptop Computer",
-          "defaultNewPrice": 950,
-          "embodiedCo2Kg": 280,
+          "defaultNewPrice": 48000,
           "typicalLifespanYears": 5,
-          "commonFaults": ["battery_dead", "slow_hdd_lag", "broken_screen", "trackpad_keys_failing", "overheating_fan_noise"]
-        },
-        {
-          "id": "headphones",
-          "name": "Wireless Over-Ear Headphones",
-          "defaultNewPrice": 160,
-          "embodiedCo2Kg": 22,
-          "typicalLifespanYears": 4,
-          "commonFaults": ["worn_earpads", "battery_wont_hold_charge", "snapped_headband", "bluetooth_connectivity"]
+          "commonFaults": [
+            "pl_battery_degraded",
+            "pl_cooling_fan_buzzing",
+            "pl_keyboard_keys_stuck",
+            "pl_battery_swollen"
+          ]
         },
         {
           "id": "tablet",
-          "name": "Tablet Device",
-          "defaultNewPrice": 420,
-          "embodiedCo2Kg": 110,
-          "typicalLifespanYears": 5,
-          "commonFaults": ["cracked_screen", "battery_degraded", "slow_software_bloat"]
+          "name": "Touch Tablet",
+          "defaultNewPrice": 28000,
+          "typicalLifespanYears": 4,
+          "commonFaults": [
+            "pl_cracked_screen",
+            "pl_charging_port_clogged",
+            "pl_battery_degraded",
+            "pl_battery_swollen"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "pl_battery_swollen",
+          "label": "Swollen Puffy Lithium Battery (Display Lifting)",
+          "name": "Swollen Puffy Lithium Battery (Display Lifting)",
+          "severity": 5,
+          "repairCost": {
+            "min": 1500,
+            "max": 4200,
+            "default": 2400
+          },
+          "diyDifficulty": "hard",
+          "partsCommon": true,
+          "safetyFlags": [
+            "swollen_battery"
+          ],
+          "description": "Gas buildup in lithium pouch causing acute fire/thermal runaway hazard.",
+          "diySteps": [
+            "CRITICAL SAFETY HAZARD. Immediately stop charging and power off device.",
+            "Do not puncture, squeeze, or apply heat to the battery pouch.",
+            "Take immediately to certified technician equipped with fire-safe sand buckets."
+          ],
+          "toolsRequired": [
+            "Fireproof lipo bag",
+            "Certified service bench"
+          ]
+        },
+        {
+          "id": "pl_battery_degraded",
+          "label": "Degraded Battery (Shuts down below 30%)",
+          "name": "Degraded Battery (Shuts down below 30%)",
+          "severity": 2,
+          "repairCost": {
+            "min": 1200,
+            "max": 3200,
+            "default": 1900
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Chemical capacity decayed under 75% health after years of charging cycles.",
+          "diySteps": [
+            "Heat rear perimeter with warm gel pack to soften adhesive gasket.",
+            "Use suction cup and plastic guitar pick to gently lift back cover.",
+            "Unscrew battery bracket, disconnect flex cable, pull release adhesive tabs.",
+            "Install fresh OEM battery cell and reapply adhesive perimeter."
+          ],
+          "toolsRequired": [
+            "Heat pack",
+            "Suction handle",
+            "Plastic picks",
+            "Torx T3/T4 screwdriver"
+          ]
+        },
+        {
+          "id": "pl_cracked_screen",
+          "label": "Cracked Front Glass / Touch Display",
+          "name": "Cracked Front Glass / Touch Display",
+          "severity": 3,
+          "repairCost": {
+            "min": 2500,
+            "max": 9500,
+            "default": 4600
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Spiderweb glass fracture from drop impact; touch digitizer or AMOLED panel damaged.",
+          "diySteps": [
+            "Apply clear packing tape over splintered glass to avoid finger cuts.",
+            "Disconnect battery connector first before disconnecting display ribbon.",
+            "Transfer ambient light sensor and speaker mesh to new display assembly.",
+            "Connect new display, test all touch points and brightness before final adhesive clamping."
+          ],
+          "toolsRequired": [
+            "iOpener heat tool",
+            "Plastic spudger",
+            "P2 Pentalobe / Phillips #000"
+          ]
+        },
+        {
+          "id": "pl_charging_port_clogged",
+          "label": "Loose / Lint-Clogged USB-C Port",
+          "name": "Loose / Lint-Clogged USB-C Port",
+          "severity": 1,
+          "repairCost": {
+            "min": 100,
+            "max": 600,
+            "default": 250
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Cable falls out easily and fast charging drops due to packed pocket lint in port recess.",
+          "diySteps": [
+            "Turn off device and illuminate port with bright flashlight.",
+            "Use non-conductive wooden toothpick or plastic probe to gently extract compressed lint.",
+            "Blow dry compressed air burst to clear dislodged fibers.",
+            "Insert cable firmly until tactile click confirms full engagement."
+          ],
+          "toolsRequired": [
+            "Wooden toothpick",
+            "Bright LED light",
+            "Can of compressed air"
+          ]
+        },
+        {
+          "id": "pl_cooling_fan_buzzing",
+          "label": "Dust-Choked Fan / Thermal Throttling",
+          "name": "Dust-Choked Fan / Thermal Throttling",
+          "severity": 2,
+          "repairCost": {
+            "min": 200,
+            "max": 800,
+            "default": 400
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Laptop runs burning hot and fan buzzes loudly due to dust pelt blocking heatsink fins.",
+          "diySteps": [
+            "Remove bottom chassis screws and pry cover.",
+            "Hold fan blades stationary with finger so bearings do not overspin.",
+            "Brush dust felt from copper heatsink fins and vacuum gently.",
+            "Apply drop of fresh thermal paste on CPU/GPU if heat pipe was removed."
+          ],
+          "toolsRequired": [
+            "Phillips #0 screwdriver",
+            "Soft brush",
+            "Thermal paste syringe"
+          ]
+        },
+        {
+          "id": "pl_keyboard_keys_stuck",
+          "label": "Sticky / Non-Registering Keyboard Keys",
+          "name": "Sticky / Non-Registering Keyboard Keys",
+          "severity": 2,
+          "repairCost": {
+            "min": 300,
+            "max": 1400,
+            "default": 650
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Beverage spill residue or debris underneath scissor switch hinge.",
+          "diySteps": [
+            "Gently pop off offending keycap using thin pry tool.",
+            "Clean scissor mechanism and rubber dome with 99% isopropyl alcohol swab.",
+            "Allow 15 minutes to dry fully, snap keycap back down until it clicks."
+          ],
+          "toolsRequired": [
+            "Keycap puller / plastic pry",
+            "99% Isopropyl alcohol",
+            "Micro-swabs"
+          ]
         }
       ]
     },
     {
-      "id": "furniture_home",
-      "name": "Furniture & Home",
+      "id": "charger_or_cable",
+      "name": "Charger or Cable",
+      "slug": "charger or cable",
+      "aliases": [
+        "charger_or_cable",
+        "charger or cable"
+      ],
+      "icon": "Zap",
+      "description": "USB power bricks, charging adapters, braided cables, and power strips",
+      "expectedLifespanYears": 2,
+      "isElectronics": true,
+      "embodiedCo2Kg": 8,
+      "replaceCost": {
+        "min": 400,
+        "max": 3500,
+        "default": 1200
+      },
+      "safetyFlags": [
+        {
+          "id": "exposed_mains_wiring",
+          "label": "Mains wire sheathing split or frayed",
+          "isCritical": true
+        },
+        {
+          "id": "burning_smell",
+          "label": "Adapter casing hot with scorched plastic smell",
+          "isCritical": true
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "cc_ties",
+          "title": "Heavy-Duty Garden & Tool Bundlers",
+          "description": "Strip outer jacketing to make weather-resistant, flexible ties for garden vines and garage hoses."
+        },
+        {
+          "id": "cc_craft",
+          "title": "Braided Paracord-Style Keychains",
+          "description": "Weave colorful nylon braided cable outer sheath into rugged luggage tags and key lanyards."
+        },
+        {
+          "id": "cc_bench",
+          "title": "Safe 5V DIY Electronics Bench Supply",
+          "description": "Terminate cut USB cable with alligator clips for powering low-voltage hobby breadboards."
+        }
+      ],
+      "reuseRoutes": [
+        "Keep as low-power bedside trickle charger for e-readers or earbuds",
+        "Leave as dedicated backup cable in office or car glove box",
+        "Donate working spare adapters to school computer clubs"
+      ],
+      "checklists": {
+        "repair": [
+          "Verify adapter is completely disconnected from wall outlet.",
+          "Check cable continuity pin-to-pin before applying heat shrink tubing.",
+          "Slide dual-wall adhesive-lined heat shrink tubing over the cracked neck joint.",
+          "Use heat gun at 120°C to activate internal waterproof glue seal."
+        ],
+        "reuse": [
+          "Clean grime with alcohol pad.",
+          "Coil in loose loop without sharp kinks.",
+          "Test on low-draw peripheral before primary device."
+        ],
+        "repurpose": [
+          "Snip off broken connector ends flush.",
+          "Strip and tin red (5V) and black (GND) lead wires.",
+          "Insulate unused data lines."
+        ],
+        "replace": [
+          "Choose USB-IF certified GaN chargers with over-voltage and thermal surge protection.",
+          "Prefer thick braided silicone cables rated for 100W+ USB-PD.",
+          "Verify CE / BIS safety certification stamps."
+        ],
+        "recycle": [
+          "Snip off copper cords and bundle with scrap copper wire.",
+          "Drop plastic brick into municipal electronic accessory drop box."
+        ]
+      },
+      "items": [
+        {
+          "id": "usb_c_charger",
+          "name": "65W GaN Fast Charger",
+          "defaultNewPrice": 1800,
+          "typicalLifespanYears": 3,
+          "commonFaults": [
+            "cc_adapter_overheating",
+            "cc_cable_frayed_neck",
+            "cc_bent_pin"
+          ]
+        },
+        {
+          "id": "braided_cable",
+          "name": "Braided USB-C Cable",
+          "defaultNewPrice": 600,
+          "typicalLifespanYears": 2,
+          "commonFaults": [
+            "cc_cable_frayed_neck",
+            "cc_intermittent_connection",
+            "cc_corroded_contacts"
+          ]
+        },
+        {
+          "id": "laptop_power_brick",
+          "name": "Laptop Power Brick",
+          "defaultNewPrice": 2400,
+          "typicalLifespanYears": 4,
+          "commonFaults": [
+            "cc_cable_frayed_neck",
+            "cc_adapter_overheating",
+            "cc_intermittent_connection"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "cc_cable_frayed_neck",
+          "label": "Outer Sheath Frayed at Connector Boot",
+          "name": "Outer Sheath Frayed at Connector Boot",
+          "severity": 4,
+          "repairCost": {
+            "min": 50,
+            "max": 200,
+            "default": 110
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [
+            "exposed_mains_wiring"
+          ],
+          "description": "Strain relief collar split open; braided shielding or internal conductors visible.",
+          "diySteps": [
+            "Check internal copper strands are still intact without shorting.",
+            "Slide marine-grade adhesive-lined polyolefin heat-shrink tubing over connector head.",
+            "Shrink with heat gun or hair dryer until adhesive oozes slightly, forming stiff reinforced boot.",
+            "Add silicone cable spring collar for extra flex resistance."
+          ],
+          "toolsRequired": [
+            "Heat shrink tube (adhesive lined)",
+            "Heat gun / lighter",
+            "Snips"
+          ]
+        },
+        {
+          "id": "cc_intermittent_connection",
+          "label": "Intermittent Charging (Wire Broken Inside Neck)",
+          "name": "Intermittent Charging (Wire Broken Inside Neck)",
+          "severity": 2,
+          "repairCost": {
+            "min": 80,
+            "max": 280,
+            "default": 160
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Charges only when bent at a specific angle due to fatigue fracture in copper hair wires.",
+          "diySteps": [
+            "Cut cable 2 cm back from damaged molded plug.",
+            "Strip outer jacket to expose internal conductor cores.",
+            "Solder leads onto a DIY solderable metal USB-C / Lightning plug replacement head.",
+            "Snap outer metal shielding shell and crimp strain relief."
+          ],
+          "toolsRequired": [
+            "Soldering iron",
+            "Solder",
+            "Replacement DIY USB plug shell"
+          ]
+        },
+        {
+          "id": "cc_bent_pin",
+          "label": "Bent Connector Plug / Housing",
+          "name": "Bent Connector Plug / Housing",
+          "severity": 2,
+          "repairCost": {
+            "min": 40,
+            "max": 150,
+            "default": 80
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Metal shell squished or bent from being stepped on, preventing port insertion.",
+          "diySteps": [
+            "Carefully inspect interior tongue with magnifying loupe.",
+            "Use flat precision watchmaker screwdriver to gently reform outer rectangular metal shield.",
+            "Verify pins are not shorted before plugging into low-value device."
+          ],
+          "toolsRequired": [
+            "Jeweler screwdriver",
+            "Magnifier loupe"
+          ]
+        },
+        {
+          "id": "cc_corroded_contacts",
+          "label": "Tarnished / Blackened Gold Pins",
+          "name": "Tarnished / Blackened Gold Pins",
+          "severity": 1,
+          "repairCost": {
+            "min": 30,
+            "max": 100,
+            "default": 50
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Blackened oxide coating on power pins causing slow or failed charging handshake.",
+          "diySteps": [
+            "Dip stiff bristle interdental brush into 99% isopropyl alcohol.",
+            "Scrub contact pins back and forth vigorously to remove carbonization.",
+            "Dry with microfiber cloth and apply thin coat of DeoxIT contact cleaner."
+          ],
+          "toolsRequired": [
+            "Isopropyl alcohol",
+            "Interdental brush",
+            "Microfiber cloth"
+          ]
+        },
+        {
+          "id": "cc_adapter_overheating",
+          "label": "Wall Adapter Burning Smell / Melting Shell",
+          "name": "Wall Adapter Burning Smell / Melting Shell",
+          "severity": 5,
+          "repairCost": {
+            "min": 500,
+            "max": 1600,
+            "default": 950
+          },
+          "diyDifficulty": "hard",
+          "partsCommon": false,
+          "safetyFlags": [
+            "burning_smell"
+          ],
+          "description": "Blown primary switching MOSFET or shorted transformer winding generating smoke.",
+          "diySteps": [
+            "CRITICAL FIRE HAZARD. Immediately unplug from mains.",
+            "Ultrasonically welded power bricks cannot be safely opened or resealed at home.",
+            "Recycle immediately and replace with compliant charger."
+          ],
+          "toolsRequired": [
+            "None (unsafe to repair)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio_device",
+      "name": "Audio Device",
+      "slug": "audio device",
+      "aliases": [
+        "audio_device",
+        "audio device"
+      ],
+      "icon": "Headphones",
+      "description": "Over-ear headphones, Bluetooth earbuds, desktop monitors, and portable speakers",
+      "expectedLifespanYears": 5,
+      "isElectronics": true,
+      "embodiedCo2Kg": 28,
+      "replaceCost": {
+        "min": 1200,
+        "max": 18000,
+        "default": 4500
+      },
+      "safetyFlags": [
+        {
+          "id": "swollen_battery",
+          "label": "Swollen earbud case or bulging speaker enclosure",
+          "isCritical": true
+        },
+        {
+          "id": "burning_smell",
+          "label": "Burnt voice coil odor or hot amplifier circuit",
+          "isCritical": true
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "ad_mic",
+          "title": "High-Quality Auxiliary Lapel / Desk Mic",
+          "description": "Salvage working microphone capsules and pre-amp wiring for amateur podcasting or intercoms."
+        },
+        {
+          "id": "ad_cabinet",
+          "title": "Retro Bluetooth Speaker Enclosure",
+          "description": "Fit a $5 Bluetooth amplifier chip inside a vintage wooden speaker cabinet with new drivers."
+        },
+        {
+          "id": "ad_damping",
+          "title": "Vibration Isolation Pads",
+          "description": "Repurpose acoustic memory foam pads to isolate turntables, 3D printers, or microphone stands."
+        }
+      ],
+      "reuseRoutes": [
+        "Dedicate as stationary desktop headphones with a low-cost $2 3.5mm cable",
+        "Pass to children for online homework or audiobooks",
+        "Donate to local audio engineering classroom for component teardown study"
+      ],
+      "checklists": {
+        "repair": [
+          "Test speaker coil impedance with multimeter (typical 32 ohms for headphones, 4-8 ohms for speakers).",
+          "Discharge any capacitors if opening powered desktop monitors.",
+          "Use flexible enameled wire solder flux when re-attaching thin audio driver voice coils.",
+          "Ensure airtight seal around speaker chamber when resealing acoustic baffle."
+        ],
+        "reuse": [
+          "Sanitize ear cushions with alcohol-free disinfectant.",
+          "Store in protective zippered hard case.",
+          "Calibrate EQ via system equalizer to compensate for any slight frequency shift."
+        ],
+        "repurpose": [
+          "Carefully unsolder dynamic driver capsules.",
+          "Wire drivers in parallel or series according to amplifier impedance specs."
+        ],
+        "replace": [
+          "Check availability of third-party snap-on ear pad replacements.",
+          "Choose models with detachable 3.5mm or USB-C cables.",
+          "Prioritize IPX4+ water resistance for workout headphones."
+        ],
+        "recycle": [
+          "Remove tiny lithium button cells from earbuds prior to recycling.",
+          "Deliver speaker drivers to scrap magnet / metal recycler."
+        ]
+      },
+      "items": [
+        {
+          "id": "wireless_headphones",
+          "name": "Over-Ear Bluetooth Headphones",
+          "defaultNewPrice": 5500,
+          "typicalLifespanYears": 5,
+          "commonFaults": [
+            "ad_earcup_padding_peeling",
+            "ad_headband_snapped",
+            "ad_battery_draining_fast",
+            "ad_one_side_silent"
+          ]
+        },
+        {
+          "id": "bluetooth_speaker",
+          "name": "Portable Bluetooth Speaker",
+          "defaultNewPrice": 3800,
+          "typicalLifespanYears": 5,
+          "commonFaults": [
+            "ad_battery_draining_fast",
+            "ad_swollen_earbud_case",
+            "ad_charging_port_clogged"
+          ]
+        },
+        {
+          "id": "tws_earbuds",
+          "name": "TWS Earbuds with Charging Case",
+          "defaultNewPrice": 2800,
+          "typicalLifespanYears": 3,
+          "commonFaults": [
+            "ad_battery_draining_fast",
+            "ad_swollen_earbud_case",
+            "ad_one_side_silent"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "ad_earcup_padding_peeling",
+          "label": "Flaking Leatherette Ear Cushions",
+          "name": "Flaking Leatherette Ear Cushions",
+          "severity": 1,
+          "repairCost": {
+            "min": 250,
+            "max": 700,
+            "default": 380
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Polyurethane leather flakes off in black specks onto ears, though audio drivers remain pristine.",
+          "diySteps": [
+            "Gently rotate or unclip old cushion plastic retaining rings.",
+            "Clean old adhesive residue with isopropyl swab.",
+            "Stretch replacement breathable velour or cooling gel ear pads over headphone rim and click firmly into place."
+          ],
+          "toolsRequired": [
+            "Replacement ear pad set",
+            "Small plastic spudger"
+          ]
+        },
+        {
+          "id": "ad_headband_snapped",
+          "label": "Snapped Plastic Headband Arch",
+          "name": "Snapped Plastic Headband Arch",
+          "severity": 2,
+          "repairCost": {
+            "min": 150,
+            "max": 550,
+            "default": 280
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Tension arch cracked at stress point, preventing headphones from clamping to head.",
+          "diySteps": [
+            "Rough up plastic edges with 220-grit sandpaper.",
+            "Splint crack with thin flexible spring steel strip or zip-tie reinforcement.",
+            "Bond with two-part epoxy or wrap tightly with self-amalgamating silicone tape."
+          ],
+          "toolsRequired": [
+            "Two-part epoxy",
+            "Sandpaper",
+            "Silicone self-fusing tape"
+          ]
+        },
+        {
+          "id": "ad_one_side_silent",
+          "label": "One Channel Silent (Frayed Jack Wire)",
+          "name": "One Channel Silent (Frayed Jack Wire)",
+          "severity": 2,
+          "repairCost": {
+            "min": 100,
+            "max": 350,
+            "default": 200
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Sound cuts out in left or right ear unless 3.5mm plug is wiggled.",
+          "diySteps": [
+            "Snip off factory molded 3.5mm plug 3 cm from bend.",
+            "Burn enamel insulation off copper hairs with lighter flame, then tin with solder flux.",
+            "Solder Left (tip), Right (ring), and Ground (sleeve) onto metal replacement 3.5mm TRS jack."
+          ],
+          "toolsRequired": [
+            "Soldering iron",
+            "Lighter",
+            "Replacement 3.5mm TRS gold plug"
+          ]
+        },
+        {
+          "id": "ad_battery_draining_fast",
+          "label": "Battery Lasts Under 30 Minutes",
+          "name": "Battery Lasts Under 30 Minutes",
+          "severity": 3,
+          "repairCost": {
+            "min": 450,
+            "max": 1300,
+            "default": 700
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Internal 3.7V lithium pouch holds fraction of original charge.",
+          "diySteps": [
+            "Unclip ear cup cover and unscrew internal acoustic baffle.",
+            "De-solder red (+) and black (-) leads from old lithium cell.",
+            "Fit identical dimension 3.7V lipo cell with protection circuit board.",
+            "Re-solder leads, secure with double-sided foam tape, and reassemble."
+          ],
+          "toolsRequired": [
+            "Precision screwdriver",
+            "Soldering iron",
+            "Replacement 3.7V LiPo"
+          ]
+        },
+        {
+          "id": "ad_swollen_earbud_case",
+          "label": "Bulging Charging Case / Swollen Lithium Cell",
+          "name": "Bulging Charging Case / Swollen Lithium Cell",
+          "severity": 5,
+          "repairCost": {
+            "min": 900,
+            "max": 2600,
+            "default": 1500
+          },
+          "diyDifficulty": "hard",
+          "partsCommon": false,
+          "safetyFlags": [
+            "swollen_battery"
+          ],
+          "description": "Lithium polymer pack swollen inside compact case, forcing plastic lid ajar.",
+          "diySteps": [
+            "CRITICAL BATTERY HAZARD. Cease charging immediately.",
+            "Do not compress or attempt to close lid.",
+            "Bring to certified e-waste handler for safe neutralization."
+          ],
+          "toolsRequired": [
+            "None (hazardous)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fan_or_cooler",
+      "name": "Fan or Cooler",
+      "slug": "fan or cooler",
+      "aliases": [
+        "fan_or_cooler",
+        "fan or cooler"
+      ],
+      "icon": "Wind",
+      "description": "Ceiling fans, high-velocity table fans, pedestal fans, and evaporative desert coolers",
+      "expectedLifespanYears": 6,
+      "isElectronics": true,
+      "embodiedCo2Kg": 42,
+      "replaceCost": {
+        "min": 1800,
+        "max": 9000,
+        "default": 3200
+      },
+      "safetyFlags": [
+        {
+          "id": "burning_smell",
+          "label": "Motor winding burnt smell or smoking stator",
+          "isCritical": true
+        },
+        {
+          "id": "exposed_mains_wiring",
+          "label": "Oscillation sheared power cable exposing live wire",
+          "isCritical": true
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "fc_exhaust",
+          "title": "Workshop Fume & Solder Exhaust",
+          "description": "Mount high-RPM fan motor into a garage window duct to vent paint and solder vapors."
+        },
+        {
+          "id": "fc_trellis",
+          "title": "Decorative Circular Garden Trellis",
+          "description": "Spray paint concentric metal fan safety grills and stake in garden for flowering vine climbers."
+        },
+        {
+          "id": "fc_generator",
+          "title": "DIY Wind Turbine Demo Model",
+          "description": "Reverse the motor hub using external magnets to create a demonstration wind energy generator."
+        }
+      ],
+      "reuseRoutes": [
+        "Use in workshop, garage, or outdoor covered balcony where whisper-quiet operation is not required",
+        "Pass to security booth or local stall vendor",
+        "Sell to student hostel residents"
+      ],
+      "checklists": {
+        "repair": [
+          "Cut circuit breaker or unplug cord completely before touching blades.",
+          "Discharge motor start capacitor safely across 100k ohm resistor.",
+          "Check bearing free-spinning resistance by hand spin.",
+          "Apply high-temperature synthetic bearing oil (SAE 20), avoid standard WD-40 on bronze bushings."
+        ],
+        "reuse": [
+          "Unclip front metal grill and wash off dust pelt with soapy sponge.",
+          "Wipe aerodynamic blades to reduce motor drag.",
+          "Tighten blade hub screws to eliminate vibration rattles."
+        ],
+        "repurpose": [
+          "Remove motor and wiring completely if making garden art.",
+          "Coat metal grills with rust-inhibiting zinc primer."
+        ],
+        "replace": [
+          "Look for BLDC (Brushless DC) motor fans saving up to 65% electricity.",
+          "Check BEE 5-star label and remote control inverter ratings."
+        ],
+        "recycle": [
+          "Copper motor stator windings have high scrap value; deliver to metal scrap yard.",
+          "Separate polypropylene fan blades and sheet metal grills."
+        ]
+      },
+      "items": [
+        {
+          "id": "ceiling_fan",
+          "name": "Ceiling Fan",
+          "defaultNewPrice": 2800,
+          "typicalLifespanYears": 8,
+          "commonFaults": [
+            "fc_capacitor_weak",
+            "fc_bearing_jammed",
+            "fc_motor_burning_odor"
+          ]
+        },
+        {
+          "id": "pedestal_fan",
+          "name": "Pedestal Fan",
+          "defaultNewPrice": 3200,
+          "typicalLifespanYears": 5,
+          "commonFaults": [
+            "fc_capacitor_weak",
+            "fc_oscillation_gear_stripped",
+            "fc_exposed_cut_cord"
+          ]
+        },
+        {
+          "id": "air_cooler",
+          "name": "Evaporative Air Cooler",
+          "defaultNewPrice": 6500,
+          "typicalLifespanYears": 6,
+          "commonFaults": [
+            "fc_pump_choked",
+            "fc_capacitor_weak",
+            "fc_bearing_jammed",
+            "fc_motor_burning_odor"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "fc_capacitor_weak",
+          "label": "Weak Run Capacitor (Fan Spins at Half Speed)",
+          "name": "Weak Run Capacitor (Fan Spins at Half Speed)",
+          "severity": 2,
+          "repairCost": {
+            "min": 80,
+            "max": 250,
+            "default": 140
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Motor hums but rotates sluggishly; capacitor capacitance dropped below rated microfarads.",
+          "diySteps": [
+            "Turn off mains wall switch and disconnect power.",
+            "Discharge old capacitor terminals by touching insulated screwdriver tip across leads.",
+            "Unscrew clamp, swap in new metallized polypropylene 2.25uF / 2.5uF 440V motor capacitor.",
+            "Restore power and test all 3 speed settings."
+          ],
+          "toolsRequired": [
+            "Screwdriver",
+            "Replacement 2.5uF capacitor",
+            "Insulated pliers"
+          ]
+        },
+        {
+          "id": "fc_bearing_jammed",
+          "label": "Dry / Seized Bushing Bearings (Squealing Noise)",
+          "name": "Dry / Seized Bushing Bearings (Squealing Noise)",
+          "severity": 2,
+          "repairCost": {
+            "min": 90,
+            "max": 320,
+            "default": 170
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Dried-out porous bronze bushings causing friction squeal and thermal shutdown.",
+          "diySteps": [
+            "Remove fan front grill, blade nut (reverse thread), and motor clam shell housing.",
+            "Clean old hardened gunk from steel shaft with mineral spirits.",
+            "Saturate felt oil reservoirs around sintered bronze bushings with 5-6 drops of non-detergent SAE 20 oil.",
+            "Spin rotor by hand until movement is buttery smooth."
+          ],
+          "toolsRequired": [
+            "Non-detergent 3-In-One oil",
+            "Rag",
+            "Screwdriver"
+          ]
+        },
+        {
+          "id": "fc_oscillation_gear_stripped",
+          "label": "Stripped Oscillation Gearbox (Clicks & Stalls)",
+          "name": "Stripped Oscillation Gearbox (Clicks & Stalls)",
+          "severity": 2,
+          "repairCost": {
+            "min": 120,
+            "max": 350,
+            "default": 210
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Nylon reduction worm gear teeth stripped inside rear oscillation gearbox.",
+          "diySteps": [
+            "Unscrew rear motor cap.",
+            "Remove 3 small screws holding clear gearbox cover.",
+            "Lift out stripped nylon gear cog and clean old grease.",
+            "Press in replacement gear, pack with white lithium grease, and fasten cover."
+          ],
+          "toolsRequired": [
+            "Replacement nylon gear",
+            "White lithium grease",
+            "Screwdriver"
+          ]
+        },
+        {
+          "id": "fc_pump_choked",
+          "label": "Submersible Water Pump Choked with Silt",
+          "name": "Submersible Water Pump Choked with Silt",
+          "severity": 2,
+          "repairCost": {
+            "min": 180,
+            "max": 480,
+            "default": 280
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Cooler pump impeller choked by hard water scale and algae, preventing water circulation.",
+          "diySteps": [
+            "Unplug cooler and drain bottom reservoir.",
+            "Twist off front magnetic impeller cap on submersible pump.",
+            "Soak cylindrical permanent magnet impeller in vinegar for 30 minutes to dissolve mineral scale.",
+            "Rinse, test pump in clean water bucket, and reinstall."
+          ],
+          "toolsRequired": [
+            "White vinegar",
+            "Old toothbrush",
+            "Bucket"
+          ]
+        },
+        {
+          "id": "fc_motor_burning_odor",
+          "label": "Stator Coil Burnt / Shorted Copper Winding",
+          "name": "Stator Coil Burnt / Shorted Copper Winding",
+          "severity": 5,
+          "repairCost": {
+            "min": 850,
+            "max": 1900,
+            "default": 1300
+          },
+          "diyDifficulty": "hard",
+          "partsCommon": false,
+          "safetyFlags": [
+            "burning_smell"
+          ],
+          "description": "Thermal fuse bypassed or burned copper stator windings producing smoke.",
+          "diySteps": [
+            "CRITICAL ELECTRICAL RISK. Motor core insulation has broken down.",
+            "Requires professional stator re-winding or replacement motor assembly."
+          ],
+          "toolsRequired": [
+            "Certified motor shop bench"
+          ]
+        },
+        {
+          "id": "fc_exposed_cut_cord",
+          "label": "Cable Sheath Severed by Oscillation Hinge",
+          "name": "Cable Sheath Severed by Oscillation Hinge",
+          "severity": 4,
+          "repairCost": {
+            "min": 120,
+            "max": 320,
+            "default": 190
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [
+            "exposed_mains_wiring"
+          ],
+          "description": "Repetitive fan head swivel pinched cord against sharp metal hinge, exposing live 230V wires.",
+          "diySteps": [
+            "Unplug immediately.",
+            "Cut damaged cable section out.",
+            "Re-route through protective rubber grommet with slack for full oscillation arc.",
+            "Reconnect internal terminal block and clamp tightly."
+          ],
+          "toolsRequired": [
+            "Wire cutters",
+            "Rubber grommet",
+            "Screwdriver"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "furniture",
+      "name": "Furniture",
+      "slug": "furniture",
+      "aliases": [
+        "furniture",
+        "furniture_home"
+      ],
       "icon": "Armchair",
-      "description": "Solid wood, metal, and upholstered home goods",
-      "averageLifespanYears": 15,
-      "embodiedCo2Kg": 80,
-      "items": [
+      "description": "Office chairs, dining tables, study desks, wooden cabinets, and bookshelves",
+      "expectedLifespanYears": 10,
+      "isElectronics": false,
+      "embodiedCo2Kg": 55,
+      "replaceCost": {
+        "min": 2500,
+        "max": 25000,
+        "default": 6500
+      },
+      "safetyFlags": [
         {
-          "id": "wooden_chair",
-          "name": "Solid Wood Dining Chair",
-          "defaultNewPrice": 110,
-          "embodiedCo2Kg": 32,
-          "typicalLifespanYears": 20,
-          "commonFaults": ["wobbly_loose_joint", "broken_rung", "scratched_surface", "cracked_seat"]
+          "id": "structural_instability",
+          "label": "Chair or shelf joint collapsed under load",
+          "isCritical": false
         },
         {
-          "id": "bookshelf",
-          "name": "Wooden / Laminate Bookshelf",
-          "defaultNewPrice": 140,
-          "embodiedCo2Kg": 55,
-          "typicalLifespanYears": 15,
-          "commonFaults": ["sagging_shelves", "loose_dowels_wobbly", "peeling_veneer"]
-        },
-        {
-          "id": "desk_table",
-          "name": "Study Desk / Work Table",
-          "defaultNewPrice": 220,
-          "embodiedCo2Kg": 75,
-          "typicalLifespanYears": 15,
-          "commonFaults": ["wobbly_legs", "drawer_slide_stuck", "water_ring_stains"]
-        },
-        {
-          "id": "floor_lamp",
-          "name": "Standing Floor Lamp",
-          "defaultNewPrice": 75,
-          "embodiedCo2Kg": 24,
-          "typicalLifespanYears": 12,
-          "commonFaults": ["switch_loose", "bent_stem_tilted", "socket_flickering"]
+          "id": "sharp_splintered_wood",
+          "label": "Sharp splintered edges or protruding nails",
+          "isCritical": false
         }
-      ]
-    },
-    {
-      "id": "apparel_footwear",
-      "name": "Apparel & Footwear",
-      "icon": "Shirt",
-      "description": "Outerwear, denim, boots, and technical gear",
-      "averageLifespanYears": 5,
-      "embodiedCo2Kg": 30,
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "fn_shelves",
+          "title": "Floating Wall Display Shelves",
+          "description": "Saw clean sections of undamaged desk tabletop or bookcase sides into stylish floating wall shelves."
+        },
+        {
+          "id": "fn_bench",
+          "title": "Rustic Garden Planter Bench",
+          "description": "Sand and weatherproof wooden dining chair frames to hold potted plants on patio or balcony."
+        },
+        {
+          "id": "fn_petbed",
+          "title": "Cozy Raised Pet Bed",
+          "description": "Line a sturdy wooden drawer with soft cushion foam and fabric for an elevated cat/dog bed."
+        }
+      ],
+      "reuseRoutes": [
+        "Pass to college students moving into unfurnished rental flats",
+        "Donate to community libraries, daycare centers, or NGOs",
+        "List on OLX / Freecycle for quick local porch pickup"
+      ],
+      "checklists": {
+        "repair": [
+          "Identify whether wood is solid timber, MDF, or particleboard before choosing fasteners.",
+          "Scrape away old brittle dried glue from joint mortise and tenons.",
+          "Apply PVA cross-linking wood glue and clamp with bar clamps for minimum 12 hours.",
+          "Pre-drill pilot holes to prevent splitting near edges."
+        ],
+        "reuse": [
+          "Thoroughly dust and clean with mild wood oil or mild detergent.",
+          "Tighten all loose bolts and corner bracket screws.",
+          "Stick felt floor protector pads under each leg."
+        ],
+        "repurpose": [
+          "Unscrew all hardware and sort screws, hinges, and drawer runners.",
+          "Sand rough edges with 120-grit sandpaper.",
+          "Apply water-based varnish or chalk paint."
+        ],
+        "replace": [
+          "Choose FSC-certified sustainably harvested timber.",
+          "Check weight capacity ratings and steel frame thickness.",
+          "Avoid low-grade unsealed particleboard prone to moisture swelling."
+        ],
+        "recycle": [
+          "Remove metal drawer pulls and steel brackets for metal scrap.",
+          "Solid untreated timber can be chipped for garden mulch or biomass."
+        ]
+      },
       "items": [
         {
-          "id": "winter_jacket",
-          "name": "Winter Parka / Insulated Jacket",
-          "defaultNewPrice": 190,
-          "embodiedCo2Kg": 42,
-          "typicalLifespanYears": 8,
-          "commonFaults": ["broken_zipper", "torn_outer_shell", "baffle_seam_leaking_down", "broken_snap"]
-        },
-        {
-          "id": "denim_jeans",
-          "name": "Denim Jeans",
-          "defaultNewPrice": 70,
-          "embodiedCo2Kg": 33,
-          "typicalLifespanYears": 5,
-          "commonFaults": ["crotch_blowout", "torn_pocket_corner", "frayed_hem", "broken_button_rivet"]
-        },
-        {
-          "id": "leather_boots",
-          "name": "Leather Work / Hiking Boots",
-          "defaultNewPrice": 180,
-          "embodiedCo2Kg": 48,
+          "id": "office_chair",
+          "name": "Ergonomic Office Chair",
+          "defaultNewPrice": 8500,
           "typicalLifespanYears": 7,
-          "commonFaults": ["sole_delaminating", "worn_tread", "dry_cracked_leather", "snapped_eyelet"]
+          "commonFaults": [
+            "fn_gas_lift_cylinder_sinking",
+            "fn_loose_joints_wobble",
+            "fn_upholstery_tear"
+          ]
         },
         {
-          "id": "backpack",
-          "name": "Commuter / Hiking Backpack",
-          "defaultNewPrice": 95,
-          "embodiedCo2Kg": 26,
-          "typicalLifespanYears": 8,
-          "commonFaults": ["broken_zipper_slider", "torn_shoulder_strap", "snapped_buckle"]
+          "id": "wooden_desk",
+          "name": "Solid Wood Study Desk",
+          "defaultNewPrice": 9500,
+          "typicalLifespanYears": 12,
+          "commonFaults": [
+            "fn_loose_joints_wobble",
+            "fn_broken_drawer_slide",
+            "fn_cracked_laminate"
+          ]
+        },
+        {
+          "id": "dining_chair",
+          "name": "Solid Wood Dining Chair",
+          "defaultNewPrice": 3500,
+          "typicalLifespanYears": 10,
+          "commonFaults": [
+            "fn_loose_joints_wobble",
+            "fn_snapped_chair_leg",
+            "fn_cracked_laminate"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "fn_loose_joints_wobble",
+          "label": "Wobbly Chair Legs / Loose Dowel Joints",
+          "name": "Wobbly Chair Legs / Loose Dowel Joints",
+          "severity": 1,
+          "repairCost": {
+            "min": 60,
+            "max": 220,
+            "default": 120
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Dry mortise and tenon joint has worked loose over seasons of humidity changes.",
+          "diySteps": [
+            "Gently tap loose joints apart with rubber mallet.",
+            "Scrape old dried yellow glue down to bare wood fibers.",
+            "Inject premium PVA aliphatic wood glue into sockets.",
+            "Reassemble joint and apply ratchet strap or bar clamp firmly for 24 hours."
+          ],
+          "toolsRequired": [
+            "Wood glue (PVA)",
+            "Bar clamp or ratchet strap",
+            "Chisel / scraper"
+          ]
+        },
+        {
+          "id": "fn_gas_lift_cylinder_sinking",
+          "label": "Sinking Office Chair Gas Lift Cylinder",
+          "name": "Sinking Office Chair Gas Lift Cylinder",
+          "severity": 2,
+          "repairCost": {
+            "min": 450,
+            "max": 1100,
+            "default": 650
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Hydraulic nitrogen gas seal failed, slowly dropping chair height under body weight.",
+          "diySteps": [
+            "Invert chair and tap wheel base off bottom shaft with rubber mallet.",
+            "Use pipe wrench around top of old cylinder to twist free from chair mechanism.",
+            "Drop standard Class 4 replacement pneumatic gas lift cylinder into base taper.",
+            "Sit down once to friction lock into place."
+          ],
+          "toolsRequired": [
+            "Pipe wrench",
+            "Rubber mallet",
+            "Replacement Class-4 cylinder"
+          ]
+        },
+        {
+          "id": "fn_broken_drawer_slide",
+          "label": "Broken Roller Drawer Runner / Ball Bearings",
+          "name": "Broken Roller Drawer Runner / Ball Bearings",
+          "severity": 2,
+          "repairCost": {
+            "min": 150,
+            "max": 450,
+            "default": 260
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Drawer jams or derails due to bent steel track or missing ball bearings.",
+          "diySteps": [
+            "Remove drawer and unscrew old metal runners from cabinet carcass.",
+            "Measure slide depth (e.g. 14, 16, or 18 inches).",
+            "Screw matching full-extension ball bearing telescopic slides onto pilot holes.",
+            "Re-insert drawer until latch clicks."
+          ],
+          "toolsRequired": [
+            "Screwdriver",
+            "Pair of telescopic drawer slides",
+            "Tape measure"
+          ]
+        },
+        {
+          "id": "fn_upholstery_tear",
+          "label": "Torn Fabric / Peeling Faux Leather Cushion",
+          "name": "Torn Fabric / Peeling Faux Leather Cushion",
+          "severity": 2,
+          "repairCost": {
+            "min": 300,
+            "max": 1200,
+            "default": 600
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Upholstery worn through to cushion foam at seat edge.",
+          "diySteps": [
+            "Unscrew seat bottom from chair frame.",
+            "Remove old staples with staple puller.",
+            "Stretch durable linen or vinyl upholstery fabric taut over foam.",
+            "Fire heavy-duty staples into underside plywood base every 2 cm."
+          ],
+          "toolsRequired": [
+            "Heavy-duty staple gun",
+            "Staples",
+            "Upholstery fabric",
+            "Scissors"
+          ]
+        },
+        {
+          "id": "fn_snapped_chair_leg",
+          "label": "Split Solid Timber Leg / Structural Crack",
+          "name": "Split Solid Timber Leg / Structural Crack",
+          "severity": 3,
+          "repairCost": {
+            "min": 250,
+            "max": 750,
+            "default": 420
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Hardwood leg cracked along grain line from uneven tilting load.",
+          "diySteps": [
+            "Pry split open slightly with thin blade.",
+            "Force wood glue deep into crack with syringe or thin card.",
+            "Clamp securely with 2 C-clamps; drill perpendicular hole and drive hidden fluted wooden dowel.",
+            "Wipe squeeze-out with damp cloth."
+          ],
+          "toolsRequired": [
+            "Drill & wood bit",
+            "Fluted dowel",
+            "Wood glue",
+            "C-clamps"
+          ]
+        },
+        {
+          "id": "fn_cracked_laminate",
+          "label": "Peeling Edge Banding / Surface Veneer",
+          "name": "Peeling Edge Banding / Surface Veneer",
+          "severity": 1,
+          "repairCost": {
+            "min": 80,
+            "max": 250,
+            "default": 150
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "PVC or melamine edge tape peeling back, catching on clothing.",
+          "diySteps": [
+            "Clean old dust under peeling strip.",
+            "Cover with baking paper and iron over edge with household clothes iron on medium heat to reactivate hot-melt glue.",
+            "Press down with wooden block until cooled, trim excess with utility knife."
+          ],
+          "toolsRequired": [
+            "Household clothes iron",
+            "Baking paper",
+            "Utility knife"
+          ]
         }
       ]
     },
     {
-      "id": "mobility_bicycles",
-      "name": "Bicycles & Mobility",
+      "id": "bicycle",
+      "name": "Bicycle",
+      "slug": "bicycle",
+      "aliases": [
+        "bicycle",
+        "mobility_bicycles"
+      ],
       "icon": "Bike",
-      "description": "Bicycles, scooters, and urban personal transit",
-      "averageLifespanYears": 10,
-      "embodiedCo2Kg": 120,
+      "description": "Commuter cycles, road bicycles, mountain bikes, and geared hybrid bikes",
+      "expectedLifespanYears": 8,
+      "isElectronics": false,
+      "embodiedCo2Kg": 60,
+      "replaceCost": {
+        "min": 5000,
+        "max": 35000,
+        "default": 9500
+      },
+      "safetyFlags": [
+        {
+          "id": "brake_failure",
+          "label": "Brakes not gripping or cable snapped",
+          "isCritical": false
+        },
+        {
+          "id": "cracked_frame",
+          "label": "Crack or buckling at welded frame headtube joint",
+          "isCritical": false
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "by_indoor_trainer",
+          "title": "Indoor Stationary Fitness Spin Bike",
+          "description": "Mount onto an inexpensive magnetic resistance stand for indoor winter cardio workouts."
+        },
+        {
+          "id": "by_wall_art",
+          "title": "Bicycle Handlebar & Seat Coat Rack",
+          "description": "Mount chrome drop handlebars and vintage leather saddle to wood as an eye-catching wall rack."
+        },
+        {
+          "id": "by_wheel_clock",
+          "title": "Spoke Wheel Trellis or Giant Wall Clock",
+          "description": "Turn true steel rim and spokes into an outdoor garden climber or retro quartz clock face."
+        }
+      ],
+      "reuseRoutes": [
+        "Donate to youth sports foundation or local cycling club",
+        "Pass to family member or daily station commuter",
+        "List on local sports exchange forums"
+      ],
+      "checklists": {
+        "repair": [
+          "Invert bike or mount in repair stand to inspect moving drive train safely.",
+          "Check tire inflation pressure with Schrader/Presta pressure gauge.",
+          "Degrease chain and sprockets before applying dry PTFE or wet chain lube.",
+          "Torque axle nuts and handlebar stem bolts to safe manufacturer specifications."
+        ],
+        "reuse": [
+          "Wash mud off frame, rims, and derailleur pivots.",
+          "Adjust seat post height so knee has slight 15-degree bend at bottom stroke.",
+          "Verify front and rear reflectors and bell are functional."
+        ],
+        "repurpose": [
+          "Strip chain, cables, and brake calipers.",
+          "Clean metal tubing with degreaser and metal polish.",
+          "Securely anchor wall mounting hardware into masonry wall studs."
+        ],
+        "replace": [
+          "Choose lightweight 6061 aluminium or chromoly steel frames.",
+          "Verify reliable Shimano or microSHIFT drivetrain componentry.",
+          "Pick mechanical or hydraulic disc brakes for wet weather stopping reliability."
+        ],
+        "recycle": [
+          "Aluminium frame, steel spokes, and brass nipples have 100% scrap recycling efficiency.",
+          "Butyl rubber inner tubes can be recycled by local vulcanizing tire shops."
+        ]
+      },
       "items": [
         {
           "id": "commuter_bike",
-          "name": "City Commuter Bicycle",
-          "defaultNewPrice": 480,
-          "embodiedCo2Kg": 140,
-          "typicalLifespanYears": 12,
-          "commonFaults": ["flat_tire_tube", "worn_brake_pads", "skipping_chain_gears", "wobbly_wheel_out_of_true", "cracked_frame_joint"]
+          "name": "Single-Speed Commuter Bicycle",
+          "defaultNewPrice": 6500,
+          "typicalLifespanYears": 8,
+          "commonFaults": [
+            "by_punctured_tube",
+            "by_brake_pads_worn",
+            "by_chain_rusty_slack"
+          ]
+        },
+        {
+          "id": "geared_hybrid",
+          "name": "21-Speed Hybrid Bicycle",
+          "defaultNewPrice": 14500,
+          "typicalLifespanYears": 8,
+          "commonFaults": [
+            "by_shifter_cable_snapped",
+            "by_wheel_out_of_true",
+            "by_brake_pads_worn",
+            "by_bottom_bracket_creak"
+          ]
+        },
+        {
+          "id": "mountain_bike",
+          "name": "Hardtail Mountain Bike",
+          "defaultNewPrice": 19000,
+          "typicalLifespanYears": 8,
+          "commonFaults": [
+            "by_wheel_out_of_true",
+            "by_shifter_cable_snapped",
+            "by_punctured_tube",
+            "by_bottom_bracket_creak"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "by_punctured_tube",
+          "label": "Flat Tire / Punctured Inner Tube",
+          "name": "Flat Tire / Punctured Inner Tube",
+          "severity": 1,
+          "repairCost": {
+            "min": 60,
+            "max": 180,
+            "default": 110
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Thorn or glass sliver caused slow air leak in butyl tube.",
+          "diySteps": [
+            "Unseat tire bead using 2 plastic tire levers.",
+            "Pull out tube and submerge in water bowl to pinpoint air bubbles.",
+            "Buff area with sandpaper, apply vulcanizing rubber cement, and press patch firmly for 3 minutes.",
+            "Check inside tire carcass with fingers for remaining thorns before re-installing."
+          ],
+          "toolsRequired": [
+            "Tire levers",
+            "Puncture patch kit",
+            "Bicycle hand pump"
+          ]
+        },
+        {
+          "id": "by_brake_pads_worn",
+          "label": "Worn Rim Brake Pads / Poor Braking",
+          "name": "Worn Rim Brake Pads / Poor Braking",
+          "severity": 2,
+          "repairCost": {
+            "min": 120,
+            "max": 380,
+            "default": 220
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Rubber brake pads worn down to steel wear line; squealing loudly against rim.",
+          "diySteps": [
+            "Unscrew 5mm hex bolt securing pad to brake caliper arm.",
+            "Mount fresh all-weather rubber compound brake shoes.",
+            "Adjust alignment so pad strikes rim center squarely without touching tire rubber.",
+            "Toe-in pad front by 1 mm to prevent squealing."
+          ],
+          "toolsRequired": [
+            "5mm Allen hex key",
+            "Replacement brake pads"
+          ]
+        },
+        {
+          "id": "by_chain_rusty_slack",
+          "label": "Rusty / Sagging Drive Chain",
+          "name": "Rusty / Sagging Drive Chain",
+          "severity": 2,
+          "repairCost": {
+            "min": 100,
+            "max": 350,
+            "default": 200
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Chain dried out and rusted from rain, causing stiff links and skipping sprockets.",
+          "diySteps": [
+            "Scrub chain with brass wire brush and citrus degreaser to strip rust.",
+            "Check chain stretch with chain checker tool.",
+            "Apply single drop of synthetic bicycle chain lube to each roller.",
+            "Backpedal 20 rotations and wipe off excess surface oil."
+          ],
+          "toolsRequired": [
+            "Citrus degreaser",
+            "Chain lube bottle",
+            "Rag",
+            "Wire brush"
+          ]
+        },
+        {
+          "id": "by_shifter_cable_snapped",
+          "label": "Snapped Gear Derailleur Cable",
+          "name": "Snapped Gear Derailleur Cable",
+          "severity": 2,
+          "repairCost": {
+            "min": 90,
+            "max": 280,
+            "default": 160
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Shifter cable frayed inside shifter pod, locking bike in smallest gear.",
+          "diySteps": [
+            "Shift to highest gear setting and undo anchor bolt at rear derailleur.",
+            "Pull old cable through housing and thread new stainless steel slick cable.",
+            "Pull cable taut with pliers, tighten anchor bolt, and turn barrel adjuster to index gears."
+          ],
+          "toolsRequired": [
+            "Cable cutter",
+            "Allen key set",
+            "Replacement inner cable"
+          ]
+        },
+        {
+          "id": "by_wheel_out_of_true",
+          "label": "Wobbly Wheel Rim / Rubbing Brake",
+          "name": "Wobbly Wheel Rim / Rubbing Brake",
+          "severity": 2,
+          "repairCost": {
+            "min": 120,
+            "max": 380,
+            "default": 220
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Pothole impact loosened spoke tension, causing rim to wobble laterally.",
+          "diySteps": [
+            "Mount bike upright and spin wheel against brake pad reference.",
+            "Where rim moves right, tighten left spoke nipple 1/4 turn and loosen right spoke 1/4 turn.",
+            "Continue fine tuning in small increments until lateral runout is under 1 mm."
+          ],
+          "toolsRequired": [
+            "Spoke wrench tool",
+            "Zip-tie indicator guide"
+          ]
+        },
+        {
+          "id": "by_bottom_bracket_creak",
+          "label": "Creaking Crank Bottom Bracket Bearings",
+          "name": "Creaking Crank Bottom Bracket Bearings",
+          "severity": 3,
+          "repairCost": {
+            "min": 280,
+            "max": 750,
+            "default": 480
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Loud rhythmic click/creak every pedal stroke under hill climbing torque.",
+          "diySteps": [
+            "Remove crank bolts and extract crank arms with crank puller tool.",
+            "Unscrew drive and non-drive bottom bracket cups (note reverse thread).",
+            "Clean frame bottom bracket shell threads, apply anti-seize grease, and install sealed cartridge unit."
+          ],
+          "toolsRequired": [
+            "Crank puller",
+            "Bottom bracket splined tool",
+            "Waterproof grease"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bag_or_footwear",
+      "name": "Bag or Footwear",
+      "slug": "bag or footwear",
+      "aliases": [
+        "bag_or_footwear",
+        "bag or footwear",
+        "apparel_footwear"
+      ],
+      "icon": "ShoppingBag",
+      "description": "Travel backpacks, laptop rucksacks, leather boots, running sneakers, and duffel bags",
+      "expectedLifespanYears": 4,
+      "isElectronics": false,
+      "embodiedCo2Kg": 22,
+      "replaceCost": {
+        "min": 1200,
+        "max": 8000,
+        "default": 2800
+      },
+      "safetyFlags": [
+        {
+          "id": "sharp_metal_buckle",
+          "label": "Broken sharp buckle edge or protruding wire eyelet",
+          "isCritical": false
+        }
+      ],
+      "repurposeIdeas": [
+        {
+          "id": "bf_apron",
+          "title": "Heavy-Duty Workshop Tool Apron",
+          "description": "Cut tough Cordura or canvas backpack panels into a multi-pocket tool and garden apron."
+        },
+        {
+          "id": "bf_straps",
+          "title": "Nylon Luggage Straps & Keyrings",
+          "description": "Salvage durable nylon webbing straps and quick-release buckles for motorcycle cargo tie-downs."
+        },
+        {
+          "id": "bf_kneepads",
+          "title": "EVA Foam Kneeling Gardening Pads",
+          "description": "Repurpose dense sneaker midsole foam or backpack lumbar cushioning into comfortable kneeling pads."
+        }
+      ],
+      "reuseRoutes": [
+        "Donate lightly scuffed bags to underprivileged student book drives",
+        "Use as utility gym bag or trunk organizer in car",
+        "Pass along to community thrift stores or shelter clothing drives"
+      ],
+      "checklists": {
+        "repair": [
+          "Clean dirt and oils from bond areas using rubbing alcohol.",
+          "Use curved heavy upholstery needles and bonded nylon thread (size #69) for fabric seams.",
+          "Apply contact cement (Barge or Shoe Goo) to both surfaces, let tack dry for 10 minutes before pressing.",
+          "Clamp bonded soles with rubber bands or heavy books for 24 hours."
+        ],
+        "reuse": [
+          "Machine or hand wash in cold water with gentle detergent.",
+          "Treat leather shoes with conditioning cream and polish.",
+          "Replace worn interior insoles with fresh breathable memory foam insoles."
+        ],
+        "repurpose": [
+          "Unpick stitching cleanly with seam ripper.",
+          "Trim raw fabric edges with pinking shears to stop fraying."
+        ],
+        "replace": [
+          "Prioritize Goodyear welted footwear with re-soleable construction.",
+          "Look for backpacks made with 1000D Cordura and YKK size #10 zippers.",
+          "Check manufacturer repair warranty policies."
+        ],
+        "recycle": [
+          "Drop shoes at Nike Grind or athletic footwear recycling bins at sports stores.",
+          "Remove brass grommets and metal zip sliders for scrap."
+        ]
+      },
+      "items": [
+        {
+          "id": "laptop_backpack",
+          "name": "Everyday Laptop Backpack",
+          "defaultNewPrice": 2800,
+          "typicalLifespanYears": 4,
+          "commonFaults": [
+            "bf_zipper_slider_separated",
+            "bf_strap_stitching_torn",
+            "bf_snapped_plastic_buckle"
+          ]
+        },
+        {
+          "id": "leather_shoes",
+          "name": "Leather Formal Shoes",
+          "defaultNewPrice": 3800,
+          "typicalLifespanYears": 5,
+          "commonFaults": [
+            "bf_sole_peeling",
+            "bf_worn_heel_tap",
+            "bf_canvas_tear"
+          ]
+        },
+        {
+          "id": "running_sneakers",
+          "name": "Running Sneakers",
+          "defaultNewPrice": 3500,
+          "typicalLifespanYears": 3,
+          "commonFaults": [
+            "bf_sole_peeling",
+            "bf_worn_heel_tap",
+            "bf_canvas_tear"
+          ]
+        }
+      ],
+      "commonFaults": [
+        {
+          "id": "bf_zipper_slider_separated",
+          "label": "Separated Zipper Teeth / Broken Slider",
+          "name": "Separated Zipper Teeth / Broken Slider",
+          "severity": 2,
+          "repairCost": {
+            "min": 70,
+            "max": 220,
+            "default": 130
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Zipper tracks split open behind the slider or pull tab broke off.",
+          "diySteps": [
+            "Check zipper teeth are intact without missing plastic nubs.",
+            "If teeth don't interlock, slider gap has widened; gently squeeze slider cheeks with pliers.",
+            "If worn, cut top stop, slide on replacement matching slider (e.g. #5 or #8), and crimp new metal top stop.",
+            "Rub candle wax along track for smooth gliding."
+          ],
+          "toolsRequired": [
+            "Pliers",
+            "Replacement zipper slider (#5 or #8)",
+            "Candle wax"
+          ]
+        },
+        {
+          "id": "bf_sole_peeling",
+          "label": "Separated Outsole Flapping at Toe",
+          "name": "Separated Outsole Flapping at Toe",
+          "severity": 2,
+          "repairCost": {
+            "min": 90,
+            "max": 280,
+            "default": 170
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Factory polyurethane adhesive degraded, causing toe or heel tread to flap open.",
+          "diySteps": [
+            "Scrape old yellow glue and dust from both shoe upper and rubber sole.",
+            "Wipe clean with rubbing alcohol.",
+            "Apply thin coat of Shoe Goo or polyurethane contact adhesive to both surfaces.",
+            "Wait 8-10 minutes until tacky, press together firmly, and wrap tightly with strong elastic bands for 24 hours."
+          ],
+          "toolsRequired": [
+            "Shoe Goo or Barge contact cement",
+            "Sandpaper",
+            "Heavy elastic bands"
+          ]
+        },
+        {
+          "id": "bf_strap_stitching_torn",
+          "label": "Shoulder Strap Seam Pulled Out",
+          "name": "Shoulder Strap Seam Pulled Out",
+          "severity": 2,
+          "repairCost": {
+            "min": 80,
+            "max": 250,
+            "default": 140
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Heavy laptop weight pulled bar-tack stitching out of top back seam.",
+          "diySteps": [
+            "Tuck strap end 2 cm inside bag seam.",
+            "Thread heavy gauge bonded nylon thread through heavy curved hand needle.",
+            "Sew a reinforced 'box-X' stitch pattern through all fabric layers.",
+            "Knot securely and melt thread ends with lighter flame."
+          ],
+          "toolsRequired": [
+            "Curved upholstery needle",
+            "Bonded nylon thread",
+            "Thimble",
+            "Snips"
+          ]
+        },
+        {
+          "id": "bf_worn_heel_tap",
+          "label": "Worn Out Heel Rubber / Uneven Tread",
+          "name": "Worn Out Heel Rubber / Uneven Tread",
+          "severity": 2,
+          "repairCost": {
+            "min": 140,
+            "max": 420,
+            "default": 250
+          },
+          "diyDifficulty": "medium",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Outsole heel rubber worn down to hollow foam core, throwing off walking posture.",
+          "diySteps": [
+            "Sand worn heel flat with 60-grit coarse sandpaper.",
+            "Coat replacement high-density rubber heel tap and shoe heel with contact adhesive.",
+            "Hammer together with shoe anvil or mallet, and trim perimeter flush with sharp hobby knife."
+          ],
+          "toolsRequired": [
+            "Replacement rubber heel tap",
+            "Shoe glue",
+            "Hobby knife",
+            "Sandpaper"
+          ]
+        },
+        {
+          "id": "bf_snapped_plastic_buckle",
+          "label": "Cracked Side-Release Webbing Buckle",
+          "name": "Cracked Side-Release Webbing Buckle",
+          "severity": 1,
+          "repairCost": {
+            "min": 40,
+            "max": 140,
+            "default": 70
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Plastic prong cracked after being slammed in car door.",
+          "diySteps": [
+            "Snip cracked female or male buckle section off webbing loop.",
+            "Slide in a 'field repair' split-bar buckle without requiring any seam unpicking.",
+            "Pull webbing through tensioner to test hold."
+          ],
+          "toolsRequired": [
+            "Field-repair split-bar buckle (25mm)",
+            "Scissors"
+          ]
+        },
+        {
+          "id": "bf_canvas_tear",
+          "label": "Torn Ripstop Canvas or Lining Pocket",
+          "name": "Torn Ripstop Canvas or Lining Pocket",
+          "severity": 2,
+          "repairCost": {
+            "min": 80,
+            "max": 280,
+            "default": 160
+          },
+          "diyDifficulty": "easy",
+          "partsCommon": true,
+          "safetyFlags": [],
+          "description": "Puncture hole or slit tear in backpack side or shoe lining.",
+          "diySteps": [
+            "Round the corners of a self-adhesive nylon repair patch (e.g. Tenacious Tape) so edges don't lift.",
+            "Smooth torn canvas flat on table.",
+            "Press patch firmly over tear and rub with back of spoon to activate pressure-sensitive adhesive."
+          ],
+          "toolsRequired": [
+            "Tenacious Tape or self-adhesive nylon patch",
+            "Scissors"
+          ]
         }
       ]
     }
   ],
   "faults": {
+    "ka_blender_coupler": {
+      "id": "ka_blender_coupler",
+      "label": "Stripped Drive Coupler Teeth",
+      "name": "Stripped Drive Coupler Teeth",
+      "severity": 2,
+      "repairCost": {
+        "min": 100,
+        "max": 350,
+        "default": 180
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Rubber or nylon drive teeth rounded off from ice overload, causing motor to spin freely.",
+      "diySteps": [
+        "Unplug appliance completely.",
+        "Hold motor shaft underneath with flathead screwdriver or cloth.",
+        "Unscrew coupler clockwise (reverse thread) and replace with identical replacement coupler.",
+        "Tighten securely and test with empty jar."
+      ],
+      "toolsRequired": [
+        "Flathead screwdriver",
+        "Replacement rubber coupler",
+        "Clean cloth"
+      ],
+      "categoryId": "kitchen_appliance"
+    },
+    "ka_kettle_switch": {
+      "id": "ka_kettle_switch",
+      "label": "Auto-Shutoff Bimetal Switch Stuck",
+      "name": "Auto-Shutoff Bimetal Switch Stuck",
+      "severity": 2,
+      "repairCost": {
+        "min": 150,
+        "max": 400,
+        "default": 220
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Steam bimetal strip fails to trigger switch off automatically when boiling.",
+      "diySteps": [
+        "Unplug base and open kettle handle access screws.",
+        "Inspect steam tube channel for lime-scale deposits blocking vapor flow.",
+        "Gently clean contacts with isopropyl alcohol or replace standard T125 thermostat switch.",
+        "Reassemble handle and boil clean water to verify auto cut-off."
+      ],
+      "toolsRequired": [
+        "Phillips screwdriver",
+        "Isopropyl alcohol",
+        "Descaling powder"
+      ],
+      "categoryId": "kitchen_appliance"
+    },
+    "ka_motor_carbon_brushes": {
+      "id": "ka_motor_carbon_brushes",
+      "label": "Worn Motor Carbon Brushes",
+      "name": "Worn Motor Carbon Brushes",
+      "severity": 3,
+      "repairCost": {
+        "min": 200,
+        "max": 600,
+        "default": 320
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Motor sparks intermittently and runs sluggishly due to carbon brushes worn past minimum length.",
+      "diySteps": [
+        "Unscrew motor base enclosure.",
+        "Unclip brass brush retainer springs.",
+        "Slide out worn carbon blocks and measure commutator ring surface.",
+        "Insert fresh brush pair and clip retainers back."
+      ],
+      "toolsRequired": [
+        "Screwdriver set",
+        "Replacement carbon brush set",
+        "Needle nose pliers"
+      ],
+      "categoryId": "kitchen_appliance"
+    },
+    "ka_heating_element": {
+      "id": "ka_heating_element",
+      "label": "Blown Heating Element / Coil",
+      "name": "Blown Heating Element / Coil",
+      "severity": 3,
+      "repairCost": {
+        "min": 350,
+        "max": 950,
+        "default": 550
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Appliance powers on indicator light but base produces zero heat.",
+      "diySteps": [
+        "Check continuity across element terminals using multimeter resistance mode.",
+        "Detach heat-resistant push terminals and remove mounting flange nuts.",
+        "Fit matching OEM replacement heating ring or cartridge with new heatproof silicone gasket."
+      ],
+      "toolsRequired": [
+        "Multimeter",
+        "Spanner / Socket set",
+        "Replacement element"
+      ],
+      "categoryId": "kitchen_appliance"
+    },
+    "ka_burning_smell": {
+      "id": "ka_burning_smell",
+      "label": "Acrid Burning Odor / Coil Insulation Melting",
+      "name": "Acrid Burning Odor / Coil Insulation Melting",
+      "severity": 5,
+      "repairCost": {
+        "min": 1200,
+        "max": 2800,
+        "default": 1800
+      },
+      "diyDifficulty": "hard",
+      "partsCommon": false,
+      "safetyFlags": [
+        "burning_smell"
+      ],
+      "description": "Burnt varnish or melted wire sheath causing intense smoking and severe short circuit hazard.",
+      "diySteps": [
+        "DO NOT USE DIY FIX. Requires professional coil rewinding or high-voltage insulation bench testing."
+      ],
+      "toolsRequired": [
+        "Certified bench test station"
+      ],
+      "categoryId": "kitchen_appliance"
+    },
+    "ka_mains_cord_frayed": {
+      "id": "ka_mains_cord_frayed",
+      "label": "Exposed Mains Copper Wire / Frayed Cable",
+      "name": "Exposed Mains Copper Wire / Frayed Cable",
+      "severity": 4,
+      "repairCost": {
+        "min": 150,
+        "max": 400,
+        "default": 220
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [
+        "exposed_mains_wiring"
+      ],
+      "description": "Outer PVC jacket torn at strain-relief boot, revealing live mains conductors.",
+      "diySteps": [
+        "Unplug immediately. Do not attempt tape-only repairs on 16A mains.",
+        "Open bottom cord clamp, trim off fatigued cable section.",
+        "Strip fresh insulation, crimp spade connectors, and anchor firmly into strain relief boot."
+      ],
+      "toolsRequired": [
+        "Wire strippers",
+        "16A 3-core replacement cord",
+        "Crimping pliers"
+      ],
+      "categoryId": "kitchen_appliance"
+    },
+    "pl_battery_swollen": {
+      "id": "pl_battery_swollen",
+      "label": "Swollen Puffy Lithium Battery (Display Lifting)",
+      "name": "Swollen Puffy Lithium Battery (Display Lifting)",
+      "severity": 5,
+      "repairCost": {
+        "min": 1500,
+        "max": 4200,
+        "default": 2400
+      },
+      "diyDifficulty": "hard",
+      "partsCommon": true,
+      "safetyFlags": [
+        "swollen_battery"
+      ],
+      "description": "Gas buildup in lithium pouch causing acute fire/thermal runaway hazard.",
+      "diySteps": [
+        "CRITICAL SAFETY HAZARD. Immediately stop charging and power off device.",
+        "Do not puncture, squeeze, or apply heat to the battery pouch.",
+        "Take immediately to certified technician equipped with fire-safe sand buckets."
+      ],
+      "toolsRequired": [
+        "Fireproof lipo bag",
+        "Certified service bench"
+      ],
+      "categoryId": "phone_or_laptop"
+    },
+    "pl_battery_degraded": {
+      "id": "pl_battery_degraded",
+      "label": "Degraded Battery (Shuts down below 30%)",
+      "name": "Degraded Battery (Shuts down below 30%)",
+      "severity": 2,
+      "repairCost": {
+        "min": 1200,
+        "max": 3200,
+        "default": 1900
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Chemical capacity decayed under 75% health after years of charging cycles.",
+      "diySteps": [
+        "Heat rear perimeter with warm gel pack to soften adhesive gasket.",
+        "Use suction cup and plastic guitar pick to gently lift back cover.",
+        "Unscrew battery bracket, disconnect flex cable, pull release adhesive tabs.",
+        "Install fresh OEM battery cell and reapply adhesive perimeter."
+      ],
+      "toolsRequired": [
+        "Heat pack",
+        "Suction handle",
+        "Plastic picks",
+        "Torx T3/T4 screwdriver"
+      ],
+      "categoryId": "phone_or_laptop"
+    },
+    "pl_cracked_screen": {
+      "id": "pl_cracked_screen",
+      "label": "Cracked Front Glass / Touch Display",
+      "name": "Cracked Front Glass / Touch Display",
+      "severity": 3,
+      "repairCost": {
+        "min": 2500,
+        "max": 9500,
+        "default": 4600
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Spiderweb glass fracture from drop impact; touch digitizer or AMOLED panel damaged.",
+      "diySteps": [
+        "Apply clear packing tape over splintered glass to avoid finger cuts.",
+        "Disconnect battery connector first before disconnecting display ribbon.",
+        "Transfer ambient light sensor and speaker mesh to new display assembly.",
+        "Connect new display, test all touch points and brightness before final adhesive clamping."
+      ],
+      "toolsRequired": [
+        "iOpener heat tool",
+        "Plastic spudger",
+        "P2 Pentalobe / Phillips #000"
+      ],
+      "categoryId": "phone_or_laptop"
+    },
+    "pl_charging_port_clogged": {
+      "id": "pl_charging_port_clogged",
+      "label": "Loose / Lint-Clogged USB-C Port",
+      "name": "Loose / Lint-Clogged USB-C Port",
+      "severity": 1,
+      "repairCost": {
+        "min": 100,
+        "max": 600,
+        "default": 250
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Cable falls out easily and fast charging drops due to packed pocket lint in port recess.",
+      "diySteps": [
+        "Turn off device and illuminate port with bright flashlight.",
+        "Use non-conductive wooden toothpick or plastic probe to gently extract compressed lint.",
+        "Blow dry compressed air burst to clear dislodged fibers.",
+        "Insert cable firmly until tactile click confirms full engagement."
+      ],
+      "toolsRequired": [
+        "Wooden toothpick",
+        "Bright LED light",
+        "Can of compressed air"
+      ],
+      "categoryId": "phone_or_laptop"
+    },
+    "pl_cooling_fan_buzzing": {
+      "id": "pl_cooling_fan_buzzing",
+      "label": "Dust-Choked Fan / Thermal Throttling",
+      "name": "Dust-Choked Fan / Thermal Throttling",
+      "severity": 2,
+      "repairCost": {
+        "min": 200,
+        "max": 800,
+        "default": 400
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Laptop runs burning hot and fan buzzes loudly due to dust pelt blocking heatsink fins.",
+      "diySteps": [
+        "Remove bottom chassis screws and pry cover.",
+        "Hold fan blades stationary with finger so bearings do not overspin.",
+        "Brush dust felt from copper heatsink fins and vacuum gently.",
+        "Apply drop of fresh thermal paste on CPU/GPU if heat pipe was removed."
+      ],
+      "toolsRequired": [
+        "Phillips #0 screwdriver",
+        "Soft brush",
+        "Thermal paste syringe"
+      ],
+      "categoryId": "phone_or_laptop"
+    },
+    "pl_keyboard_keys_stuck": {
+      "id": "pl_keyboard_keys_stuck",
+      "label": "Sticky / Non-Registering Keyboard Keys",
+      "name": "Sticky / Non-Registering Keyboard Keys",
+      "severity": 2,
+      "repairCost": {
+        "min": 300,
+        "max": 1400,
+        "default": 650
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Beverage spill residue or debris underneath scissor switch hinge.",
+      "diySteps": [
+        "Gently pop off offending keycap using thin pry tool.",
+        "Clean scissor mechanism and rubber dome with 99% isopropyl alcohol swab.",
+        "Allow 15 minutes to dry fully, snap keycap back down until it clicks."
+      ],
+      "toolsRequired": [
+        "Keycap puller / plastic pry",
+        "99% Isopropyl alcohol",
+        "Micro-swabs"
+      ],
+      "categoryId": "phone_or_laptop"
+    },
+    "cc_cable_frayed_neck": {
+      "id": "cc_cable_frayed_neck",
+      "label": "Outer Sheath Frayed at Connector Boot",
+      "name": "Outer Sheath Frayed at Connector Boot",
+      "severity": 4,
+      "repairCost": {
+        "min": 50,
+        "max": 200,
+        "default": 110
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [
+        "exposed_mains_wiring"
+      ],
+      "description": "Strain relief collar split open; braided shielding or internal conductors visible.",
+      "diySteps": [
+        "Check internal copper strands are still intact without shorting.",
+        "Slide marine-grade adhesive-lined polyolefin heat-shrink tubing over connector head.",
+        "Shrink with heat gun or hair dryer until adhesive oozes slightly, forming stiff reinforced boot.",
+        "Add silicone cable spring collar for extra flex resistance."
+      ],
+      "toolsRequired": [
+        "Heat shrink tube (adhesive lined)",
+        "Heat gun / lighter",
+        "Snips"
+      ],
+      "categoryId": "charger_or_cable"
+    },
+    "cc_intermittent_connection": {
+      "id": "cc_intermittent_connection",
+      "label": "Intermittent Charging (Wire Broken Inside Neck)",
+      "name": "Intermittent Charging (Wire Broken Inside Neck)",
+      "severity": 2,
+      "repairCost": {
+        "min": 80,
+        "max": 280,
+        "default": 160
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Charges only when bent at a specific angle due to fatigue fracture in copper hair wires.",
+      "diySteps": [
+        "Cut cable 2 cm back from damaged molded plug.",
+        "Strip outer jacket to expose internal conductor cores.",
+        "Solder leads onto a DIY solderable metal USB-C / Lightning plug replacement head.",
+        "Snap outer metal shielding shell and crimp strain relief."
+      ],
+      "toolsRequired": [
+        "Soldering iron",
+        "Solder",
+        "Replacement DIY USB plug shell"
+      ],
+      "categoryId": "charger_or_cable"
+    },
+    "cc_bent_pin": {
+      "id": "cc_bent_pin",
+      "label": "Bent Connector Plug / Housing",
+      "name": "Bent Connector Plug / Housing",
+      "severity": 2,
+      "repairCost": {
+        "min": 40,
+        "max": 150,
+        "default": 80
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Metal shell squished or bent from being stepped on, preventing port insertion.",
+      "diySteps": [
+        "Carefully inspect interior tongue with magnifying loupe.",
+        "Use flat precision watchmaker screwdriver to gently reform outer rectangular metal shield.",
+        "Verify pins are not shorted before plugging into low-value device."
+      ],
+      "toolsRequired": [
+        "Jeweler screwdriver",
+        "Magnifier loupe"
+      ],
+      "categoryId": "charger_or_cable"
+    },
+    "cc_corroded_contacts": {
+      "id": "cc_corroded_contacts",
+      "label": "Tarnished / Blackened Gold Pins",
+      "name": "Tarnished / Blackened Gold Pins",
+      "severity": 1,
+      "repairCost": {
+        "min": 30,
+        "max": 100,
+        "default": 50
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Blackened oxide coating on power pins causing slow or failed charging handshake.",
+      "diySteps": [
+        "Dip stiff bristle interdental brush into 99% isopropyl alcohol.",
+        "Scrub contact pins back and forth vigorously to remove carbonization.",
+        "Dry with microfiber cloth and apply thin coat of DeoxIT contact cleaner."
+      ],
+      "toolsRequired": [
+        "Isopropyl alcohol",
+        "Interdental brush",
+        "Microfiber cloth"
+      ],
+      "categoryId": "charger_or_cable"
+    },
+    "cc_adapter_overheating": {
+      "id": "cc_adapter_overheating",
+      "label": "Wall Adapter Burning Smell / Melting Shell",
+      "name": "Wall Adapter Burning Smell / Melting Shell",
+      "severity": 5,
+      "repairCost": {
+        "min": 500,
+        "max": 1600,
+        "default": 950
+      },
+      "diyDifficulty": "hard",
+      "partsCommon": false,
+      "safetyFlags": [
+        "burning_smell"
+      ],
+      "description": "Blown primary switching MOSFET or shorted transformer winding generating smoke.",
+      "diySteps": [
+        "CRITICAL FIRE HAZARD. Immediately unplug from mains.",
+        "Ultrasonically welded power bricks cannot be safely opened or resealed at home.",
+        "Recycle immediately and replace with compliant charger."
+      ],
+      "toolsRequired": [
+        "None (unsafe to repair)"
+      ],
+      "categoryId": "charger_or_cable"
+    },
+    "ad_earcup_padding_peeling": {
+      "id": "ad_earcup_padding_peeling",
+      "label": "Flaking Leatherette Ear Cushions",
+      "name": "Flaking Leatherette Ear Cushions",
+      "severity": 1,
+      "repairCost": {
+        "min": 250,
+        "max": 700,
+        "default": 380
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Polyurethane leather flakes off in black specks onto ears, though audio drivers remain pristine.",
+      "diySteps": [
+        "Gently rotate or unclip old cushion plastic retaining rings.",
+        "Clean old adhesive residue with isopropyl swab.",
+        "Stretch replacement breathable velour or cooling gel ear pads over headphone rim and click firmly into place."
+      ],
+      "toolsRequired": [
+        "Replacement ear pad set",
+        "Small plastic spudger"
+      ],
+      "categoryId": "audio_device"
+    },
+    "ad_headband_snapped": {
+      "id": "ad_headband_snapped",
+      "label": "Snapped Plastic Headband Arch",
+      "name": "Snapped Plastic Headband Arch",
+      "severity": 2,
+      "repairCost": {
+        "min": 150,
+        "max": 550,
+        "default": 280
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Tension arch cracked at stress point, preventing headphones from clamping to head.",
+      "diySteps": [
+        "Rough up plastic edges with 220-grit sandpaper.",
+        "Splint crack with thin flexible spring steel strip or zip-tie reinforcement.",
+        "Bond with two-part epoxy or wrap tightly with self-amalgamating silicone tape."
+      ],
+      "toolsRequired": [
+        "Two-part epoxy",
+        "Sandpaper",
+        "Silicone self-fusing tape"
+      ],
+      "categoryId": "audio_device"
+    },
+    "ad_one_side_silent": {
+      "id": "ad_one_side_silent",
+      "label": "One Channel Silent (Frayed Jack Wire)",
+      "name": "One Channel Silent (Frayed Jack Wire)",
+      "severity": 2,
+      "repairCost": {
+        "min": 100,
+        "max": 350,
+        "default": 200
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Sound cuts out in left or right ear unless 3.5mm plug is wiggled.",
+      "diySteps": [
+        "Snip off factory molded 3.5mm plug 3 cm from bend.",
+        "Burn enamel insulation off copper hairs with lighter flame, then tin with solder flux.",
+        "Solder Left (tip), Right (ring), and Ground (sleeve) onto metal replacement 3.5mm TRS jack."
+      ],
+      "toolsRequired": [
+        "Soldering iron",
+        "Lighter",
+        "Replacement 3.5mm TRS gold plug"
+      ],
+      "categoryId": "audio_device"
+    },
+    "ad_battery_draining_fast": {
+      "id": "ad_battery_draining_fast",
+      "label": "Battery Lasts Under 30 Minutes",
+      "name": "Battery Lasts Under 30 Minutes",
+      "severity": 3,
+      "repairCost": {
+        "min": 450,
+        "max": 1300,
+        "default": 700
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Internal 3.7V lithium pouch holds fraction of original charge.",
+      "diySteps": [
+        "Unclip ear cup cover and unscrew internal acoustic baffle.",
+        "De-solder red (+) and black (-) leads from old lithium cell.",
+        "Fit identical dimension 3.7V lipo cell with protection circuit board.",
+        "Re-solder leads, secure with double-sided foam tape, and reassemble."
+      ],
+      "toolsRequired": [
+        "Precision screwdriver",
+        "Soldering iron",
+        "Replacement 3.7V LiPo"
+      ],
+      "categoryId": "audio_device"
+    },
+    "ad_swollen_earbud_case": {
+      "id": "ad_swollen_earbud_case",
+      "label": "Bulging Charging Case / Swollen Lithium Cell",
+      "name": "Bulging Charging Case / Swollen Lithium Cell",
+      "severity": 5,
+      "repairCost": {
+        "min": 900,
+        "max": 2600,
+        "default": 1500
+      },
+      "diyDifficulty": "hard",
+      "partsCommon": false,
+      "safetyFlags": [
+        "swollen_battery"
+      ],
+      "description": "Lithium polymer pack swollen inside compact case, forcing plastic lid ajar.",
+      "diySteps": [
+        "CRITICAL BATTERY HAZARD. Cease charging immediately.",
+        "Do not compress or attempt to close lid.",
+        "Bring to certified e-waste handler for safe neutralization."
+      ],
+      "toolsRequired": [
+        "None (hazardous)"
+      ],
+      "categoryId": "audio_device"
+    },
+    "fc_capacitor_weak": {
+      "id": "fc_capacitor_weak",
+      "label": "Weak Run Capacitor (Fan Spins at Half Speed)",
+      "name": "Weak Run Capacitor (Fan Spins at Half Speed)",
+      "severity": 2,
+      "repairCost": {
+        "min": 80,
+        "max": 250,
+        "default": 140
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Motor hums but rotates sluggishly; capacitor capacitance dropped below rated microfarads.",
+      "diySteps": [
+        "Turn off mains wall switch and disconnect power.",
+        "Discharge old capacitor terminals by touching insulated screwdriver tip across leads.",
+        "Unscrew clamp, swap in new metallized polypropylene 2.25uF / 2.5uF 440V motor capacitor.",
+        "Restore power and test all 3 speed settings."
+      ],
+      "toolsRequired": [
+        "Screwdriver",
+        "Replacement 2.5uF capacitor",
+        "Insulated pliers"
+      ],
+      "categoryId": "fan_or_cooler"
+    },
+    "fc_bearing_jammed": {
+      "id": "fc_bearing_jammed",
+      "label": "Dry / Seized Bushing Bearings (Squealing Noise)",
+      "name": "Dry / Seized Bushing Bearings (Squealing Noise)",
+      "severity": 2,
+      "repairCost": {
+        "min": 90,
+        "max": 320,
+        "default": 170
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Dried-out porous bronze bushings causing friction squeal and thermal shutdown.",
+      "diySteps": [
+        "Remove fan front grill, blade nut (reverse thread), and motor clam shell housing.",
+        "Clean old hardened gunk from steel shaft with mineral spirits.",
+        "Saturate felt oil reservoirs around sintered bronze bushings with 5-6 drops of non-detergent SAE 20 oil.",
+        "Spin rotor by hand until movement is buttery smooth."
+      ],
+      "toolsRequired": [
+        "Non-detergent 3-In-One oil",
+        "Rag",
+        "Screwdriver"
+      ],
+      "categoryId": "fan_or_cooler"
+    },
+    "fc_oscillation_gear_stripped": {
+      "id": "fc_oscillation_gear_stripped",
+      "label": "Stripped Oscillation Gearbox (Clicks & Stalls)",
+      "name": "Stripped Oscillation Gearbox (Clicks & Stalls)",
+      "severity": 2,
+      "repairCost": {
+        "min": 120,
+        "max": 350,
+        "default": 210
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Nylon reduction worm gear teeth stripped inside rear oscillation gearbox.",
+      "diySteps": [
+        "Unscrew rear motor cap.",
+        "Remove 3 small screws holding clear gearbox cover.",
+        "Lift out stripped nylon gear cog and clean old grease.",
+        "Press in replacement gear, pack with white lithium grease, and fasten cover."
+      ],
+      "toolsRequired": [
+        "Replacement nylon gear",
+        "White lithium grease",
+        "Screwdriver"
+      ],
+      "categoryId": "fan_or_cooler"
+    },
+    "fc_pump_choked": {
+      "id": "fc_pump_choked",
+      "label": "Submersible Water Pump Choked with Silt",
+      "name": "Submersible Water Pump Choked with Silt",
+      "severity": 2,
+      "repairCost": {
+        "min": 180,
+        "max": 480,
+        "default": 280
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Cooler pump impeller choked by hard water scale and algae, preventing water circulation.",
+      "diySteps": [
+        "Unplug cooler and drain bottom reservoir.",
+        "Twist off front magnetic impeller cap on submersible pump.",
+        "Soak cylindrical permanent magnet impeller in vinegar for 30 minutes to dissolve mineral scale.",
+        "Rinse, test pump in clean water bucket, and reinstall."
+      ],
+      "toolsRequired": [
+        "White vinegar",
+        "Old toothbrush",
+        "Bucket"
+      ],
+      "categoryId": "fan_or_cooler"
+    },
+    "fc_motor_burning_odor": {
+      "id": "fc_motor_burning_odor",
+      "label": "Stator Coil Burnt / Shorted Copper Winding",
+      "name": "Stator Coil Burnt / Shorted Copper Winding",
+      "severity": 5,
+      "repairCost": {
+        "min": 850,
+        "max": 1900,
+        "default": 1300
+      },
+      "diyDifficulty": "hard",
+      "partsCommon": false,
+      "safetyFlags": [
+        "burning_smell"
+      ],
+      "description": "Thermal fuse bypassed or burned copper stator windings producing smoke.",
+      "diySteps": [
+        "CRITICAL ELECTRICAL RISK. Motor core insulation has broken down.",
+        "Requires professional stator re-winding or replacement motor assembly."
+      ],
+      "toolsRequired": [
+        "Certified motor shop bench"
+      ],
+      "categoryId": "fan_or_cooler"
+    },
+    "fc_exposed_cut_cord": {
+      "id": "fc_exposed_cut_cord",
+      "label": "Cable Sheath Severed by Oscillation Hinge",
+      "name": "Cable Sheath Severed by Oscillation Hinge",
+      "severity": 4,
+      "repairCost": {
+        "min": 120,
+        "max": 320,
+        "default": 190
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [
+        "exposed_mains_wiring"
+      ],
+      "description": "Repetitive fan head swivel pinched cord against sharp metal hinge, exposing live 230V wires.",
+      "diySteps": [
+        "Unplug immediately.",
+        "Cut damaged cable section out.",
+        "Re-route through protective rubber grommet with slack for full oscillation arc.",
+        "Reconnect internal terminal block and clamp tightly."
+      ],
+      "toolsRequired": [
+        "Wire cutters",
+        "Rubber grommet",
+        "Screwdriver"
+      ],
+      "categoryId": "fan_or_cooler"
+    },
+    "fn_loose_joints_wobble": {
+      "id": "fn_loose_joints_wobble",
+      "label": "Wobbly Chair Legs / Loose Dowel Joints",
+      "name": "Wobbly Chair Legs / Loose Dowel Joints",
+      "severity": 1,
+      "repairCost": {
+        "min": 60,
+        "max": 220,
+        "default": 120
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Dry mortise and tenon joint has worked loose over seasons of humidity changes.",
+      "diySteps": [
+        "Gently tap loose joints apart with rubber mallet.",
+        "Scrape old dried yellow glue down to bare wood fibers.",
+        "Inject premium PVA aliphatic wood glue into sockets.",
+        "Reassemble joint and apply ratchet strap or bar clamp firmly for 24 hours."
+      ],
+      "toolsRequired": [
+        "Wood glue (PVA)",
+        "Bar clamp or ratchet strap",
+        "Chisel / scraper"
+      ],
+      "categoryId": "furniture"
+    },
+    "fn_gas_lift_cylinder_sinking": {
+      "id": "fn_gas_lift_cylinder_sinking",
+      "label": "Sinking Office Chair Gas Lift Cylinder",
+      "name": "Sinking Office Chair Gas Lift Cylinder",
+      "severity": 2,
+      "repairCost": {
+        "min": 450,
+        "max": 1100,
+        "default": 650
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Hydraulic nitrogen gas seal failed, slowly dropping chair height under body weight.",
+      "diySteps": [
+        "Invert chair and tap wheel base off bottom shaft with rubber mallet.",
+        "Use pipe wrench around top of old cylinder to twist free from chair mechanism.",
+        "Drop standard Class 4 replacement pneumatic gas lift cylinder into base taper.",
+        "Sit down once to friction lock into place."
+      ],
+      "toolsRequired": [
+        "Pipe wrench",
+        "Rubber mallet",
+        "Replacement Class-4 cylinder"
+      ],
+      "categoryId": "furniture"
+    },
+    "fn_broken_drawer_slide": {
+      "id": "fn_broken_drawer_slide",
+      "label": "Broken Roller Drawer Runner / Ball Bearings",
+      "name": "Broken Roller Drawer Runner / Ball Bearings",
+      "severity": 2,
+      "repairCost": {
+        "min": 150,
+        "max": 450,
+        "default": 260
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Drawer jams or derails due to bent steel track or missing ball bearings.",
+      "diySteps": [
+        "Remove drawer and unscrew old metal runners from cabinet carcass.",
+        "Measure slide depth (e.g. 14, 16, or 18 inches).",
+        "Screw matching full-extension ball bearing telescopic slides onto pilot holes.",
+        "Re-insert drawer until latch clicks."
+      ],
+      "toolsRequired": [
+        "Screwdriver",
+        "Pair of telescopic drawer slides",
+        "Tape measure"
+      ],
+      "categoryId": "furniture"
+    },
+    "fn_upholstery_tear": {
+      "id": "fn_upholstery_tear",
+      "label": "Torn Fabric / Peeling Faux Leather Cushion",
+      "name": "Torn Fabric / Peeling Faux Leather Cushion",
+      "severity": 2,
+      "repairCost": {
+        "min": 300,
+        "max": 1200,
+        "default": 600
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Upholstery worn through to cushion foam at seat edge.",
+      "diySteps": [
+        "Unscrew seat bottom from chair frame.",
+        "Remove old staples with staple puller.",
+        "Stretch durable linen or vinyl upholstery fabric taut over foam.",
+        "Fire heavy-duty staples into underside plywood base every 2 cm."
+      ],
+      "toolsRequired": [
+        "Heavy-duty staple gun",
+        "Staples",
+        "Upholstery fabric",
+        "Scissors"
+      ],
+      "categoryId": "furniture"
+    },
+    "fn_snapped_chair_leg": {
+      "id": "fn_snapped_chair_leg",
+      "label": "Split Solid Timber Leg / Structural Crack",
+      "name": "Split Solid Timber Leg / Structural Crack",
+      "severity": 3,
+      "repairCost": {
+        "min": 250,
+        "max": 750,
+        "default": 420
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Hardwood leg cracked along grain line from uneven tilting load.",
+      "diySteps": [
+        "Pry split open slightly with thin blade.",
+        "Force wood glue deep into crack with syringe or thin card.",
+        "Clamp securely with 2 C-clamps; drill perpendicular hole and drive hidden fluted wooden dowel.",
+        "Wipe squeeze-out with damp cloth."
+      ],
+      "toolsRequired": [
+        "Drill & wood bit",
+        "Fluted dowel",
+        "Wood glue",
+        "C-clamps"
+      ],
+      "categoryId": "furniture"
+    },
+    "fn_cracked_laminate": {
+      "id": "fn_cracked_laminate",
+      "label": "Peeling Edge Banding / Surface Veneer",
+      "name": "Peeling Edge Banding / Surface Veneer",
+      "severity": 1,
+      "repairCost": {
+        "min": 80,
+        "max": 250,
+        "default": 150
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "PVC or melamine edge tape peeling back, catching on clothing.",
+      "diySteps": [
+        "Clean old dust under peeling strip.",
+        "Cover with baking paper and iron over edge with household clothes iron on medium heat to reactivate hot-melt glue.",
+        "Press down with wooden block until cooled, trim excess with utility knife."
+      ],
+      "toolsRequired": [
+        "Household clothes iron",
+        "Baking paper",
+        "Utility knife"
+      ],
+      "categoryId": "furniture"
+    },
+    "by_punctured_tube": {
+      "id": "by_punctured_tube",
+      "label": "Flat Tire / Punctured Inner Tube",
+      "name": "Flat Tire / Punctured Inner Tube",
+      "severity": 1,
+      "repairCost": {
+        "min": 60,
+        "max": 180,
+        "default": 110
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Thorn or glass sliver caused slow air leak in butyl tube.",
+      "diySteps": [
+        "Unseat tire bead using 2 plastic tire levers.",
+        "Pull out tube and submerge in water bowl to pinpoint air bubbles.",
+        "Buff area with sandpaper, apply vulcanizing rubber cement, and press patch firmly for 3 minutes.",
+        "Check inside tire carcass with fingers for remaining thorns before re-installing."
+      ],
+      "toolsRequired": [
+        "Tire levers",
+        "Puncture patch kit",
+        "Bicycle hand pump"
+      ],
+      "categoryId": "bicycle"
+    },
+    "by_brake_pads_worn": {
+      "id": "by_brake_pads_worn",
+      "label": "Worn Rim Brake Pads / Poor Braking",
+      "name": "Worn Rim Brake Pads / Poor Braking",
+      "severity": 2,
+      "repairCost": {
+        "min": 120,
+        "max": 380,
+        "default": 220
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Rubber brake pads worn down to steel wear line; squealing loudly against rim.",
+      "diySteps": [
+        "Unscrew 5mm hex bolt securing pad to brake caliper arm.",
+        "Mount fresh all-weather rubber compound brake shoes.",
+        "Adjust alignment so pad strikes rim center squarely without touching tire rubber.",
+        "Toe-in pad front by 1 mm to prevent squealing."
+      ],
+      "toolsRequired": [
+        "5mm Allen hex key",
+        "Replacement brake pads"
+      ],
+      "categoryId": "bicycle"
+    },
+    "by_chain_rusty_slack": {
+      "id": "by_chain_rusty_slack",
+      "label": "Rusty / Sagging Drive Chain",
+      "name": "Rusty / Sagging Drive Chain",
+      "severity": 2,
+      "repairCost": {
+        "min": 100,
+        "max": 350,
+        "default": 200
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Chain dried out and rusted from rain, causing stiff links and skipping sprockets.",
+      "diySteps": [
+        "Scrub chain with brass wire brush and citrus degreaser to strip rust.",
+        "Check chain stretch with chain checker tool.",
+        "Apply single drop of synthetic bicycle chain lube to each roller.",
+        "Backpedal 20 rotations and wipe off excess surface oil."
+      ],
+      "toolsRequired": [
+        "Citrus degreaser",
+        "Chain lube bottle",
+        "Rag",
+        "Wire brush"
+      ],
+      "categoryId": "bicycle"
+    },
+    "by_shifter_cable_snapped": {
+      "id": "by_shifter_cable_snapped",
+      "label": "Snapped Gear Derailleur Cable",
+      "name": "Snapped Gear Derailleur Cable",
+      "severity": 2,
+      "repairCost": {
+        "min": 90,
+        "max": 280,
+        "default": 160
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Shifter cable frayed inside shifter pod, locking bike in smallest gear.",
+      "diySteps": [
+        "Shift to highest gear setting and undo anchor bolt at rear derailleur.",
+        "Pull old cable through housing and thread new stainless steel slick cable.",
+        "Pull cable taut with pliers, tighten anchor bolt, and turn barrel adjuster to index gears."
+      ],
+      "toolsRequired": [
+        "Cable cutter",
+        "Allen key set",
+        "Replacement inner cable"
+      ],
+      "categoryId": "bicycle"
+    },
+    "by_wheel_out_of_true": {
+      "id": "by_wheel_out_of_true",
+      "label": "Wobbly Wheel Rim / Rubbing Brake",
+      "name": "Wobbly Wheel Rim / Rubbing Brake",
+      "severity": 2,
+      "repairCost": {
+        "min": 120,
+        "max": 380,
+        "default": 220
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Pothole impact loosened spoke tension, causing rim to wobble laterally.",
+      "diySteps": [
+        "Mount bike upright and spin wheel against brake pad reference.",
+        "Where rim moves right, tighten left spoke nipple 1/4 turn and loosen right spoke 1/4 turn.",
+        "Continue fine tuning in small increments until lateral runout is under 1 mm."
+      ],
+      "toolsRequired": [
+        "Spoke wrench tool",
+        "Zip-tie indicator guide"
+      ],
+      "categoryId": "bicycle"
+    },
+    "by_bottom_bracket_creak": {
+      "id": "by_bottom_bracket_creak",
+      "label": "Creaking Crank Bottom Bracket Bearings",
+      "name": "Creaking Crank Bottom Bracket Bearings",
+      "severity": 3,
+      "repairCost": {
+        "min": 280,
+        "max": 750,
+        "default": 480
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Loud rhythmic click/creak every pedal stroke under hill climbing torque.",
+      "diySteps": [
+        "Remove crank bolts and extract crank arms with crank puller tool.",
+        "Unscrew drive and non-drive bottom bracket cups (note reverse thread).",
+        "Clean frame bottom bracket shell threads, apply anti-seize grease, and install sealed cartridge unit."
+      ],
+      "toolsRequired": [
+        "Crank puller",
+        "Bottom bracket splined tool",
+        "Waterproof grease"
+      ],
+      "categoryId": "bicycle"
+    },
+    "bf_zipper_slider_separated": {
+      "id": "bf_zipper_slider_separated",
+      "label": "Separated Zipper Teeth / Broken Slider",
+      "name": "Separated Zipper Teeth / Broken Slider",
+      "severity": 2,
+      "repairCost": {
+        "min": 70,
+        "max": 220,
+        "default": 130
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Zipper tracks split open behind the slider or pull tab broke off.",
+      "diySteps": [
+        "Check zipper teeth are intact without missing plastic nubs.",
+        "If teeth don't interlock, slider gap has widened; gently squeeze slider cheeks with pliers.",
+        "If worn, cut top stop, slide on replacement matching slider (e.g. #5 or #8), and crimp new metal top stop.",
+        "Rub candle wax along track for smooth gliding."
+      ],
+      "toolsRequired": [
+        "Pliers",
+        "Replacement zipper slider (#5 or #8)",
+        "Candle wax"
+      ],
+      "categoryId": "bag_or_footwear"
+    },
+    "bf_sole_peeling": {
+      "id": "bf_sole_peeling",
+      "label": "Separated Outsole Flapping at Toe",
+      "name": "Separated Outsole Flapping at Toe",
+      "severity": 2,
+      "repairCost": {
+        "min": 90,
+        "max": 280,
+        "default": 170
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Factory polyurethane adhesive degraded, causing toe or heel tread to flap open.",
+      "diySteps": [
+        "Scrape old yellow glue and dust from both shoe upper and rubber sole.",
+        "Wipe clean with rubbing alcohol.",
+        "Apply thin coat of Shoe Goo or polyurethane contact adhesive to both surfaces.",
+        "Wait 8-10 minutes until tacky, press together firmly, and wrap tightly with strong elastic bands for 24 hours."
+      ],
+      "toolsRequired": [
+        "Shoe Goo or Barge contact cement",
+        "Sandpaper",
+        "Heavy elastic bands"
+      ],
+      "categoryId": "bag_or_footwear"
+    },
+    "bf_strap_stitching_torn": {
+      "id": "bf_strap_stitching_torn",
+      "label": "Shoulder Strap Seam Pulled Out",
+      "name": "Shoulder Strap Seam Pulled Out",
+      "severity": 2,
+      "repairCost": {
+        "min": 80,
+        "max": 250,
+        "default": 140
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Heavy laptop weight pulled bar-tack stitching out of top back seam.",
+      "diySteps": [
+        "Tuck strap end 2 cm inside bag seam.",
+        "Thread heavy gauge bonded nylon thread through heavy curved hand needle.",
+        "Sew a reinforced 'box-X' stitch pattern through all fabric layers.",
+        "Knot securely and melt thread ends with lighter flame."
+      ],
+      "toolsRequired": [
+        "Curved upholstery needle",
+        "Bonded nylon thread",
+        "Thimble",
+        "Snips"
+      ],
+      "categoryId": "bag_or_footwear"
+    },
+    "bf_worn_heel_tap": {
+      "id": "bf_worn_heel_tap",
+      "label": "Worn Out Heel Rubber / Uneven Tread",
+      "name": "Worn Out Heel Rubber / Uneven Tread",
+      "severity": 2,
+      "repairCost": {
+        "min": 140,
+        "max": 420,
+        "default": 250
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Outsole heel rubber worn down to hollow foam core, throwing off walking posture.",
+      "diySteps": [
+        "Sand worn heel flat with 60-grit coarse sandpaper.",
+        "Coat replacement high-density rubber heel tap and shoe heel with contact adhesive.",
+        "Hammer together with shoe anvil or mallet, and trim perimeter flush with sharp hobby knife."
+      ],
+      "toolsRequired": [
+        "Replacement rubber heel tap",
+        "Shoe glue",
+        "Hobby knife",
+        "Sandpaper"
+      ],
+      "categoryId": "bag_or_footwear"
+    },
+    "bf_snapped_plastic_buckle": {
+      "id": "bf_snapped_plastic_buckle",
+      "label": "Cracked Side-Release Webbing Buckle",
+      "name": "Cracked Side-Release Webbing Buckle",
+      "severity": 1,
+      "repairCost": {
+        "min": 40,
+        "max": 140,
+        "default": 70
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Plastic prong cracked after being slammed in car door.",
+      "diySteps": [
+        "Snip cracked female or male buckle section off webbing loop.",
+        "Slide in a 'field repair' split-bar buckle without requiring any seam unpicking.",
+        "Pull webbing through tensioner to test hold."
+      ],
+      "toolsRequired": [
+        "Field-repair split-bar buckle (25mm)",
+        "Scissors"
+      ],
+      "categoryId": "bag_or_footwear"
+    },
+    "bf_canvas_tear": {
+      "id": "bf_canvas_tear",
+      "label": "Torn Ripstop Canvas or Lining Pocket",
+      "name": "Torn Ripstop Canvas or Lining Pocket",
+      "severity": 2,
+      "repairCost": {
+        "min": 80,
+        "max": 280,
+        "default": 160
+      },
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "safetyFlags": [],
+      "description": "Puncture hole or slit tear in backpack side or shoe lining.",
+      "diySteps": [
+        "Round the corners of a self-adhesive nylon repair patch (e.g. Tenacious Tape) so edges don't lift.",
+        "Smooth torn canvas flat on table.",
+        "Press patch firmly over tear and rub with back of spoon to activate pressure-sensitive adhesive."
+      ],
+      "toolsRequired": [
+        "Tenacious Tape or self-adhesive nylon patch",
+        "Scissors"
+      ],
+      "categoryId": "bag_or_footwear"
+    },
     "lever_wont_latch": {
       "id": "lever_wont_latch",
-      "name": "Lever won't stay down / pop-up latch slips",
-      "severity": "mild",
+      "label": "Lever won't latch down",
+      "name": "Lever won't latch down",
+      "severity": 1,
+      "repairCost": {
+        "min": 0,
+        "max": 200,
+        "default": 0
+      },
       "diyDifficulty": "easy",
-      "diyTimeMinutes": 25,
-      "proLaborHours": 0.5,
+      "partsCommon": true,
+      "safetyFlags": [],
       "partsCostEstimate": 0,
-      "toolsRequired": ["Phillips screwdriver", "Brush / compressed air"],
-      "safetyRisk": "low",
-      "description": "Usually caused by accumulated breadcrumbs obstructing the electromagnet catch or thermal latch arm.",
-      "diySteps": [
-        "Unplug the toaster and wait until completely cool.",
-        "Remove and empty the bottom crumb tray into compost.",
-        "Turn the toaster upside down over a trash bin and shake gently.",
-        "Unscrew the bottom base plate screws and gently remove the plastic knob.",
-        "Inspect the mechanical latch catch near the bottom solenoid; brush away carbonized crumbs.",
-        "Reassemble, plug in, and test latch operation."
+      "diyTimeMinutes": 20,
+      "proCostEstimate": 250,
+      "description": "Toaster carriage won't lock down due to crumb accumulation or dirty electromagnet.",
+      "toolsRequired": [
+        "Cleaning brush",
+        "Screwdriver"
       ],
-      "proCostEstimate": 25
+      "diySteps": [
+        "Unplug toaster",
+        "Empty crumb tray",
+        "Gently clean latch hook with soft brush"
+      ]
     },
     "heating_uneven": {
       "id": "heating_uneven",
-      "name": "One side burns, other side stays cold (broken nichrome wire)",
-      "severity": "moderate",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 45,
-      "proLaborHours": 0.75,
-      "partsCostEstimate": 12,
-      "toolsRequired": ["Screwdriver set", "Wire crimp / splice sleeve", "Multimeter"],
-      "safetyRisk": "moderate",
-      "description": "A broken segment of nichrome ribbon heating wire or faulty mica sheet support.",
-      "diySteps": [
-        "Ensure power is unplugged.",
-        "Disassemble outer casing.",
-        "Use a multimeter on resistance mode to pinpoint the broken ribbon loop.",
-        "Use a high-temperature mechanical crimp connector (never solder nichrome wire!).",
-        "Inspect mica board for insulation integrity.",
-        "Reassemble and test safely on a non-flammable surface."
-      ],
-      "proCostEstimate": 40
+      "label": "Uneven heating",
+      "name": "Uneven heating",
+      "severity": 2,
+      "repairCost": {
+        "min": 100,
+        "max": 350,
+        "default": 180
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": []
     },
     "frayed_cord": {
       "id": "frayed_cord",
-      "name": "Power cord casing damaged / exposed copper wires",
-      "severity": "high",
+      "label": "Frayed power cord",
+      "name": "Frayed power cord",
+      "severity": 4,
+      "repairCost": {
+        "min": 150,
+        "max": 400,
+        "default": 220
+      },
       "diyDifficulty": "easy",
-      "diyTimeMinutes": 30,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 8,
-      "toolsRequired": ["Wire stripper", "Screwdriver", "Replacement 3-prong cord / plug"],
-      "safetyRisk": "high",
-      "safetyFlag": "ELECTRICAL_SHOCK_HAZARD",
-      "safetyWarning": "Exposed mains wires present a direct electric shock and building fire hazard. Do NOT plug in until replaced.",
-      "diySteps": [
-        "Do not plug in unit.",
-        "Cut back damaged portion or replace cord with identical gauge appliance cord.",
-        "Ensure grounding wire (green/yellow) is securely connected to metal chassis.",
-        "Use strain-relief clamp so cord cannot be pulled loose from inside."
-      ],
-      "proCostEstimate": 35
+      "partsCommon": true,
+      "safetyFlags": [
+        "exposed_mains_wiring"
+      ]
     },
     "crumbs_jamming": {
       "id": "crumbs_jamming",
-      "name": "Excessive smoke / burnt smell from internal debris",
-      "severity": "mild",
+      "label": "Crumbs jamming mechanism",
+      "name": "Crumbs jamming mechanism",
+      "severity": 1,
+      "repairCost": {
+        "min": 0,
+        "max": 100,
+        "default": 0
+      },
       "diyDifficulty": "easy",
-      "diyTimeMinutes": 15,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 0,
-      "toolsRequired": ["Soft brush", "Microfiber cloth"],
-      "safetyRisk": "low",
-      "description": "Deep buildup of old oils and crumbs resting against active heating coils.",
-      "diySteps": [
-        "Unplug toaster completely.",
-        "Slide out crumb tray and wash with warm soapy water.",
-        "Use a dry toothbrush to dislodge caught crusts from cage wire.",
-        "Allow to dry completely before re-inserting tray."
-      ],
-      "proCostEstimate": 15
-    },
-    "heating_element_dead": {
-      "id": "heating_element_dead",
-      "name": "Kettle powers on light, but water never heats",
-      "severity": "high",
-      "diyDifficulty": "difficult",
-      "diyTimeMinutes": 60,
-      "proLaborHours": 0.75,
-      "partsCostEstimate": 18,
-      "toolsRequired": ["Torx security screwdriver", "Multimeter"],
-      "safetyRisk": "moderate",
-      "description": "Thermal fuse blown or integrated base heating ring open-circuit.",
-      "diySteps": [
-        "Unplug from base station.",
-        "Check base connector pins for corrosion or spring pin depression.",
-        "Disassemble base cover; check thermal cut-off fuse with multimeter for continuity.",
-        "If heating element is stamped into bottom tank, replacement is uneconomical."
-      ],
-      "proCostEstimate": 35
-    },
-    "leaking_base": {
-      "id": "leaking_base",
-      "name": "Water seeps from kettle bottom onto electrical base",
-      "severity": "critical",
-      "diyDifficulty": "difficult",
-      "diyTimeMinutes": 50,
-      "proLaborHours": 0.75,
-      "partsCostEstimate": 10,
-      "toolsRequired": ["Food-grade silicone sealant / replacement gasket"],
-      "safetyRisk": "high",
-      "safetyFlag": "WATER_ELECTRICITY_HAZARD",
-      "safetyWarning": "Water leaking directly into high-voltage electrical contacts can trip mains circuit breakers or deliver severe electric shocks.",
-      "diySteps": [
-        "Immediately discontinue use.",
-        "Silicon seals around heating plate degrade after 4-5 years of thermal expansion.",
-        "If replacement silicone O-ring is available from manufacturer, replace gasket; otherwise recycle safely."
-      ],
-      "proCostEstimate": 30
-    },
-    "switch_auto_shutoff_broken": {
-      "id": "switch_auto_shutoff_broken",
-      "name": "Kettle boils continuously without clicking off",
-      "severity": "high",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 35,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 9,
-      "toolsRequired": ["Screwdriver", "Steam tube cleaning brush"],
-      "safetyRisk": "moderate",
-      "description": "Steam tube obstructed with limescale or bi-metal switch worn out.",
-      "diySteps": [
-        "Run 50/50 white vinegar and water descale cycle.",
-        "Inspect the small steam aperture near upper handle; clear any limescale plug.",
-        "If bi-metallic switch has warped, replace switch mechanism in handle."
-      ],
-      "proCostEstimate": 28
-    },
-    "blade_assembly_seized": {
-      "id": "blade_assembly_seized",
-      "name": "Blender blade won't turn by hand / burning rubber smell",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 14,
-      "toolsRequired": ["Wrench / replacement blade assembly"],
-      "safetyRisk": "low",
-      "description": "Sealed bearing inside blade base has dried out or leaked liquid past gasket.",
-      "diySteps": [
-        "Unscrew pitcher collar ring from pitcher base.",
-        "Carefully inspect blade bearing; if stiff, replace whole blade cartridge ($10-$15).",
-        "Lubricate rubber drive socket clutch on base motor."
-      ],
-      "proCostEstimate": 30
-    },
-    "motor_humming_no_spin": {
-      "id": "motor_humming_no_spin",
-      "name": "Blender motor hums loudly but drive pin does not spin",
-      "severity": "high",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 40,
-      "proLaborHours": 0.75,
-      "partsCostEstimate": 8,
-      "toolsRequired": ["Screwdrivers", "Replacement rubber clutch gear"],
-      "safetyRisk": "moderate",
-      "description": "Rubber drive coupler stripped or start capacitor weakened.",
-      "diySteps": [
-        "Unplug motor base.",
-        "Examine teeth on rubber motor drive clutch; usually sheared to protect motor from burning.",
-        "Reverse thread: unscrew old coupler clockwise with flathead holding motor shaft underside.",
-        "Spin on new rubber coupler."
-      ],
-      "proCostEstimate": 45
-    },
-    "pitcher_cracked": {
-      "id": "pitcher_cracked",
-      "name": "Plastic or glass pitcher has hairline crack",
-      "severity": "high",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 10,
-      "proLaborHours": 0,
-      "partsCostEstimate": 25,
-      "toolsRequired": ["Replacement pitcher"],
-      "safetyRisk": "moderate",
-      "description": "Cracked pitchers cannot safely hold hot liquid or high-speed vortex pressure.",
-      "diySteps": [
-        "Do not glue food-contact pitcher with industrial glue.",
-        "Order model-specific replacement pitcher from manufacturer or thrift store.",
-        "Pitcher itself is 100% recyclable glass or plastic #7."
-      ],
-      "proCostEstimate": 25
-    },
-    "coupler_stripped": {
-      "id": "coupler_stripped",
-      "name": "Motor spins freely but pitcher blade does not engage",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 7,
-      "toolsRequired": ["Flathead screwdriver", "Pliers"],
-      "safetyRisk": "low",
-      "description": "Sacrificial rubber coupler stripped; intentionally engineered to fail before motor burns out.",
-      "diySteps": [
-        "Unplug base.",
-        "Twist off stripped coupler counter-clockwise (or clockwise if reverse-threaded).",
-        "Install new replacement coupler ($5-$7 pack)."
-      ],
-      "proCostEstimate": 25
-    },
-    "mineral_scale_clog": {
-      "id": "mineral_scale_clog",
-      "name": "Coffee maker brews very slowly or sputters loudly",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 40,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 4,
-      "toolsRequired": ["White vinegar or citric acid descaler"],
-      "safetyRisk": "low",
-      "description": "Calcium and magnesium carbonate buildup in heating boiler tube.",
-      "diySteps": [
-        "Fill reservoir with 1 part white vinegar and 2 parts fresh water.",
-        "Run brew cycle halfway, pause machine for 30 minutes to dissolve mineral scales.",
-        "Finish cycle and flush twice with clean cold water."
-      ],
-      "proCostEstimate": 15
-    },
-    "carafe_broken": {
-      "id": "carafe_broken",
-      "name": "Glass carafe shattered or handle broken",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 5,
-      "proLaborHours": 0,
-      "partsCostEstimate": 18,
-      "toolsRequired": ["Universal replacement carafe"],
-      "safetyRisk": "low",
-      "description": "Glass carafe broken; heating unit and basket remain 100% operational.",
-      "diySteps": [
-        "Get a universal replacement carafe with adjustable lid height ($15-$20).",
-        "Alternatively, use a wide-mouth stainless travel mug directly under drip stop."
-      ],
-      "proCostEstimate": 18
-    },
-    "water_pump_weak": {
-      "id": "water_pump_weak",
-      "name": "Heater works but water stays in reservoir",
-      "severity": "moderate",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 45,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 6,
-      "toolsRequired": ["Screwdriver", "Replacement check-valve ball"],
-      "safetyRisk": "low",
-      "description": "One-way silicone ball valve stuck closed or calcified in bottom reservoir hose.",
-      "diySteps": [
-        "Open bottom casing.",
-        "Locate one-way silicone inlet valve on silicone tube.",
-        "Gently massage valve to free stuck ball bearing or soak in warm vinegar."
-      ],
-      "proCostEstimate": 35
+      "partsCommon": true,
+      "safetyFlags": []
     },
     "sparks_inside": {
       "id": "sparks_inside",
-      "name": "Visible sparks, arcing, or crackling noise inside microwave cooking cavity",
-      "severity": "high",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 15,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 9,
-      "toolsRequired": ["Scissors / utility knife", "Replacement mica waveguide sheet"],
-      "safetyRisk": "high",
+      "label": "Sparks inside microwave casing",
+      "name": "Sparks inside microwave casing",
+      "severity": 5,
+      "repairCost": {
+        "min": 150,
+        "max": 450,
+        "default": 250
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": [
+        "burning_smell"
+      ],
       "safetyFlag": "MICROWAVE_WAVEGUIDE_BURNT",
-      "safetyWarning": "Sparks inside the cavity are usually caused by a burnt mica waveguide cover sheet absorbing grease. DO NOT open internal high-voltage casing!",
-      "diySteps": [
-        "Unplug microwave immediately.",
-        "Look at the small silver-grey cardboard-like square inside the right interior wall (waveguide cover).",
-        "If charred or blackened, unclip or unscrew this small mica cover sheet.",
-        "Trace the old cover onto a new $8 universal mica sheet, cut out with scissors, and snap in.",
-        "Do NOT open outer steel chassis: high voltage capacitor holds lethal charge even unplugged!"
-      ],
-      "proCostEstimate": 35
-    },
-    "turntable_wont_rotate": {
-      "id": "turntable_wont_rotate",
-      "name": "Glass plate stays still during heating",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 12,
-      "toolsRequired": ["Replacement turntable motor", "Phillips screwdriver"],
-      "safetyRisk": "low",
-      "description": "Bottom turntable gear motor stripped or plastic roller guide misaligned.",
-      "diySteps": [
-        "Check that plastic roller ring and glass plate are aligned on drive coupler.",
-        "If drive spindle doesn't turn, access bottom underside access hatch.",
-        "Unplug wire clip from 21V/120V turntable synchronous motor and swap ($10 part)."
-      ],
-      "proCostEstimate": 40
-    },
-    "door_latch_broken": {
-      "id": "door_latch_broken",
-      "name": "Door latch spring broken / unit won't start",
-      "severity": "moderate",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 35,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 14,
-      "toolsRequired": ["Putty knife", "Screwdriver"],
-      "safetyRisk": "moderate",
-      "description": "Safety microswitch interlock hooks snapped; microwave safely prevents running with door open.",
-      "diySteps": [
-        "Unplug unit.",
-        "Gently pry inner plastic door trim bezel.",
-        "Replace the dual plastic door key hook and spring."
-      ],
-      "proCostEstimate": 45
-    },
-    "no_heat_magnetron": {
-      "id": "no_heat_magnetron",
-      "name": "Microwave runs timer and fan, but food stays ice cold",
-      "severity": "critical",
-      "diyDifficulty": "difficult",
-      "diyTimeMinutes": 90,
-      "proLaborHours": 1.5,
-      "partsCostEstimate": 60,
-      "toolsRequired": ["High-voltage probe", "Safety discharge resistor"],
-      "safetyRisk": "critical",
-      "safetyFlag": "LETHAL_HIGH_VOLTAGE_CAPACITOR",
-      "safetyWarning": "DANGER: Microwave high-voltage capacitors store 2,000 to 5,000 Volts even when completely unplugged for days. DIY internal servicing can cause fatal electric shock. Use certified pro repair or recycle.",
-      "diySteps": [
-        "DANGER: Do NOT attempt DIY repair inside outer microwave chassis.",
-        "High voltage transformer, diode, or magnetron failure requires specialized test equipment.",
-        "For sub-$120 microwaves, pro repair cost ($110-$140) typically exceeds replacement price. Recommend responsible e-waste recycling."
-      ],
-      "proCostEstimate": 125
-    },
-    "cracked_screen": {
-      "id": "cracked_screen",
-      "name": "Cracked front glass or unresponsive display touch digitizer",
-      "severity": "high",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 60,
-      "proLaborHours": 0.75,
-      "partsCostEstimate": 65,
-      "toolsRequired": ["Heat gun / iOpener", "Suction handle", "Precision pentalobe / spudger set"],
-      "safetyRisk": "low",
-      "description": "Damaged OLED/LCD panel or broken glass digitizer.",
-      "diySteps": [
-        "Back up all phone data to cloud / computer before repair.",
-        "Power off completely.",
-        "Heat perimeter adhesive to 70°C using heat pack or hair dryer.",
-        "Pry perimeter with thin plastic guitar pick; disconnect battery flex cable FIRST.",
-        "Disconnect old display ribbon, transfer sensor bracket to new screen assembly, seal with pre-cut adhesive."
-      ],
-      "proCostEstimate": 120
+      "safetyRisk": "high",
+      "safetyWarning": "Arcing sparks usually caused by food splatter burning through mica waveguide cover."
     },
     "battery_degraded": {
       "id": "battery_degraded",
-      "name": "Battery drains within 2-3 hours or shuts down randomly under load",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 35,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 25,
-      "toolsRequired": ["Precision screwdriver set", "Plastic pry card", "Isopropyl alcohol 90%+"],
-      "safetyRisk": "moderate",
-      "description": "Lithium-ion cells naturally degrade to <80% health after 500-800 charge cycles (2-3 years).",
-      "diySteps": [
-        "Discharge phone battery below 25% before starting (safer in case of puncture).",
-        "Open phone back glass or lift display according to model service guide.",
-        "Disconnect battery ribbon connector immediately.",
-        "Pull adhesive stretch-release pull tabs steadily at a low angle.",
-        "Apply 2 drops of 99% isopropyl alcohol under edge if glue sticks.",
-        "Drop in fresh OEM-grade battery ($20-$30), reconnect, and calibrate with full charge cycle."
-      ],
-      "proCostEstimate": 65
-    },
-    "charging_port_loose": {
-      "id": "charging_port_loose",
-      "name": "Charging cable falls out easily or only charges at weird angles",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 10,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 0,
-      "toolsRequired": ["Wooden / plastic toothpick", "Flashlight", "Soft brush"],
-      "safetyRisk": "low",
-      "description": "In 85% of cases, pocket lint is packed hard into the bottom of the USB-C or Lightning port cavity.",
-      "diySteps": [
-        "Turn off the device.",
-        "Shine a bright light directly into the charging port.",
-        "Use a wooden or non-conductive plastic toothpick to gently tease out compacted pocket lint.",
-        "Never use a metal needle or paperclip which can short internal data/power pins.",
-        "Blow clean with compressed air and test cable click."
-      ],
-      "proCostEstimate": 20
+      "label": "Battery degraded / rapid drain",
+      "name": "Battery degraded / rapid drain",
+      "severity": 2,
+      "repairCost": {
+        "min": 1200,
+        "max": 3200,
+        "default": 1900
+      },
+      "diyDifficulty": "medium",
+      "partsCommon": true,
+      "safetyFlags": []
     },
     "swollen_battery": {
       "id": "swollen_battery",
-      "name": "Screen or back cover pushing outward; swollen lithium pouch",
-      "severity": "critical",
-      "diyDifficulty": "difficult",
-      "diyTimeMinutes": 45,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 35,
-      "toolsRequired": ["Safety goggles", "Fireproof sand / lipo bag", "Plastic tools only"],
+      "label": "Swollen lithium battery",
+      "name": "Swollen lithium battery",
+      "severity": 5,
+      "repairCost": {
+        "min": 1500,
+        "max": 4000,
+        "default": 2500
+      },
+      "diyDifficulty": "hard",
+      "partsCommon": true,
+      "safetyFlags": [
+        "swollen_battery"
+      ],
+      "safetyFlag": "SWOLLEN_LITHIUM_BATTERY",
       "safetyRisk": "critical",
-      "safetyFlag": "LITHIUM_FIRE_EXPLOSION_HAZARD",
-      "safetyWarning": "CRITICAL FIRE HAZARD: Gas buildup inside lithium pouch indicates internal cell decomposition. DO NOT charge, bend, puncture, or apply heat. Requires immediate safe removal or certified pro disposal.",
-      "diySteps": [
-        "Immediately power off device and DO NOT plug in charger.",
-        "Do not apply heat or use sharp metallic tools near the battery.",
-        "Wear eye protection and keep device away from flammable materials.",
-        "If you are not an experienced technician, bring the device to a battery recycling specialist or repair shop immediately."
-      ],
-      "proCostEstimate": 75
-    },
-    "speaker_crackling": {
-      "id": "speaker_crackling",
-      "name": "Muffled sound, ear speaker whisper, or buzzing audio",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 15,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 5,
-      "toolsRequired": ["Blu-tack / mounting putty", "Soft bristle brush", "Isopropyl alcohol"],
-      "safetyRisk": "low",
-      "description": "Fine acoustic speaker mesh is clogged with dust, sweat, or makeup.",
-      "diySteps": [
-        "Press a small bead of Blu-Tack or clean putty firmly into the speaker grill and peel off.",
-        "Repeat to pull out dirt from micro-perforations.",
-        "Lightly brush with dry toothbrush."
-      ],
-      "proCostEstimate": 20
-    },
-    "battery_dead": {
-      "id": "battery_dead",
-      "name": "Laptop only stays on when plugged into charger; battery 0%",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 45,
-      "toolsRequired": ["Phillips / Torx screwdriver"],
-      "safetyRisk": "low",
-      "description": "Internal battery pack reached end-of-life cycle count.",
-      "diySteps": [
-        "Turn off laptop and disconnect AC adapter.",
-        "Remove bottom case cover screws.",
-        "Disconnect battery motherboard harness.",
-        "Unscrew 3-5 retention screws, lift out old battery, install new pack ($40-$55)."
-      ],
-      "proCostEstimate": 85
-    },
-    "slow_hdd_lag": {
-      "id": "slow_hdd_lag",
-      "name": "Takes 5 minutes to boot; freezing and constant spinning disk lag",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 45,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 40,
-      "toolsRequired": ["Screwdriver", "2.5-inch or M.2 NVMe SSD", "USB flash drive"],
-      "safetyRisk": "low",
-      "description": "Aging mechanical spinning hard drive (HDD) bottlenecking modern operating system.",
-      "diySteps": [
-        "Replace old spinning mechanical drive with a modern solid-state drive (SSD $30-$45).",
-        "Clone drive or install fresh OS from USB flash drive.",
-        "Performance jumps by 400-600%, adding 3-5 years of fast everyday use!"
-      ],
-      "proCostEstimate": 90
-    },
-    "broken_screen": {
-      "id": "broken_screen",
-      "name": "Lines across screen, black ink blotches, or shattered glass",
-      "severity": "high",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 40,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 85,
-      "toolsRequired": ["Plastic spudger", "Phillips screwdriver"],
-      "safetyRisk": "low",
-      "description": "Cracked internal LCD panel inside bezel.",
-      "diySteps": [
-        "Disconnect battery before working on display cables.",
-        "Pop off plastic display front bezel with guitar pick.",
-        "Remove 4 panel corner screws, unclip 30-pin or 40-pin eDP video cable.",
-        "Mount new LCD panel ($70-$95), clip cable, and snap bezel back on."
-      ],
-      "proCostEstimate": 140
-    },
-    "trackpad_keys_failing": {
-      "id": "trackpad_keys_failing",
-      "name": "Sticky keys, missing keycaps, or unresponsive trackpad click",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 25,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 12,
-      "toolsRequired": ["Compressed air", "Replacement key scissor clip"],
-      "safetyRisk": "low",
-      "description": "Grit under key switches or worn scissor hinge.",
-      "diySteps": [
-        "Blow compressed air horizontally under keycaps.",
-        "For broken individual keys, order specific replacement keycap + hinge ($5).",
-        "Snap hinge onto keyboard plate, then press keycap until it clicks."
-      ],
-      "proCostEstimate": 40
-    },
-    "overheating_fan_noise": {
-      "id": "overheating_fan_noise",
-      "name": "Laptop fan runs at max speed, bottom gets hot, thermal throttling",
-      "severity": "moderate",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 35,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 8,
-      "toolsRequired": ["Screwdriver", "Can of compressed air", "Thermal paste"],
-      "safetyRisk": "low",
-      "description": "Air cooling radiator fins clogged with dust fleece and dried-out factory thermal compound.",
-      "diySteps": [
-        "Open bottom chassis panel.",
-        "Block fan blades with a finger so they don't overspin; blast radiator fin heatsink with compressed air.",
-        "Remove copper heatsink pipe, clean old dried paste with alcohol, apply pea-sized dot of quality thermal paste.",
-        "Reassemble: drops operating temperatures by 15-25°C immediately."
-      ],
-      "proCostEstimate": 60
-    },
-    "worn_earpads": {
-      "id": "worn_earpads",
-      "name": "Faux leather flaking black specks onto ears / foam flattened",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 10,
-      "proLaborHours": 0,
-      "partsCostEstimate": 15,
-      "toolsRequired": ["Replacement ear pads set"],
-      "safetyRisk": "low",
-      "description": "Synthetic polyurethane coating naturally breaks down after 2-3 years of body oils.",
-      "diySteps": [
-        "Twist or gently pull old ear pad cushion off outer cup rim.",
-        "Snap on replacement memory foam protein leather or breathable mesh pads ($12-$18).",
-        "Restores acoustic noise isolation and looks brand new."
-      ],
-      "proCostEstimate": 15
-    },
-    "battery_wont_hold_charge": {
-      "id": "battery_wont_hold_charge",
-      "name": "Headphones shut off after 15 minutes of music",
-      "severity": "moderate",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 40,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 14,
-      "toolsRequired": ["Small soldering iron", "Plastic pry tool"],
-      "safetyRisk": "low",
-      "description": "Small 3.7V lithium polymer battery cell exhausted.",
-      "diySteps": [
-        "Pry speaker housing baffle carefully.",
-        "Note polarity (+ red, - black) of tiny 3.7V LiPo cell.",
-        "Desolder 2 leads, solder in matching dimensions replacement cell ($10-$15)."
-      ],
-      "proCostEstimate": 45
-    },
-    "snapped_headband": {
-      "id": "snapped_headband",
-      "name": "Plastic headband slider or hinge cracked in half",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 25,
-      "proLaborHours": 0,
-      "partsCostEstimate": 12,
-      "toolsRequired": ["Replacement headband slider / 2-part epoxy"],
-      "safetyRisk": "low",
-      "description": "Stress fatigue fracture at plastic adjustment joint.",
-      "diySteps": [
-        "Order model headband replacement bracket ($10-$14 online).",
-        "Alternatively, splint fracture with thin metal strip and 2-part epoxy wrapped in heat-shrink tubing."
-      ],
-      "proCostEstimate": 35
+      "safetyWarning": "Swollen lithium battery poses acute fire and thermal runaway risk."
     },
     "wobbly_loose_joint": {
       "id": "wobbly_loose_joint",
-      "name": "Legs or rungs wobble when seated; joints squeaking",
-      "severity": "mild",
+      "label": "Wobbly chair joints",
+      "name": "Wobbly chair joints",
+      "severity": 1,
+      "repairCost": {
+        "min": 50,
+        "max": 200,
+        "default": 100
+      },
       "diyDifficulty": "easy",
-      "diyTimeMinutes": 30,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 6,
-      "toolsRequired": ["PVA wood glue (Titebond II)", "Bar clamp or ratcheting strap", "Sandpaper"],
-      "safetyRisk": "low",
-      "description": "Seasonal humidity expansion dries and shrinks old hide glue, loosening mortise and tenon joints.",
-      "diySteps": [
-        "Gently wiggle loose tenons apart (tap with rubber mallet if needed).",
-        "Scrape dry brittle old glue from tenon and mortise socket with sandpaper.",
-        "Apply fresh yellow PVA wood glue into the hole and all sides of tenon.",
-        "Reinsert joint, wrap a ratcheting strap or bar clamp firmly around legs.",
-        "Wipe away glue squeeze-out with damp cloth; leave clamped 12 hours."
-      ],
-      "proCostEstimate": 45
-    },
-    "broken_rung": {
-      "id": "broken_rung",
-      "name": "Horizontal support stretcher or leg rung snapped",
-      "severity": "moderate",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 45,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 8,
-      "toolsRequired": ["Wood glue", "Wood dowel / splice", "Drill", "Clamp"],
-      "safetyRisk": "low",
-      "description": "Cross-grain split along stretcher wood fiber.",
-      "diySteps": [
-        "Drill a 1/4-inch alignment hole 1 inch deep into each broken face.",
-        "Insert a hardwood dowel pin coated in PVA glue as an internal reinforcing bone.",
-        "Clamp tight and allow 24 hours cure."
-      ],
-      "proCostEstimate": 50
-    },
-    "scratched_surface": {
-      "id": "scratched_surface",
-      "name": "White surface scratches, minor gouges, or dulled finish",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 7,
-      "toolsRequired": ["Walnut meat / wax touch-up crayon", "Mineral oil or beeswax polish"],
-      "safetyRisk": "low",
-      "description": "Topcoat lacquer or wax layer scratched without penetrating base wood.",
-      "diySteps": [
-        "For shallow scratches, rub a raw walnut meat firmly over scratch: natural oils fill the mark instantly.",
-        "For deeper scratches, melt matching wax furniture crayon into gouge.",
-        "Buff whole surface with beeswax polish."
-      ],
-      "proCostEstimate": 30
-    },
-    "cracked_seat": {
-      "id": "cracked_seat",
-      "name": "Seat board has split along wood grain",
-      "severity": "high",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 50,
-      "proLaborHours": 0.75,
-      "partsCostEstimate": 10,
-      "toolsRequired": ["Wood glue", "Long bar clamps", "Pocket screw or mending plate"],
-      "safetyRisk": "moderate",
-      "description": "Wood shrinkage along glued plank seam.",
-      "diySteps": [
-        "Pry split slightly open, inject wood glue deep along entire crack length.",
-        "Clamp tightly with two parallel bar clamps.",
-        "Reinforce underside with a steel mending plate screwed beneath seat."
-      ],
-      "proCostEstimate": 60
-    },
-    "sagging_shelves": {
-      "id": "sagging_shelves",
-      "name": "Particle board shelves bending in middle under book weight",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 15,
-      "proLaborHours": 0,
-      "partsCostEstimate": 5,
-      "toolsRequired": ["Screws", "Wood battens or aluminum angle channel"],
-      "safetyRisk": "low",
-      "description": "Particleboard 'creep' deflection under steady dead load.",
-      "diySteps": [
-        "Immediate zero-cost fix: flip shelf 180 degrees upside down so gravity works against deflection curve.",
-        "Long-term fix: screw a 1x1 inch pine batten or aluminum angle along back edge of each shelf."
-      ],
-      "proCostEstimate": 15
-    },
-    "broken_zipper": {
-      "id": "broken_zipper",
-      "name": "Zipper slider split; teeth won't mesh or slider came off track",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 6,
-      "toolsRequired": ["Pliers", "Fork or universal slider replacement kit"],
-      "safetyRisk": "low",
-      "description": "In 90% of cases the teeth are fine; the cast zinc slider mouth has spread open slightly from tension.",
-      "diySteps": [
-        "Inspect teeth for missing or melted teeth.",
-        "If teeth are intact, use pliers to gently squeeze the top and bottom jaw plates of slider closer together.",
-        "Lubricate zipper teeth with pencil graphite (dry lube) or beeswax.",
-        "If slider is missing, install a clip-on universal zipper slider ($5)."
-      ],
-      "proCostEstimate": 25
-    },
-    "torn_outer_shell": {
-      "id": "torn_outer_shell",
-      "name": "L-shaped tear or rip in nylon/polyester fabric; down feathers escaping",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 10,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 8,
-      "toolsRequired": ["Tenacious Tape or nylon repair patch", "Rubbing alcohol", "Scissors"],
-      "safetyRisk": "low",
-      "description": "Snag tear from branch or sharp edge.",
-      "diySteps": [
-        "Clean 1 inch perimeter around tear with rubbing alcohol wipe; dry completely.",
-        "Push down insulation or feathers back inside jacket.",
-        "Cut a piece of technical gear repair tape (e.g. Tenacious Tape) with rounded corners so edges won't catch.",
-        "Press patch firmly over tear with palm pressure for 60 seconds. Machine washable and permanent."
-      ],
-      "proCostEstimate": 20
-    },
-    "crotch_blowout": {
-      "id": "crotch_blowout",
-      "name": "Denim worn thin and ripped at inner thigh / crotch seam",
-      "severity": "mild",
-      "diyDifficulty": "moderate",
-      "diyTimeMinutes": 40,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 5,
-      "toolsRequired": ["Iron-on fusible interfacing", "Matching thread", "Sewing needle or machine"],
-      "safetyRisk": "low",
-      "description": "Fabric friction wear along weave lines.",
-      "diySteps": [
-        "Turn jeans inside out.",
-        "Iron lightweight fusible cotton interfacing patch over worn zone on inside.",
-        "Turn right-side out and darning-stitch back and forth parallel to denim twill lines.",
-        "Reinforces denim and becomes nearly invisible."
-      ],
-      "proCostEstimate": 22
-    },
-    "sole_delaminating": {
-      "id": "sole_delaminating",
-      "name": "Rubber shoe sole flapping open at toe or heel",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 25,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 9,
-      "toolsRequired": ["Shoe Goo / Barge contact cement", "Sandpaper", "Painter's tape / rubber bands"],
-      "safetyRisk": "low",
-      "description": "Factory polyurethane adhesive crystallized from age and moisture.",
-      "diySteps": [
-        "Scrape away old crusty glue with medium-grit sandpaper.",
-        "Clean contact surfaces with isopropyl alcohol.",
-        "Apply thin coat of flexible contact adhesive (Barge Cement or Shoe Goo) to both surfaces.",
-        "Wait 10 minutes for tackiness, press firmly together, and wrap tightly with rubber bands for 24 hours."
-      ],
-      "proCostEstimate": 25
-    },
-    "flat_tire_tube": {
-      "id": "flat_tire_tube",
-      "name": "Bicycle tire flat; won't hold air",
-      "severity": "mild",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 4,
-      "toolsRequired": ["Tire levers", "Bicycle pump", "Tube patch kit or replacement tube"],
-      "safetyRisk": "low",
-      "description": "Small puncture from thorn, wire, or pinch flat.",
-      "diySteps": [
-        "Unhook brake quick-release and drop wheel from frame.",
-        "Insert two plastic tire levers under tire bead, slide lever around rim to unseat one side.",
-        "Pull out inner tube, pump air, submerge in water bowl to locate bubbles.",
-        "Scuff tube with sander, apply vulcanizing cement, apply rubber patch firmly for 3 minutes.",
-        "Feel inside tire casing for trapped thorn before reinstalling tube!"
-      ],
-      "proCostEstimate": 20
-    },
-    "worn_brake_pads": {
-      "id": "worn_brake_pads",
-      "name": "Brakes screech loudly, metal-on-metal grind, weak stopping power",
-      "severity": "high",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 25,
-      "proLaborHours": 0.5,
-      "partsCostEstimate": 12,
-      "toolsRequired": ["Hex Allen key set (4mm/5mm)", "Replacement brake pad pair"],
-      "safetyRisk": "high",
-      "safetyFlag": "BRAKE_STOPPING_HAZARD",
-      "safetyWarning": "Worn bicycle brakes compromise emergency stopping distance and can gouge aluminum wheel rims.",
-      "diySteps": [
-        "Loosen cable anchor pinch bolt or pad hex bolt.",
-        "Slide out worn rubber pads; observe direction arrow on new pads.",
-        "Align pad flush against wheel rim braking track (never touching tire rubber).",
-        "Toe-in pad slightly: front of pad touches rim 1mm before rear to eliminate screeching.",
-        "Tighten hex bolt securely and test brake lever pull."
-      ],
-      "proCostEstimate": 30
-    },
-    "skipping_chain_gears": {
-      "id": "skipping_chain_gears",
-      "name": "Chain clunks or jumps gears when pedaling uphill",
-      "severity": "moderate",
-      "diyDifficulty": "easy",
-      "diyTimeMinutes": 20,
-      "proLaborHours": 0.25,
-      "partsCostEstimate": 0,
-      "toolsRequired": ["Bike chain lube", "Ruler or chain wear checker"],
-      "safetyRisk": "low",
-      "description": "Cable tension stretched or chain stretched past 0.75% wear limit.",
-      "diySteps": [
-        "Measure 12 links of chain with a ruler: 12 inches is brand new; 12 1/8 inches means chain is worn and needs swap.",
-        "If chain is good, turn the rear derailleur barrel adjuster counter-clockwise 1/2 turn to tighten cable tension.",
-        "Shift through gears while spinning pedals to confirm smooth indexing."
-      ],
-      "proCostEstimate": 25
-    },
-    "cracked_frame_joint": {
-      "id": "cracked_frame_joint",
-      "name": "Cracked aluminum weld at headtube or bottom bracket",
-      "severity": "critical",
-      "diyDifficulty": "difficult",
-      "diyTimeMinutes": 0,
-      "proLaborHours": 3,
-      "partsCostEstimate": 200,
-      "toolsRequired": ["Certified frame welder / nondestructive inspection"],
-      "safetyRisk": "critical",
-      "safetyFlag": "STRUCTURAL_COLLAPSE_HAZARD",
-      "safetyWarning": "CATASTROPHIC FAILURE RISK: Cracked bicycle frame tube or weld can snap unexpectedly while riding, causing severe rider injury. Frame is beyond economical repair.",
-      "diySteps": [
-        "STOP RIDING IMMEDIATELY.",
-        "Aluminum bike frames cannot be safely repaired with hobby welding.",
-        "Strip usable components (wheels, shifters, crank, saddle) for reuse or donor build.",
-        "Recycle bare aluminum frame at scrap metal depot."
-      ],
-      "proCostEstimate": 250
+      "partsCommon": true,
+      "safetyFlags": []
     }
   },
-  "upcycleIdeas": {
-    "small_appliances": [
-      {
-        "id": "toaster_mail_sorter",
-        "title": "Vintage Desk Mail & File Sorter",
-        "description": "Strip internal heating guts and transform the classic stainless toaster chassis into a retro desktop letter and envelope organizer.",
-        "difficulty": "Easy",
-        "timeMinutes": 30,
-        "tools": ["Screwdriver", "Pliers"],
-        "materialsNeeded": ["Felt pads for base"]
+  "heuristics": {
+    "defaultWeights": {
+      "cost": 30,
+      "practicality": 20,
+      "remainingLife": 15,
+      "environment": 15,
+      "safety": 10,
+      "effort": 10
+    },
+    "safetyWeightLocked": 10,
+    "cost": {
+      "repairMultiplier": 10,
+      "replaceMultiplier": 8,
+      "repurpose": 6,
+      "reuse": 7,
+      "recycle": 3
+    },
+    "practicality": {
+      "repairBase": 10,
+      "repairSeverityMultiplier": 1.5,
+      "repairDiyHardPenalty": 1,
+      "repairPartsCommonBonus": 1,
+      "replace": 9,
+      "repurposeWithIdeas": 6,
+      "repurposeWithoutIdeas": 1,
+      "reuseByCondition": {
+        "good": 8,
+        "fair": 4,
+        "poor": 1
       },
-      {
-        "id": "blender_planter",
-        "title": "Retro Glass Kitchen Herb Planter",
-        "description": "Clean the glass or BPA-free pitcher, add drainage gravel at base, and grow fresh basil, mint, or succulents on a windowsill.",
-        "difficulty": "Easy",
-        "timeMinutes": 15,
-        "tools": ["Dish soap", "Gravel"],
-        "materialsNeeded": ["Potting soil", "Herb seeds"]
+      "recycle": 8
+    },
+    "remainingLife": {
+      "repairMultiplier": 10,
+      "repairGoodConditionBonus": 1,
+      "replaceMultiplier": 10,
+      "repurpose": 5,
+      "reuseMultiplier": 6,
+      "recycleMultiplier": 7
+    },
+    "environment": {
+      "repair": 9,
+      "reuse": 8,
+      "repurpose": 7,
+      "recycle": 5,
+      "replaceDefault": 2,
+      "replaceElectronics": 1
+    },
+    "safety": {
+      "repair": 9,
+      "reuse": 8,
+      "repurpose": 7,
+      "replace": 9,
+      "recycle": 8,
+      "criticalGatedOptions": [
+        "repair",
+        "reuse",
+        "repurpose"
+      ]
+    },
+    "effort": {
+      "repairByDifficulty": {
+        "easy": 7,
+        "medium": 5,
+        "hard": 3
       },
-      {
-        "id": "carafe_terrarium",
-        "title": "Cold-Brew Carafe Moss Terrarium",
-        "description": "Convert a heat-resistant glass coffee carafe into a self-watering indoor moss and fern miniature ecosystem.",
-        "difficulty": "Easy",
-        "timeMinutes": 25,
-        "tools": ["Tweezers", "Spray bottle"],
-        "materialsNeeded": ["Activated charcoal", "Sphagnum moss", "Pebbles"]
-      }
-    ],
-    "consumer_electronics": [
-      {
-        "id": "tablet_smart_dashboard",
-        "title": "Wall-Mounted Smart Home / Weather Screen",
-        "description": "Even if the battery is tired, mount an old tablet to the kitchen wall on permanent low-power charge as a family calendar and weather dashboard.",
-        "difficulty": "Easy",
-        "timeMinutes": 20,
-        "tools": ["Wall adhesive strips"],
-        "materialsNeeded": ["Kiosk browser app", "Charging cord"]
-      },
-      {
-        "id": "laptop_home_server",
-        "title": "Headless Home Cloud / Media Server",
-        "description": "A laptop with a cracked screen has built-in battery backup (UPS) and very low idle power draw. Run Linux or CasaOS for private cloud storage.",
-        "difficulty": "Intermediate",
-        "timeMinutes": 60,
-        "tools": ["USB flash drive", "Ethernet cable"],
-        "materialsNeeded": ["Free Linux OS"]
-      },
-      {
-        "id": "phone_security_cam",
-        "title": "Dedicated HD Security / Pet Camera",
-        "description": "High-definition camera sensor and Wi-Fi make old smartphones vastly superior to cheap CCTV webcams. Plug in and stream to your main phone.",
-        "difficulty": "Easy",
-        "timeMinutes": 15,
-        "tools": ["Phone tripod / clip"],
-        "materialsNeeded": ["Alfred Camera / Camo app"]
-      }
-    ],
-    "furniture_home": [
-      {
-        "id": "chair_towel_rack",
-        "title": "Wall-Mounted Spindle Towel & Coat Rack",
-        "description": "Saw off the curved backrest of an unsalvageable wooden chair, sand, paint, and mount flat to entryway wall for hanging coats and towels.",
-        "difficulty": "Intermediate",
-        "timeMinutes": 45,
-        "tools": ["Hand saw", "Drill", "Wall anchors"],
-        "materialsNeeded": ["Paint / stain", "2 screws"]
-      },
-      {
-        "id": "shelf_raised_planter",
-        "title": "Outdoor Raised Planter Box",
-        "description": "Reconfigure sagging solid wood or plywood bookshelf panels into deep square garden beds for backyard vegetables.",
-        "difficulty": "Intermediate",
-        "timeMinutes": 60,
-        "tools": ["Cordless drill", "Deck screws"],
-        "materialsNeeded": ["Landscape liner fabric"]
-      }
-    ],
-    "apparel_footwear": [
-      {
-        "id": "jeans_tote_bag",
-        "title": "Heavy-Duty Denim Market Tote Bag",
-        "description": "Cut worn jeans across thighs; sew bottom hem shut, and use leg fabric strips as double-stitched tote shoulder straps.",
-        "difficulty": "Easy",
-        "timeMinutes": 45,
-        "tools": ["Fabric scissors", "Sewing machine / needle"],
-        "materialsNeeded": ["Heavy polyester thread"]
-      },
-      {
-        "id": "puffer_pet_jacket",
-        "title": "Insulated Dog / Pet Thermal Vest",
-        "description": "Use the ripstop down baffled fabric of a torn winter coat to craft an ultra-warm weather vest for small and medium dogs.",
-        "difficulty": "Intermediate",
-        "timeMinutes": 50,
-        "tools": ["Scissors", "Needle & thread"],
-        "materialsNeeded": ["Velcro hook-and-loop strips"]
-      }
-    ],
-    "mobility_bicycles": [
-      {
-        "id": "bike_rim_pot_rack",
-        "title": "Hanging Kitchen Pot & Pan Chandelier",
-        "description": "Suspend a trued bicycle aluminum rim horizontally from ceiling chains with S-hooks through spoke eyelets for heavy cast iron skillets.",
-        "difficulty": "Intermediate",
-        "timeMinutes": 40,
-        "tools": ["Ceiling screw hooks", "Pliers"],
-        "materialsNeeded": ["Decorative chain", "12 S-hooks"]
-      },
-      {
-        "id": "chain_bottle_opener",
-        "title": "Artisanal Bicycle Chain Bottle Opener",
-        "description": "Clean discarded chain segments in degreaser, link around a stainless opener lever, and finish with clear rust-inhibiting coat.",
-        "difficulty": "Easy",
-        "timeMinutes": 20,
-        "tools": ["Chain pin tool", "Degreaser"],
-        "materialsNeeded": ["Stainless key ring"]
-      }
+      "replace": 8,
+      "repurpose": 4,
+      "reuse": 7,
+      "recycle": 9
+    },
+    "criticalSafetyFlags": [
+      "swollen_battery",
+      "swollen battery",
+      "burning_smell",
+      "burning smell",
+      "exposed_mains_wiring",
+      "exposed mains wiring"
     ]
   },
   "judgeDemos": [
     {
       "id": "demo_toaster",
       "title": "Kitchen Toaster — Won't Latch Down",
-      "subtitle": "Classic 15-minute DIY fix saving $45 and diverting 18 kg CO2e",
-      "category": "small_appliances",
+      "subtitle": "Classic 15-minute DIY fix saving ₹2,000 and diverting 18 kg CO2e",
+      "category": "kitchen_appliance",
       "itemId": "toaster",
       "itemName": "Pop-up Toaster",
-      "originalPrice": 45,
-      "itemAgeYears": 3,
+      "originalPrice": 2000,
+      "replaceCost": 2000,
+      "repairCost": 0,
+      "itemAgeYears": 2,
       "faultId": "lever_wont_latch",
       "userSkill": 2,
       "hasBasicTools": true,
       "timeAvailable": "afternoon",
-      "expectedWinner": "repair_diy",
-      "highlightNote": "Shows that a zero-cost 25-minute crumb cleanup easily beats buying a new toaster."
+      "expectedWinner": "repair",
+      "highlightNote": "Shows that a zero-cost 20-minute clean easily beats buying a new appliance."
     },
     {
       "id": "demo_phone",
       "title": "Smartphone — Rapid Battery Drain",
-      "subtitle": "3-year-old phone, $25 battery swap vs $750 new phone purchase",
-      "category": "consumer_electronics",
+      "subtitle": "3-year-old phone, ₹1,900 battery swap vs ₹32,000 new phone purchase",
+      "category": "phone_or_laptop",
       "itemId": "smartphone",
       "itemName": "Smartphone",
-      "originalPrice": 750,
+      "originalPrice": 32000,
+      "replaceCost": 32000,
+      "repairCost": 1900,
       "itemAgeYears": 3,
-      "faultId": "battery_degraded",
-      "userSkill": 3,
+      "faultId": "pl_battery_degraded",
+      "userSkill": 2,
       "hasBasicTools": true,
       "timeAvailable": "weekend",
-      "expectedWinner": "repair_diy",
-      "highlightNote": "Scores 94/100 for Repair: massive financial return and 70kg CO2e embodied carbon saved."
+      "expectedWinner": "repair",
+      "highlightNote": "Scores very high for Repair: massive financial return and avoids 85kg CO2e embodied carbon."
     },
     {
       "id": "demo_chair",
       "title": "Solid Oak Chair — Wobbly Joints",
       "subtitle": "Wood glue & clamp restoration, or upcycle into garden bench",
-      "category": "furniture_home",
-      "itemId": "wooden_chair",
+      "category": "furniture",
+      "itemId": "dining_chair",
       "itemName": "Solid Wood Dining Chair",
-      "originalPrice": 120,
-      "itemAgeYears": 6,
-      "faultId": "wobbly_loose_joint",
+      "originalPrice": 6500,
+      "replaceCost": 6500,
+      "repairCost": 120,
+      "itemAgeYears": 5,
+      "faultId": "fn_loose_joints_wobble",
       "userSkill": 2,
       "hasBasicTools": true,
       "timeAvailable": "weekend",
-      "expectedWinner": "repair_diy",
-      "highlightNote": "Demonstrates craftsmanship valuation over cheap flatpack replacement."
+      "expectedWinner": "repair",
+      "highlightNote": "Demonstrates craftsmanship valuation over cheap fast-furniture replacement."
     },
     {
-      "id": "demo_microwave_safety",
-      "title": "Microwave — Sparks Inside Casing",
-      "subtitle": "Instant Rust Safety Warning triggered (#C8553D) & safe waveguide fix",
-      "category": "small_appliances",
-      "itemId": "microwave",
-      "itemName": "Countertop Microwave",
-      "originalPrice": 120,
-      "itemAgeYears": 4,
-      "faultId": "sparks_inside",
+      "id": "demo_swollen_battery",
+      "title": "Smartphone — Swollen Battery Safety Hazard",
+      "subtitle": "Instant Critical Hazard detected — Gated verdict against DIY",
+      "category": "phone_or_laptop",
+      "itemId": "smartphone",
+      "itemName": "Smartphone",
+      "originalPrice": 30000,
+      "replaceCost": 30000,
+      "repairCost": 2400,
+      "itemAgeYears": 3,
+      "faultId": "pl_battery_swollen",
+      "safetyFlags": [
+        "swollen_battery"
+      ],
       "userSkill": 1,
       "hasBasicTools": false,
       "timeAvailable": "quick",
-      "expectedWinner": "repair_pro",
-      "highlightNote": "Triggers critical electrical safety protocol and explains waveguide vs lethal capacitor safety."
+      "expectedWinner": "recycle",
+      "highlightNote": "Triggers GATED safety status: DIY blocked to protect user from fire risks."
     }
   ]
 }

@@ -121,7 +121,7 @@ export function ActionPage() {
 
       {/* Content specific to active option */}
       {/* 1. DIY Repair Playbook */}
-      {activeOption.id === 'repair_diy' && (
+      {(activeOption.id === 'repair' || activeOption.id === 'repair_diy') && (
         <div className="space-y-6">
           {/* Tools & Parts Required */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -160,6 +160,11 @@ export const COPY = {
       actionPlan: 'Action Playbook',
     },
     options: {
+      repair: {
+        name: 'Repair',
+        badge: 'Lowest Cost & Maximum Lifespan Extension',
+        tagline: 'Fix the diagnosed fault to restore full utility and keep the item working.',
+      },
       repair_diy: {
         name: 'Repair (DIY)',
         badge: 'Lowest Cost & Maximum Learning',
@@ -249,4 +254,53 @@ export const COPY = {
     searchPlaceholder: 'Search faults, appliances, or materials...',
     filterAll: 'All Categories',
   },
+
+  reasons: {
+    repair: {
+      costHigh: 'Repairing for ₹{repairCost} is highly economical compared to buying a replacement for ₹{replaceCost}.',
+      costLow: 'Repair cost of ₹{repairCost} is relatively steep compared to a ₹{replaceCost} replacement.',
+      practicalityHigh: 'The fault has moderate severity and replacement parts are widely available.',
+      practicalityLow: 'Fixing this fault is technically challenging and requires uncommon components.',
+      remainingLifeHigh: 'With substantial remaining lifespan, restoring this item offers outstanding return on investment.',
+      remainingLifeLow: 'The item is nearing the end of its expected lifespan, limiting remaining service duration.',
+      environment: 'Repairing keeps functional materials in service and prevents manufacturing carbon emissions.',
+      safetyGated: 'CRITICAL HAZARD DETECTED ({flags}): Do not attempt DIY repair. Consult a certified technician.',
+      safetyClear: 'Standard safety precautions apply; no critical thermal or electrical hazards detected.',
+      effortEasy: 'DIY difficulty is low and can be tackled in a short session with basic tools.',
+      effortHard: 'DIY difficulty is high and demands significant effort or specialist tooling.',
+    },
+    reuse: {
+      zeroCost: 'Reusing or passing the item along incurs ₹0 in parts or labor costs.',
+      conditionGood: 'Physical condition is well-preserved for continued secondary use or donation.',
+      conditionPoor: 'Wear and tear limits secondary utility without initial servicing.',
+      environment: 'Direct reuse generates zero emissions and keeps 100% of embodied resources intact.',
+      remainingLife: 'Capitalizes on remaining functional lifespan without requiring fresh investment.',
+    },
+    repurpose: {
+      creativeUtility: 'Upcycling breathes new life into components for practical household or workshop roles.',
+      materialsSaved: 'Transforms chassis and hardware instead of sending them to the scrap heap.',
+      effortFeasible: 'Repurposing projects can be accomplished with standard tools at minimal out-of-pocket cost.',
+      ideasAvailable: 'Proven upcycling recipes are available to repurpose this item into functional items.',
+    },
+    replace: {
+      freshWarranty: 'Replacing resets product age to 0 years with updated technology and manufacturer warranty.',
+      uneconomicalRepair: 'When repair costs (₹{repairCost}) approach replacement value (₹{replaceCost}), a new purchase is more sensible.',
+      energyEfficiency: 'Modern replacement units offer superior energy efficiency and improved safety standards.',
+      endOfLife: 'The old unit has reached or exceeded its expected design lifespan.',
+    },
+    recycle: {
+      responsibleDisposal: 'Certified recycling reclaims critical copper, aluminium, and rare materials safely.',
+      safeHazardHandling: 'Safely neutralizes potential electronic and chemical contaminants.',
+      landfillDiversion: 'Keeps non-biodegradable waste out of municipal landfills.',
+      endOfLifeDefault: 'Appropriate end-of-life pathway when repair and repurpose are not viable.',
+    },
+    tippingPoint: {
+      flip: 'If repair cost exceeds ₹{thresholdRupees}, switching to {newWinner} becomes the better decision.',
+      noFlip: 'Repair remains the highest-scoring recommendation even if repair cost triples.',
+    },
+    gated: {
+      warning: 'A critical safety hazard was detected ({flags}). We strongly recommend a certified professional or safe e-waste disposal, never DIY.'
+    }
+  },
 };
+

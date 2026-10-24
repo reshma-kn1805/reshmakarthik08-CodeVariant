@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import {
   Sparkles,
@@ -10,6 +10,7 @@ import {
   DollarSign,
   ArrowRight,
   TrendingDown,
+  TrendingUp,
   Layers,
   Share2,
 } from 'lucide-react';
@@ -20,6 +21,7 @@ import { OptionCard } from '../components/verdict/OptionCard.jsx';
 import { SafetyBanner } from '../components/common/SafetyBanner.jsx';
 import { EstimateBadge } from '../components/common/EstimateBadge.jsx';
 import { TinkerModal } from '../components/modals/TinkerModal.jsx';
+import { tippingPoint } from '../engine/index.js';
 
 export function VerdictPage() {
   const navigate = useNavigate();
@@ -35,6 +37,15 @@ export function VerdictPage() {
   }, [id]);
 
   const { item, fault, safety, options, winner, analytics } = decisionResult;
+
+  // Signature Feature: Tipping Point calculation
+  const tipPoint = useMemo(() => {
+    try {
+      return tippingPoint(assessment, rules);
+    } catch (e) {
+      return null;
+    }
+  }, [assessment, rules]);
 
   // Sync to history log
   useEffect(() => {
@@ -198,6 +209,23 @@ export function VerdictPage() {
             <span className="text-[10px] text-ink-faint block mt-1">Useful life</span>
           </div>
         </div>
+
+        {/* Signature Feature: Tipping Point Banner */}
+        {tipPoint && (
+          <div className="p-4 rounded-brand bg-white/95 border border-brand/30 shadow-xs flex items-start gap-3">
+            <div className="p-2 rounded-full bg-brand-tint text-brand-deep shrink-0 mt-0.5">
+              <TrendingUp className="w-4 h-4 text-brand-deep" />
+            </div>
+            <div className="space-y-0.5">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-brand-deep block">
+                What Would Change This Verdict (Tipping Point)
+              </span>
+              <p className="text-xs sm:text-sm text-ink font-medium leading-relaxed">
+                {tipPoint.sentence}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Primary CTA */}
         <div className="pt-2">

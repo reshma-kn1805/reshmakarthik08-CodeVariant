@@ -29,6 +29,7 @@ export function OptionCard({ option, rank = 1, isWinner = false }) {
 
   const getIcon = (id) => {
     switch (id) {
+      case 'repair':
       case 'repair_diy':
         return <Wrench className="w-5 h-5" />;
       case 'repair_pro':
