@@ -470,6 +470,12 @@ export function calculateDecision(input = {}, rules = defaultRules, config = APP
     safetyRatings.repair = 0;
     safetyRatings.reuse = 0;
     safetyRatings.repurpose = 0;
+    practicalityRatings.repair = 0;
+    practicalityRatings.reuse = 0;
+    practicalityRatings.repurpose = 0;
+    lifeRatings.repair = 0;
+    lifeRatings.reuse = 0;
+    lifeRatings.repurpose = 0;
   }
 
   // Effort ratings

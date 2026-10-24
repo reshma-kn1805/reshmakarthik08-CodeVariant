@@ -293,4 +293,128 @@ describe('Decision & Scoring Engine (Pure JS)', () => {
     expect(emptyResult.confidence).toBe('low');
     expect(emptyResult.winner).toBeDefined();
   });
+
+  // PHASE 6 STRESS TESTS & BREAK-IT CASES
+  describe('Phase 6 Stress & Break-It Cases', () => {
+    it('handles age 0 (brand new) safely without division by zero', () => {
+      const inputAge0 = {
+        category: 'phone_or_laptop',
+        ageYears: 0,
+        faultId: 'pl_cracked_screen',
+        severity: 2,
+        repairCost: 3000,
+        replaceCost: 40000,
+        safetyFlags: [],
+      };
+      const res = calculateDecision(inputAge0, rules, APP_CONFIG);
+      expect(res.winner).toBeDefined();
+      expect(res.options.length).toBe(5);
+      expect(res.options[0].lifespanAddedYears).toBeGreaterThan(0);
+      expect(Number.isFinite(res.winner.score)).toBe(true);
+    });
+
+    it('handles age 50 (ancient item) gracefully', () => {
+      const inputAge50 = {
+        category: 'kitchen_appliance',
+        ageYears: 50,
+        faultId: 'ka_motor_seized',
+        severity: 3,
+        repairCost: 1500,
+        replaceCost: 3500,
+        safetyFlags: [],
+      };
+      const res = calculateDecision(inputAge50, rules, APP_CONFIG);
+      expect(res.winner).toBeDefined();
+      expect(Number.isFinite(res.winner.score)).toBe(true);
+      expect(res.options[0].factors.remainingLife.points).toBeGreaterThanOrEqual(0);
+    });
+
+    it('handles repair cost exceeding replacement cost (repair > replace)', () => {
+      const inputHighRepair = {
+        category: 'furniture',
+        ageYears: 8,
+        faultId: 'fn_broken_leg',
+        severity: 3,
+        repairCost: 15000,
+        replaceCost: 4500, // repair is 333% of new cost!
+        safetyFlags: [],
+      };
+      const res = calculateDecision(inputHighRepair, rules, APP_CONFIG);
+      expect(res.winner.id).not.toBe('repair');
+      expect(['replace', 'recycle', 'repurpose']).toContain(res.winner.id);
+      // Tipping point should be null because repair is already far unviable
+      const tp = tippingPoint(inputHighRepair, rules, APP_CONFIG);
+      expect(tp).toBeNull();
+    });
+
+    it('handles huge numbers (multi-million values) without overflow or NaN', () => {
+      const inputHuge = {
+        category: 'phone_or_laptop',
+        ageYears: 2,
+        faultId: 'pl_cracked_screen',
+        severity: 2,
+        repairCost: 10000000,
+        replaceCost: 45000000,
+        safetyFlags: [],
+      };
+      const res = calculateDecision(inputHuge, rules, APP_CONFIG);
+      expect(res.winner).toBeDefined();
+      expect(Number.isFinite(res.winner.score)).toBe(true);
+      res.options.forEach(opt => {
+        expect(Number.isFinite(opt.score)).toBe(true);
+        expect(Number.isFinite(opt.costEstimate)).toBe(true);
+      });
+    });
+
+    it('validates the 3 required Phase 2 example scenarios produce expected outcomes', () => {
+      // Scenario 1: 5-year-old mixer grinder, blades won't spin -> Repair wins
+      const ex1 = {
+        category: 'kitchen_appliance',
+        ageYears: 5,
+        faultId: 'ka_blender_coupler',
+        severity: 2,
+        problemText: "Blades won't spin when loaded",
+        repairCost: 180,
+        replaceCost: 3500,
+        restCondition: 'good',
+        safetyFlags: [],
+      };
+      const res1 = calculateDecision(ex1, rules, APP_CONFIG);
+      expect(res1.winner.id).toBe('repair');
+      expect(res1.gated).toBe(false);
+
+      // Scenario 2: Phone with swollen battery -> Safety gate / Recycle wins
+      const ex2 = {
+        category: 'phone_or_laptop',
+        ageYears: 3,
+        faultId: 'pl_battery_swollen',
+        severity: 3,
+        problemText: 'Battery has swelled and pushed up the screen glass',
+        repairCost: 2200,
+        replaceCost: 28000,
+        restCondition: 'fair',
+        safetyFlags: ['swollen_battery'],
+      };
+      const res2 = calculateDecision(ex2, rules, APP_CONFIG);
+      expect(res2.gated).toBe(true);
+      expect(res2.safety.isCritical).toBe(true);
+      expect(res2.winner.id).toBe('recycle');
+
+      // Scenario 3: Old chair where repair costs nearly as much as new -> Replace wins
+      const ex3 = {
+        category: 'furniture',
+        ageYears: 7,
+        faultId: 'fn_structural_crack',
+        severity: 3,
+        problemText: 'Main support wood has split down the center',
+        repairCost: 4200,
+        replaceCost: 4800,
+        restCondition: 'poor',
+        safetyFlags: [],
+      };
+      const res3 = calculateDecision(ex3, rules, APP_CONFIG);
+      expect(res3.winner.id).toBe('replace');
+      expect(res3.gated).toBe(false);
+    });
+  });
 });
