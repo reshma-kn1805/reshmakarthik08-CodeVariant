@@ -12,7 +12,7 @@ import {
 import { DragOverlayCard } from './DataCard.jsx';
 import { applyDrop } from './actions.js';
 
-const CanvasContext = createContext(null);
+export const CanvasContext = createContext(null);
 
 export function useCanvas() {
   const ctx = useContext(CanvasContext);
@@ -82,6 +82,7 @@ export function CanvasProvider({ children, onDropSuccess, stateContext = {} }) {
   const [activeCard, setActiveCard] = useState(null);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [bouncingZoneId, setBouncingZoneId] = useState(null);
+  const [dropConfirmations, setDropConfirmations] = useState({});
 
   // Configure sensors per Canvas Protocol requirements:
   // PointerSensor (immediate drag with 4px activation distance)
@@ -125,9 +126,17 @@ export function CanvasProvider({ children, onDropSuccess, stateContext = {} }) {
       const result = applyDrop(stateContext, card, zoneId);
 
       if (result.success) {
-        if (result.effects?.message) {
-          setFeedbackMessage(result.effects.message);
-        }
+        const msg = result.effects?.message || 'Action executed successfully';
+        setFeedbackMessage(msg);
+        setDropConfirmations((prev) => ({ ...prev, [zoneId]: msg }));
+        setTimeout(() => {
+          setDropConfirmations((prev) => {
+            const next = { ...prev };
+            delete next[zoneId];
+            return next;
+          });
+        }, 2800);
+
         if (onDropSuccess) {
           onDropSuccess(result);
         }
@@ -189,6 +198,7 @@ export function CanvasProvider({ children, onDropSuccess, stateContext = {} }) {
         feedbackMessage,
         setFeedbackMessage,
         bouncingZoneId,
+        dropConfirmations,
       }}
     >
       <DndContext

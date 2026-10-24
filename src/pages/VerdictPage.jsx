@@ -506,6 +506,11 @@ export function VerdictPage() {
             id="zone-commit"
             label="Drop option to Commit"
             hint="Locks option & reveals step checklist below."
+            emptyState={
+              committedOptionId
+                ? `Active commitment: ${activeCommittedOption?.name}`
+                : 'No option locked • Drag any option card below'
+            }
             className="bg-white border-brand shadow-xs"
           />
 
@@ -514,6 +519,11 @@ export function VerdictPage() {
             id="zone-compare"
             label="Drop option to Compare"
             hint="Side-by-side comparison for up to 3 options."
+            emptyState={
+              comparedOptionIds.length > 0
+                ? `${comparedOptionIds.length}/3 options staged • Drop more to inspect`
+                : 'Drop up to 3 options to compare trade-offs'
+            }
             className="bg-white border-amber shadow-xs"
           />
 
@@ -522,6 +532,7 @@ export function VerdictPage() {
             id="zone-keep"
             label="Drop Case to Keep"
             hint="Pins in history or restores discarded case."
+            emptyState="Drop active Case Card or discarded case to restore"
             className="bg-white border-deepGreen shadow-xs"
           />
 
@@ -531,12 +542,14 @@ export function VerdictPage() {
               id="zone-discard"
               label="Drop to Discard"
               hint="Moves to Discard tray."
+              emptyState="Drop Case Card to discard"
               className="bg-white border-safety-rust shadow-xs"
             />
             <ActionZone
               id="zone-export"
               label="Drop to Export"
               hint="Copies report & prints."
+              emptyState="Drop Case Card to copy summary"
               className="bg-white border-ink-border shadow-xs"
             />
           </div>
@@ -711,6 +724,7 @@ export function VerdictPage() {
               id="zone-plan-done"
               label="Drop step card here to mark Done"
               hint="Persists step completion in session storage."
+              emptyState="Drop completed step cards here to check off"
               className="bg-brand-surfaceAlt/30 min-h-[90px]"
             />
 

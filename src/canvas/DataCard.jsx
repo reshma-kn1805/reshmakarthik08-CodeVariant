@@ -36,10 +36,19 @@ export function DataCard({
     },
   });
 
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    window?.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const style = {
     transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)${!window?.matchMedia('(prefers-reduced-motion: reduce)').matches ? ' rotate(2deg) scale(1.02)' : ''}`
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)${!prefersReducedMotion ? ' rotate(2deg) scale(1.02)' : ''}`
       : undefined,
+    transition: isDragging
+      ? 'none'
+      : prefersReducedMotion
+      ? 'none'
+      : 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms ease',
     zIndex: isDragging ? 999 : undefined,
   };
 

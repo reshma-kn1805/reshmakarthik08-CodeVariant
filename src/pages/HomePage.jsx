@@ -163,6 +163,7 @@ export function HomePage() {
             id="zone-start-assessment"
             label="Drop card to start assessment"
             hint="Drag any category card from below to configure diagnosis, or drag an example card for an instant verdict."
+            emptyState="Empty slot • Drop a Category or Example card to begin"
             mobileSticky={true}
             className="min-h-[140px] bg-white border-brand-deep/30 shadow-card"
           />
@@ -197,39 +198,45 @@ export function HomePage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {threeExamples.map((ex) => {
-              const matches = isExampleMatch(ex);
-              const isSafety = ex.expectedWinner === 'recycle';
+          {threeExamples.filter(isExampleMatch).length === 0 ? (
+            <div className="p-6 rounded-brand-lg border border-dashed border-ink-border bg-white text-center text-xs text-ink-muted">
+              No example scenarios match "{searchQuery}". Clear the search above to view all demos.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {threeExamples.map((ex) => {
+                const matches = isExampleMatch(ex);
+                const isSafety = ex.expectedWinner === 'recycle';
 
-              return (
-                <div
-                  key={ex.id}
-                  className={`transition-opacity duration-200 ${
-                    matches ? 'opacity-100 ring-2 ring-amber/30 rounded-brand-lg' : 'opacity-40'
-                  }`}
-                >
-                  <DataCard
-                    id={ex.id}
-                    type="example"
-                    title={ex.title}
-                    subtitle={ex.subtitle}
-                    badge={ex.badge}
-                    icon={isSafety ? AlertTriangle : Wrench}
-                    data={ex}
+                return (
+                  <div
+                    key={ex.id}
+                    className={`transition-opacity duration-200 ${
+                      matches ? 'opacity-100 ring-2 ring-amber/30 rounded-brand-lg' : 'opacity-40'
+                    }`}
                   >
-                    <p className="text-[11px] text-ink leading-relaxed font-medium">
-                      {ex.highlight}
-                    </p>
-                    <div className="pt-2 border-t border-ink-border/30 flex items-center justify-between text-[10px] font-mono text-ink-muted">
-                      <span>Category: {ex.assessment?.category?.replace(/_/g, ' ')}</span>
-                      <span className="text-amber font-bold">Drag to Zone ↑</span>
-                    </div>
-                  </DataCard>
-                </div>
-              );
-            })}
-          </div>
+                    <DataCard
+                      id={ex.id}
+                      type="example"
+                      title={ex.title}
+                      subtitle={ex.subtitle}
+                      badge={ex.badge}
+                      icon={isSafety ? AlertTriangle : Wrench}
+                      data={ex}
+                    >
+                      <p className="text-[11px] text-ink leading-relaxed font-medium">
+                        {ex.highlight}
+                      </p>
+                      <div className="pt-2 border-t border-ink-border/30 flex items-center justify-between text-[10px] font-mono text-ink-muted">
+                        <span>Category: {ex.assessment?.category?.replace(/_/g, ' ')}</span>
+                        <span className="text-amber font-bold">Drag to Zone ↑</span>
+                      </div>
+                    </DataCard>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* 8 Draggable Category Cards Section (Parts Bin) */}
@@ -248,35 +255,41 @@ export function HomePage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
-            {categories.map((cat) => {
-              const IconComp = CATEGORY_ICONS[cat.id] || Wrench;
-              const matches = isCategoryMatch(cat);
+          {categories.filter(isCategoryMatch).length === 0 ? (
+            <div className="p-6 rounded-brand-lg border border-dashed border-ink-border bg-white text-center text-xs text-ink-muted">
+              No equipment categories match "{searchQuery}". Clear the search above to view all 8 types.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+              {categories.map((cat) => {
+                const IconComp = CATEGORY_ICONS[cat.id] || Wrench;
+                const matches = isCategoryMatch(cat);
 
-              return (
-                <div
-                  key={cat.id}
-                  className={`transition-opacity duration-200 ${
-                    matches ? 'opacity-100' : 'opacity-35'
-                  }`}
-                >
-                  <DataCard
-                    id={cat.id}
-                    type="category"
-                    title={cat.name}
-                    subtitle={`Lifespan: ${cat.expectedLifespanYears || 5}y`}
-                    icon={IconComp}
-                    data={cat}
-                    badge="Category"
+                return (
+                  <div
+                    key={cat.id}
+                    className={`transition-opacity duration-200 ${
+                      matches ? 'opacity-100' : 'opacity-35'
+                    }`}
                   >
-                    <p className="text-[11px] text-ink-muted line-clamp-2">
-                      {cat.description}
-                    </p>
-                  </DataCard>
-                </div>
-              );
-            })}
-          </div>
+                    <DataCard
+                      id={cat.id}
+                      type="category"
+                      title={cat.name}
+                      subtitle={`Lifespan: ${cat.expectedLifespanYears || 5}y`}
+                      icon={IconComp}
+                      data={cat}
+                      badge="Category"
+                    >
+                      <p className="text-[11px] text-ink-muted line-clamp-2">
+                        {cat.description}
+                      </p>
+                    </DataCard>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* Session Impact Summary Row with DonutGauge */}

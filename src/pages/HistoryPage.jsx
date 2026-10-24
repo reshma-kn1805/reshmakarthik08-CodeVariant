@@ -177,6 +177,7 @@ export function HistoryPage() {
             id="zone-history-reopen"
             label="Drop card to Reopen & Edit"
             hint="Loads diagnosis back into the assessment workbench."
+            emptyState="Drop any saved case card to reopen & edit"
             className="bg-white border-brand min-h-[110px] shadow-xs"
           />
 
@@ -185,6 +186,11 @@ export function HistoryPage() {
             id="zone-history-compare"
             label="Drop 2 cards to Compare"
             hint={`Side-by-side comparison. (${comparedHistoryIds.length}/2 cards queued).`}
+            emptyState={
+              comparedHistoryIds.length > 0
+                ? `${comparedHistoryIds.length}/2 cases queued • Drop 2nd case to compare`
+                : 'Drop 2 archive cards to compare trade-offs'
+            }
             className="bg-white border-amber min-h-[110px] shadow-xs"
           />
 
@@ -193,6 +199,7 @@ export function HistoryPage() {
             id="zone-history-discard"
             label="Drop card to Discard"
             hint="Permanently removes evaluation from session archive."
+            emptyState="Drop card here to permanently remove"
             className="bg-white border-safety-rust min-h-[110px] shadow-xs"
           />
         </section>

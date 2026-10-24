@@ -170,6 +170,7 @@ export function AssessPage() {
                 id="zone-category-slot"
                 label={`Drop category card here to switch equipment`}
                 hint={`Currently loaded: ${activeCategory.name}. Drag another category card into this slot to replace.`}
+                emptyState={`Active: ${activeCategory.name} • Drop card to switch`}
                 className="bg-brand-surfaceAlt/20 min-h-[80px]"
               />
 
@@ -219,6 +220,11 @@ export function AssessPage() {
                 id="zone-faults"
                 label="Drop diagnosed fault cards here"
                 hint="Multi-drop accepted. The first card becomes the primary diagnosis for repair calculations."
+                emptyState={
+                  assessment.faultId
+                    ? `Diagnosed: ${primaryFaultLabel}`
+                    : 'No fault card dropped yet • Drop a card from below'
+                }
                 className="bg-brand-surfaceAlt/20 min-h-[80px]"
               />
 
@@ -322,6 +328,11 @@ export function AssessPage() {
                 id="zone-safety"
                 label="Drop safety warning sign cards here"
                 hint="Critical signs lock DIY repair and redirect to professional technicians or recycling."
+                emptyState={
+                  hasCriticalFlag
+                    ? 'Hazard active • Locks DIY repair'
+                    : 'Safe condition affirmed • Drop flags if hazard observed'
+                }
                 className="bg-brand-surfaceAlt/20 min-h-[80px]"
               />
 
@@ -620,6 +631,7 @@ export function AssessPage() {
                 id="zone-run-assessment"
                 label="Drop Case File to run assessment"
                 hint="Drop the Case File above to calculate the 5-way decision matrix, log to history, and view the verdict."
+                emptyState="Ready for Case File • Drag the card above to run engine"
                 mobileSticky={true}
                 className="min-h-[140px] bg-white border-brand shadow-card"
               />
