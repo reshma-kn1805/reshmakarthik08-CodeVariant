@@ -1,35 +1,42 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import rulesData from '../data/rules.json';
+import examplesData from '../data/examples.json';
 import { APP_CONFIG } from '../config/app.config.js';
 import { calculateDecision } from '../engine/scoring.js';
 
-const STORAGE_KEY = 'fix_it_first_assessment_v1';
+const STORAGE_KEY = 'fix_it_first_assessment_v2';
+const HISTORY_KEY = 'fix_it_first_history_v2';
 
 const DEFAULT_ASSESSMENT = {
-  category: 'small_appliances',
-  itemId: 'toaster',
+  id: '',
+  category: 'kitchen_appliance',
+  itemName: 'Kitchen Appliance',
+  itemId: '',
   customItemName: '',
-  itemAgeYears: 2,
-  itemCondition: 'good',
-  originalPrice: 45,
-  faultId: 'lever_wont_latch',
+  ageYears: 3,
+  itemAgeYears: 3,
+  faultId: 'ka_blender_coupler',
   customFault: '',
-  severity: 'mild',
-  userSkill: 2,
-  hasBasicTools: true,
-  timeAvailable: 'afternoon',
-  safetyChecks: {
-    sparks: false,
-    batteryBulge: false,
-    waterDamage: false,
+  problemText: 'Appliance power is on but mechanical rotation fails under normal load.',
+  severity: 2, // 1: Mild, 2: Moderate, 3: High
+  restCondition: 'good', // 'good' | 'fair' | 'poor'
+  diyDifficulty: 'easy', // 'easy' | 'medium' | 'hard'
+  repairCost: 180,
+  replaceCost: 3500,
+  safetyFlags: [],
+  priorities: {
+    money: 50,
+    waste: 50,
+    effort: 50,
   },
+  safetyChecks: {},
   overrides: null,
 };
 
 const AssessmentContext = createContext(null);
 
 export function AssessmentProvider({ children }) {
-  // Initialize from sessionStorage to survive browser refresh
+  // Assessment state from sessionStorage
   const [assessment, setAssessment] = useState(() => {
     try {
       const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -43,10 +50,23 @@ export function AssessmentProvider({ children }) {
     return DEFAULT_ASSESSMENT;
   });
 
+  // History list from sessionStorage
+  const [history, setHistory] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(HISTORY_KEY);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.warn('Failed to load history from sessionStorage:', e);
+    }
+    return [];
+  });
+
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
 
-  // Sync to sessionStorage on changes
+  // Sync assessment to sessionStorage
   useEffect(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(assessment));
@@ -55,18 +75,26 @@ export function AssessmentProvider({ children }) {
     }
   }, [assessment]);
 
-  // Compute decision matrix dynamically via pure engine
+  // Sync history to sessionStorage
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch (e) {
+      console.warn('Failed to persist history:', e);
+    }
+  }, [history]);
+
+  // Compute decision result dynamically
   const decisionResult = useMemo(() => {
     try {
       return calculateDecision(assessment, rulesData, APP_CONFIG);
     } catch (err) {
       console.error('Error calculating decision:', err);
-      // Fallback safe result
       return calculateDecision(DEFAULT_ASSESSMENT, rulesData, APP_CONFIG);
     }
   }, [assessment]);
 
-  // Automatically keep selectedOptionId in sync with winner if not explicitly set
+  // Active selected option
   const activeSelectedOption = useMemo(() => {
     if (selectedOptionId) {
       const match = decisionResult.options.find(o => o.id === selectedOptionId);
@@ -79,55 +107,120 @@ export function AssessmentProvider({ children }) {
     setAssessment(prev => ({
       ...prev,
       ...partial,
-      safetyChecks: {
-        ...prev.safetyChecks,
-        ...(partial.safetyChecks || {}),
+      priorities: {
+        ...prev.priorities,
+        ...(partial.priorities || {}),
       },
+      safetyFlags: partial.safetyFlags !== undefined ? partial.safetyFlags : prev.safetyFlags,
     }));
   };
 
-  const loadDemo = (demoId) => {
-    const demo = rulesData.judgeDemos?.find(d => d.id === demoId);
-    if (!demo) return;
+  /**
+   * Save current assessment & decision result to session history
+   */
+  const saveCurrentToHistory = () => {
+    const result = calculateDecision(assessment, rulesData, APP_CONFIG);
+    const id = assessment.id || `eval_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const categoryObj = rulesData.categories.find(c => c.id === assessment.category);
 
-    setAssessment({
-      category: demo.category,
-      itemId: demo.itemId,
-      customItemName: '',
-      itemAgeYears: demo.itemAgeYears || 2,
-      itemCondition: 'good',
-      originalPrice: demo.originalPrice,
-      faultId: demo.faultId,
-      customFault: '',
-      severity: rulesData.faults[demo.faultId]?.severity || 'moderate',
-      userSkill: demo.userSkill || 2,
-      hasBasicTools: demo.hasBasicTools ?? true,
-      timeAvailable: demo.timeAvailable || 'afternoon',
-      safetyChecks: {
-        sparks: demo.faultId === 'sparks_inside',
-        batteryBulge: demo.faultId === 'swollen_battery',
-        waterDamage: demo.faultId === 'leaking_base',
-      },
-      overrides: null,
+    const historyEntry = {
+      id,
+      timestamp: new Date().toISOString(),
+      dateStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      itemName: assessment.itemName || assessment.customItemName || categoryObj?.name || 'Assessed Item',
+      category: categoryObj?.name || assessment.category,
+      categoryId: assessment.category,
+      faultName: assessment.problemText ? assessment.problemText.slice(0, 45) + '...' : 'Diagnosed issue',
+      winner: result.winner.name,
+      winnerId: result.winner.id,
+      score: result.winner.score,
+      savings: result.analytics.netSavings,
+      carbon: result.winner.carbonSavedKg || 0,
+      gated: result.gated,
+      assessment: { ...assessment, id },
+      decisionResult: result,
+    };
+
+    setHistory(prev => {
+      // Remove any prior entry with exact same id or push to top
+      const filtered = prev.filter(item => item.id !== id);
+      return [historyEntry, ...filtered.slice(0, 19)]; // keep up to 20
     });
-    setSelectedOptionId(null);
+
+    setAssessment(prev => ({ ...prev, id }));
+    return id;
   };
 
-  const applyOverrides = (newOverrides) => {
-    setAssessment(prev => ({
-      ...prev,
-      overrides: {
-        ...(prev.overrides || {}),
-        ...newOverrides,
-      },
-    }));
+  /**
+   * Load a scenario from examples.json or judgeDemos
+   */
+  const loadExample = (exampleId) => {
+    const ex = examplesData.find(e => e.id === exampleId);
+    if (ex) {
+      const id = `ex_${ex.id}`;
+      const newAssessment = {
+        ...DEFAULT_ASSESSMENT,
+        ...ex.assessment,
+        id,
+      };
+      setAssessment(newAssessment);
+      setSelectedOptionId(null);
+
+      // Run and persist in history
+      const result = calculateDecision(newAssessment, rulesData, APP_CONFIG);
+      const historyEntry = {
+        id,
+        timestamp: new Date().toISOString(),
+        dateStr: 'Example',
+        itemName: ex.title,
+        category: ex.assessment.category?.replace(/_/g, ' '),
+        categoryId: ex.assessment.category,
+        faultName: ex.subtitle,
+        winner: result.winner.name,
+        winnerId: result.winner.id,
+        score: result.winner.score,
+        savings: result.analytics.netSavings,
+        carbon: result.winner.carbonSavedKg || 0,
+        gated: result.gated,
+        assessment: newAssessment,
+        decisionResult: result,
+      };
+
+      setHistory(prev => [historyEntry, ...prev.filter(h => h.id !== id)]);
+      return id;
+    }
+
+    // Fallback: check rulesData.judgeDemos
+    const demo = rulesData.judgeDemos?.find(d => d.id === exampleId);
+    if (demo) {
+      const id = `demo_${demo.id}`;
+      const newAssessment = {
+        ...DEFAULT_ASSESSMENT,
+        category: demo.category,
+        itemName: demo.itemName,
+        ageYears: demo.itemAgeYears || 3,
+        itemAgeYears: demo.itemAgeYears || 3,
+        faultId: demo.faultId,
+        problemText: demo.subtitle || demo.highlightNote,
+        replaceCost: demo.replaceCost || demo.originalPrice || 3500,
+        repairCost: demo.repairCost !== undefined ? demo.repairCost : 250,
+        safetyFlags: demo.safetyFlags || [],
+        id,
+      };
+      setAssessment(newAssessment);
+      setSelectedOptionId(null);
+      return id;
+    }
+
+    return null;
   };
 
-  const resetOverrides = () => {
-    setAssessment(prev => ({
-      ...prev,
-      overrides: null,
-    }));
+  const getHistoryItem = (id) => {
+    return history.find(h => h.id === id) || null;
+  };
+
+  const deleteHistoryItem = (id) => {
+    setHistory(prev => prev.filter(h => h.id !== id));
   };
 
   const resetAssessment = () => {
@@ -149,11 +242,14 @@ export function AssessmentProvider({ children }) {
     decisionResult,
     selectedOption: activeSelectedOption,
     setSelectedOptionId,
-    loadDemo,
-    applyOverrides,
-    resetOverrides,
+    saveCurrentToHistory,
+    loadExample,
+    history,
+    getHistoryItem,
+    deleteHistoryItem,
     resetAssessment,
     rules: rulesData,
+    examples: examplesData,
     config: APP_CONFIG,
   };
 

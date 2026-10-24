@@ -57,27 +57,27 @@ export const COPY = {
   steps: {
     step1: {
       number: '1',
-      title: 'Item & Value',
+      title: 'Item Details',
       shortTitle: 'Item',
-      description: 'What item do you have and what was its original value?',
+      description: 'Select category, item name, and how old the item is.',
     },
     step2: {
       number: '2',
-      title: 'Fault Diagnosis',
-      shortTitle: 'Diagnosis',
-      description: 'What is wrong with it and are there safety hazards?',
+      title: "What's Wrong?",
+      shortTitle: "What's Wrong",
+      description: 'Select observed fault symptoms, describe the issue, and pick severity.',
     },
     step3: {
       number: '3',
-      title: 'Tools & Skills',
-      shortTitle: 'Capability',
-      description: 'Your comfort level with hand tools and repair time.',
+      title: 'Safety Check',
+      shortTitle: 'Safety',
+      description: 'Check for category-specific warning signs or hazards before proceeding.',
     },
     step4: {
       number: '4',
-      title: 'The Decision Matrix',
-      shortTitle: 'Verdict',
-      description: 'Unbiased ranked evaluation of all 5 paths.',
+      title: 'Costs & Priorities',
+      shortTitle: 'Priorities',
+      description: 'Fine-tune cost estimates, physical condition, and decision priorities.',
     },
   },
 

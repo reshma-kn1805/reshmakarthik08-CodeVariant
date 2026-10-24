@@ -20,10 +20,11 @@ import { COPY } from '../copy/en.js';
 import { useAssessment } from '../state/AssessmentContext.jsx';
 import { JudgeDemosModal } from '../components/modals/JudgeDemosModal.jsx';
 import { Button, Card, Badge, PageContainer } from '../components/ui/index.js';
+import examplesData from '../data/examples.json';
 
 export function HomePage() {
   const navigate = useNavigate();
-  const { rules, loadDemo } = useAssessment();
+  const { rules, loadDemo, loadExample } = useAssessment();
   const [showDemoModal, setShowDemoModal] = useState(false);
 
   const handleStartFresh = () => {
@@ -33,6 +34,11 @@ export function HomePage() {
   const handleRunDemo = (demoId) => {
     loadDemo(demoId);
     navigate(`/verdict/${demoId}`);
+  };
+
+  const handleRunExample = (exampleId) => {
+    const id = loadExample(exampleId);
+    navigate(`/verdict/${id}`);
   };
 
   return (
@@ -92,6 +98,69 @@ export function HomePage() {
             <span className="font-heading font-extrabold text-2xl text-deepGreen block">0 sec</span>
             <span className="text-xs text-ink-muted mt-0.5 block leading-snug">No login, zero telemetry, runs pure math in your browser</span>
           </div>
+        </div>
+      </section>
+
+      {/* Try an Example Row (Phase 2 Requirement) */}
+      <section className="max-w-5xl mx-auto px-4 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-ink-border/50 pb-2">
+          <div>
+            <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-brand-deep">
+              <Sparkles className="w-3.5 h-3.5 text-action-amber fill-action-amber" />
+              <span>Instant Test Scenarios</span>
+            </div>
+            <h2 className="font-heading font-extrabold text-2xl text-ink mt-0.5">
+              Try an Example (1-Click Verdicts)
+            </h2>
+          </div>
+          <span className="text-xs text-ink-muted">
+            Jump straight into real-world scored decision matrices
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {examplesData.map((ex) => {
+            const isSafety = ex.expectedWinner === 'recycle';
+            const isRepair = ex.expectedWinner === 'repair';
+
+            return (
+              <button
+                key={ex.id}
+                type="button"
+                onClick={() => handleRunExample(ex.id)}
+                className="p-5 rounded-brand-lg bg-white border border-ink-border/80 hover:border-brand/50 shadow-subtle hover:shadow-card transition-all text-left group cursor-pointer flex flex-col justify-between gap-4"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                        isSafety
+                          ? 'bg-safety-rustLight text-safety-rust'
+                          : isRepair
+                          ? 'bg-brand-tint text-brand-deep'
+                          : 'bg-action-amberLight text-action-amberHover'
+                      }`}
+                    >
+                      {ex.badge}
+                    </span>
+                    <span className="text-xs font-mono text-ink-faint">1-click</span>
+                  </div>
+
+                  <h3 className="font-heading font-bold text-lg text-ink group-hover:text-brand-deep transition-colors">
+                    {ex.title}
+                  </h3>
+                  <p className="text-xs text-ink-muted leading-relaxed">
+                    {ex.subtitle}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-ink-border/40 flex items-center justify-between text-xs font-semibold text-brand-deep group-hover:text-brand">
+                  <span>{ex.highlight}</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+            );
+          })}
         </div>
       </section>
 

@@ -1,0 +1,89 @@
+[
+  {
+    "id": "mixer_grinder_spin",
+    "title": "5-year-old Mixer Grinder",
+    "subtitle": "Blades won't spin (Stripped coupler)",
+    "highlight": "Repair wins (₹180 part vs ₹3,500 new)",
+    "expectedWinner": "repair",
+    "badge": "High ROI Repair",
+    "assessment": {
+      "category": "kitchen_appliance",
+      "itemName": "Mixer Grinder",
+      "itemId": "mixer_grinder",
+      "ageYears": 5,
+      "itemAgeYears": 5,
+      "faultId": "ka_blender_coupler",
+      "problemText": "Motor spins and hums loudly, but drive coupler teeth are stripped so blades don't turn under load.",
+      "severity": 2,
+      "restCondition": "good",
+      "diyDifficulty": "easy",
+      "partsCommon": true,
+      "repairCost": 180,
+      "replaceCost": 3500,
+      "safetyFlags": [],
+      "priorities": {
+        "money": 70,
+        "waste": 60,
+        "effort": 40
+      }
+    }
+  },
+  {
+    "id": "swollen_battery_phone",
+    "title": "Phone with Swollen Battery",
+    "subtitle": "Battery bulging & pushing screen up",
+    "highlight": "Safety gate triggered (Don't DIY)",
+    "expectedWinner": "recycle",
+    "badge": "Critical Safety Gate",
+    "assessment": {
+      "category": "phone_or_laptop",
+      "itemName": "Smartphone",
+      "itemId": "smartphone",
+      "ageYears": 3,
+      "itemAgeYears": 3,
+      "faultId": "pl_battery_swollen",
+      "problemText": "Back cover lifted along the right edge and screen is visibly pushed up by swollen lithium battery pouch.",
+      "severity": 5,
+      "restCondition": "fair",
+      "diyDifficulty": "hard",
+      "partsCommon": true,
+      "repairCost": 2400,
+      "replaceCost": 32000,
+      "safetyFlags": ["swollen_battery"],
+      "priorities": {
+        "money": 50,
+        "waste": 50,
+        "effort": 50
+      }
+    }
+  },
+  {
+    "id": "chair_expensive_repair",
+    "title": "Old Wooden Study Chair",
+    "subtitle": "Structural joint split along grain",
+    "highlight": "Replace wins (Repair ₹2,400 near ₹2,600 new)",
+    "expectedWinner": "replace",
+    "badge": "Uneconomical Fix",
+    "assessment": {
+      "category": "furniture",
+      "itemName": "Solid Wood Study Chair",
+      "itemId": "dining_chair",
+      "ageYears": 8,
+      "itemAgeYears": 8,
+      "faultId": "fn_snapped_chair_leg",
+      "problemText": "Rear leg tenon joint split cleanly down the hardwood grain; chair frame wobbles severely and carpenter quote is near replacement value.",
+      "severity": 4,
+      "restCondition": "poor",
+      "diyDifficulty": "hard",
+      "partsCommon": false,
+      "repairCost": 2400,
+      "replaceCost": 2600,
+      "safetyFlags": [],
+      "priorities": {
+        "money": 80,
+        "waste": 30,
+        "effort": 60
+      }
+    }
+  }
+]
