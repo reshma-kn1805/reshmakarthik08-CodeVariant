@@ -1,518 +1,377 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  History,
-  ArrowRight,
+  History as HistoryIcon,
+  RotateCcw,
+  Scale,
   Trash2,
   Sparkles,
-  Clock,
-  ArrowLeftRight,
+  Layers,
+  Wrench,
   CheckCircle2,
-  AlertTriangle,
-  RotateCcw,
-  Edit3,
-  ExternalLink,
-  X,
-  Plus,
-  Scale,
-  Leaf,
   DollarSign,
-  ShieldAlert,
+  Leaf,
+  X,
+  AlertTriangle,
 } from 'lucide-react';
 import { useAssessment } from '../state/AssessmentContext.jsx';
-import { PageContainer, Card, Badge, Button } from '../components/ui/index.js';
-import { EstimateBadge } from '../components/common/EstimateBadge.jsx';
+import { CanvasProvider, DataCard, ActionZone } from '../canvas/index.js';
+import { Breadcrumbs } from '../components/common/Breadcrumbs.jsx';
+import { DonutGauge } from '../components/common/DonutGauge.jsx';
+import examplesData from '../data/examples.json';
 
 export function HistoryPage() {
   const navigate = useNavigate();
   const {
     history,
     deleteHistoryItem,
-    clearHistory,
     updateAssessment,
-    setCurrentStep,
-    loadExample,
-    examples,
+    assessment,
   } = useAssessment();
 
-  // State for side-by-side comparison: holds up to 2 item IDs
-  const [selectedIds, setSelectedIds] = useState([]);
+  // Compared history IDs (up to 2)
+  const [comparedHistoryIds, setComparedHistoryIds] = useState([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
+  const [bannerNotice, setBannerNotice] = useState(null);
 
-  // Toggle selection for comparison
-  const toggleSelectForCompare = (id) => {
-    setSelectedIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
+  // Esc key closes comparison modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setShowCompareModal(false);
       }
-      if (prev.length >= 2) {
-        // Replace second selection
-        return [prev[0], id];
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleDropSuccess = (result) => {
+    if (result.effects?.message) {
+      setBannerNotice(result.effects.message);
+      setTimeout(() => setBannerNotice(null), 4000);
+    }
+
+    // Reopen & edit
+    if (result.effects?.navigate) {
+      if (result.state?.assessment) {
+        updateAssessment(result.state.assessment);
       }
-      return [...prev, id];
-    });
-  };
+      navigate(result.effects.navigate);
+      return;
+    }
 
-  const handleOpenVerdict = (id) => {
-    navigate(`/verdict/${id}`);
-  };
+    // Discard from history
+    if (result.effects?.removedId) {
+      deleteHistoryItem(result.effects.removedId);
+      setComparedHistoryIds((prev) => prev.filter((id) => id !== result.effects.removedId));
+    }
 
-  const handleEditAndRerun = (item) => {
-    if (item.assessment) {
-      updateAssessment(item.assessment);
-      setCurrentStep(1);
-      navigate('/assess');
+    // Compare
+    if (result.effects?.comparedHistoryIds) {
+      setComparedHistoryIds(result.effects.comparedHistoryIds);
+      if (result.effects.openCompareModal) {
+        setShowCompareModal(true);
+      }
     }
   };
 
-  // Compare pair
-  const compareItemA = history.find((h) => h.id === selectedIds[0]);
-  const compareItemB = history.find((h) => h.id === selectedIds[1]);
+  const handleCustomDrop = (result) => {
+    if (!result.success) {
+      setBannerNotice(result.effects?.message || 'Drop rejected');
+      setTimeout(() => setBannerNotice(null), 4000);
+      return;
+    }
+    handleDropSuccess(result);
+  };
+
+  // Compare pair items
+  const itemA = history.find((h) => h.id === comparedHistoryIds[0]);
+  const itemB = history.find((h) => h.id === comparedHistoryIds[1]);
+
+  const totalSavings = history.reduce((acc, h) => acc + (h.savings || 0), 0);
+  const totalCarbon = history.reduce((acc, h) => acc + (h.carbon || 0), 0);
+
+  // Fallback example card for empty state
+  const fallbackExample = examplesData[0] || {};
+  const fallbackHistoryCard = {
+    id: `ex_${fallbackExample.id}`,
+    itemName: fallbackExample.title,
+    category: fallbackExample.assessment?.category?.replace(/_/g, ' ') || 'Kitchen Appliance',
+    faultName: fallbackExample.subtitle,
+    winner: 'Repair It Yourself',
+    score: 84,
+    savings: 3320,
+    carbon: 35,
+    assessment: fallbackExample.assessment,
+  };
 
   return (
-    <PageContainer maxWidth="5xl">
-      <div className="space-y-6">
-        {/* Header */}
+    <CanvasProvider
+      stateContext={{
+        assessment,
+        history,
+        comparedHistoryIds,
+      }}
+      onDropSuccess={handleCustomDrop}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+        {/* Breadcrumb Navigation */}
+        <Breadcrumbs
+          items={[{ label: 'Workbench', path: '/' }, { label: 'Archive (Canvas Mode)' }]}
+          showActions={false}
+        />
+
+        {/* Archive Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-ink-border/60">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase text-deepGreen tracking-wider">
-                Session Log
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen bg-tint px-2 py-0.5 rounded-full border border-green/20">
+                Session Archive • Canvas Mode
               </span>
-              <Badge variant="green" size="sm">
-                {history.length} {history.length === 1 ? 'assessment' : 'assessments'}
-              </Badge>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-ink-muted">
+                {history.length} {history.length === 1 ? 'record' : 'records'}
+              </span>
             </div>
-            <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-ink mt-0.5">
-              Decision History
+            <h1 className="font-heading font-black text-2xl sm:text-3xl text-ink mt-1">
+              Decision Archive
             </h1>
-            <p className="text-xs sm:text-sm text-ink-muted mt-1">
-              All evaluations performed in this session. Saved locally in browser memory with zero tracking.
+            <p className="text-xs text-ink-muted">
+              All evaluations performed in this session. Drag cards to Reopen, Compare side-by-side, or Discard.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            {selectedIds.length === 2 && (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setShowCompareModal(true)}
-                className="gap-1.5"
-              >
-                <ArrowLeftRight className="w-3.5 h-3.5" />
-                <span>Compare Selected (2)</span>
-              </Button>
-            )}
-
-            {history.length > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  if (window.confirm('Clear all session history?')) {
-                    clearHistory();
-                    setSelectedIds([]);
-                  }
-                }}
-                className="inline-flex items-center gap-1.5 text-xs text-ink-faint hover:text-rust px-2.5 py-1.5 rounded border border-ink-border/60 hover:border-rust/40 transition-colors cursor-pointer"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear</span>
-              </button>
-            )}
+          {/* Session Impact Stats */}
+          <div className="flex items-center gap-4 bg-white p-3 rounded-brand-lg border border-ink-border/80 shadow-xs">
+            <DonutGauge
+              score={Math.min(history.length * 20, 100)}
+              size={56}
+              strokeWidth={6}
+              color="#2E7D5B"
+              label=""
+              sublabel="cases"
+            />
+            <div className="text-left text-xs">
+              <span className="text-[10px] font-mono text-ink-muted uppercase block">Cumulative Savings</span>
+              <span className="font-mono font-bold text-sm text-deepGreen block">
+                ₹{totalSavings.toLocaleString('en-IN')}
+              </span>
+              <span className="text-[10px] text-ink-muted font-mono block">
+                +{totalCarbon} kg CO₂ avoided
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Comparison floating banner if exactly 2 are selected */}
-        {selectedIds.length > 0 && (
-          <div className="p-3.5 rounded-brand-lg bg-brand-surface border-2 border-amber/50 shadow-subtle flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded bg-action-amberLight text-action-amberHover">
-                <Scale className="w-4 h-4" />
-              </div>
-              <div className="text-xs">
-                <span className="font-bold text-ink">
-                  {selectedIds.length === 2
-                    ? '2 items selected for side-by-side comparison'
-                    : '1 item selected. Select 1 more to compare.'}
-                </span>
-                <span className="text-ink-muted block text-[11px]">
-                  {selectedIds.length === 2
-                    ? 'Compare trade-offs, repair economics, and recommended pathways.'
-                    : 'Click "Compare" on any second item below.'}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {selectedIds.length === 2 && (
-                <button
-                  type="button"
-                  onClick={() => setShowCompareModal(true)}
-                  className="px-3 py-1.5 rounded-brand bg-amber text-ink hover:text-white text-xs font-bold hover:bg-action-amberHover transition-all flex items-center gap-1 cursor-pointer shadow-amber-glow"
-                >
-                  <ArrowLeftRight className="w-3.5 h-3.5" />
-                  <span>View Side-by-Side</span>
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setSelectedIds([])}
-                className="px-2.5 py-1.5 text-xs text-ink-muted hover:text-ink transition-colors cursor-pointer"
-              >
-                Deselect
-              </button>
-            </div>
+        {/* Notice feedback banner */}
+        {bannerNotice && (
+          <div className="p-3 rounded-brand bg-brand-surfaceAlt border border-brand/30 text-brand-deep text-xs font-semibold flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber shrink-0" />
+            <span>{bannerNotice}</span>
           </div>
         )}
 
-        {/* Empty state */}
-        {history.length === 0 ? (
-          <Card className="text-center py-12 px-4 space-y-5">
-            <div className="w-14 h-14 rounded-full bg-brand-surface text-green border border-ink-border flex items-center justify-center mx-auto">
-              <History className="w-7 h-7" />
-            </div>
-            <div className="space-y-1.5 max-w-md mx-auto">
-              <h3 className="font-heading font-bold text-lg text-ink">No assessments yet</h3>
-              <p className="text-xs text-ink-muted">
-                Run an item assessment to see your options ranked with honest estimates, carbon footprint, and clear next steps.
-              </p>
-            </div>
+        {/* Three Action Zones: Reopen & Edit, Compare, Discard */}
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Zone 1: Reopen & Edit */}
+          <ActionZone
+            id="zone-history-reopen"
+            label="Drop card to Reopen & Edit"
+            hint="Loads diagnosis back into the assessment workbench."
+            className="bg-white border-brand min-h-[110px] shadow-xs"
+          />
 
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button
-                variant="primary"
-                size="md"
-                onClick={() => {
-                  setCurrentStep(1);
-                  navigate('/assess');
-                }}
-                className="gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Start New Assessment</span>
-              </Button>
-            </div>
+          {/* Zone 2: Compare 2 Items */}
+          <ActionZone
+            id="zone-history-compare"
+            label="Drop 2 cards to Compare"
+            hint={`Side-by-side comparison. (${comparedHistoryIds.length}/2 cards queued).`}
+            className="bg-white border-amber min-h-[110px] shadow-xs"
+          />
 
-            {/* Quick-load example seeds */}
-            <div className="pt-6 border-t border-ink-border/50 max-w-xl mx-auto">
-              <p className="text-[11px] font-mono uppercase tracking-wider text-ink-faint mb-3">
-                Or seed session with a 1-click example:
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-left">
-                {examples.map((ex) => (
-                  <button
-                    key={ex.id}
-                    type="button"
-                    onClick={() => {
-                      const id = loadExample(ex.id);
-                      navigate(`/verdict/${id}`);
-                    }}
-                    className="p-2.5 rounded-brand bg-white border border-ink-border hover:border-amber text-xs hover:shadow-subtle transition-all cursor-pointer"
-                  >
-                    <span className="font-bold text-ink block truncate">{ex.title}</span>
-                    <span className="text-[11px] text-ink-muted block truncate mt-0.5">
-                      {ex.subtitle}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </Card>
-        ) : (
-          /* List of past decisions */
-          <div className="space-y-3">
-            {history.map((item) => {
-              const isSelected = selectedIds.includes(item.id);
-              const isGated = Boolean(item.gated);
+          {/* Zone 3: Discard */}
+          <ActionZone
+            id="zone-history-discard"
+            label="Drop card to Discard"
+            hint="Permanently removes evaluation from session archive."
+            className="bg-white border-safety-rust min-h-[110px] shadow-xs"
+          />
+        </section>
 
-              return (
-                <div
+        {/* History Cards Section */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between border-b border-ink-border/40 pb-2">
+            <div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-deepGreen block">
+                Saved Case Records
+              </span>
+              <h2 className="font-heading font-extrabold text-xl text-ink">
+                Archive Cards
+              </h2>
+            </div>
+            <span className="text-xs text-ink-muted hidden sm:inline">
+              Grab handle & drop into an action zone above
+            </span>
+          </div>
+
+          {history.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {history.map((item) => (
+                <DataCard
                   key={item.id}
-                  className={`p-4 rounded-brand-lg bg-white border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                    isSelected
-                      ? 'border-amber ring-2 ring-amber/20 bg-action-amberLight/30'
-                      : 'border-ink-border hover:border-ink-muted'
-                  }`}
+                  id={item.id}
+                  type="history-card"
+                  title={item.itemName || 'Assessed Item'}
+                  subtitle={`${item.category || 'Appliance'} • ${item.dateStr || 'Recent'}`}
+                  badge={item.winner || 'Evaluated'}
+                  icon={HistoryIcon}
+                  data={item}
+                  className={comparedHistoryIds.includes(item.id) ? 'border-amber ring-2 ring-amber/40' : ''}
                 >
-                  {/* Left: Info and Compare checkbox */}
-                  <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <button
-                      type="button"
-                      onClick={() => toggleSelectForCompare(item.id)}
-                      title={isSelected ? 'Remove from comparison' : 'Select for side-by-side comparison'}
-                      className={`mt-1 w-5 h-5 rounded border flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-                        isSelected
-                          ? 'bg-amber border-amber text-ink'
-                          : 'border-ink-border/80 hover:border-amber text-transparent'
-                      }`}
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                    </button>
-
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <div className="flex items-center gap-2 text-[11px] text-ink-faint">
-                        <span className="capitalize font-medium text-ink-muted">
-                          {item.category?.replace(/_/g, ' ')}
-                        </span>
-                        <span>•</span>
-                        <span>{item.dateStr || 'Recent'}</span>
-                        {isGated && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rust bg-safety-rustLight px-1.5 py-0.5 rounded border border-safety-rustBorder">
-                            <ShieldAlert className="w-3 h-3 text-rust" />
-                            Gated Hazard
-                          </span>
-                        )}
-                      </div>
-
-                      <h3 className="font-heading font-bold text-base text-ink truncate">
-                        {item.itemName}
-                      </h3>
-
-                      <p className="text-xs text-ink-muted truncate">
-                        Issue: <span className="text-ink">{item.faultName}</span>
+                  <div className="space-y-1.5 text-xs">
+                    <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                      <span className="text-ink-muted">Verdict:</span>
+                      <span className="font-bold text-deepGreen">{item.winner}</span>
+                    </div>
+                    <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                      <span className="text-ink-muted">Score:</span>
+                      <span className="font-mono font-bold text-ink">{item.score}/100</span>
+                    </div>
+                    <div className="flex justify-between border-b border-ink-border/30 pb-1">
+                      <span className="text-ink-muted">Savings:</span>
+                      <span className="font-mono font-bold text-deepGreen">
+                        ₹{(item.savings || 0).toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                    {item.faultName && (
+                      <p className="text-[11px] text-ink-muted truncate pt-0.5">
+                        {item.faultName}
                       </p>
-                    </div>
+                    )}
                   </div>
+                </DataCard>
+              ))}
+            </div>
+          ) : (
+            /* Empty State with Example Card to drag per prompt requirement */
+            <div className="p-8 rounded-brand-lg border-2 border-dashed border-ink-border bg-white text-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-brand-surfaceAlt mx-auto flex items-center justify-center text-ink-muted">
+                <HistoryIcon className="w-6 h-6 stroke-[1.8]" />
+              </div>
+              <div className="space-y-1 max-w-md mx-auto">
+                <h3 className="font-heading font-bold text-lg text-ink">
+                  Archive is Empty
+                </h3>
+                <p className="text-xs text-ink-muted leading-relaxed">
+                  You haven't saved any evaluations yet. Pick up the demo card below and drag it into <strong>Reopen & Edit</strong> to test the workflow, or start on the workbench.
+                </p>
+              </div>
 
-                  {/* Middle: Winner & Metric Badges */}
-                  <div className="flex items-center gap-4 shrink-0 sm:border-l sm:border-ink-border/60 sm:pl-4">
-                    <div className="text-right">
-                      <span className="text-[10px] text-ink-faint uppercase tracking-wider block font-medium">
-                        Top Recommendation
-                      </span>
-                      <span
-                        className={`text-xs font-bold block ${
-                          isGated ? 'text-rust' : 'text-deepGreen'
-                        }`}
-                      >
-                        {item.winner}
-                      </span>
-                      <span className="font-mono text-xs text-ink-muted block">
-                        Score: <span className="font-bold text-ink">{item.score}</span>/100
-                      </span>
-                    </div>
-
-                    <div className="text-right pl-3 border-l border-ink-border/60">
-                      <span className="text-[10px] text-ink-faint uppercase tracking-wider block font-medium">
-                        Net Savings
-                      </span>
-                      <span className="font-mono text-sm font-bold text-ink">
-                        ₹{(item.savings || 0).toLocaleString()}
-                      </span>
-                      <span className="text-[10px] text-green block font-medium">
-                        +{item.carbon || 0} kg CO₂
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Right: Actions */}
-                  <div className="flex items-center gap-1.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-ink-border/40">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenVerdict(item.id)}
-                      className="px-3 py-1.5 rounded-brand bg-amber hover:bg-action-amberHover text-ink hover:text-white shadow-xs text-xs font-bold transition-all inline-flex items-center gap-1.5 cursor-pointer"
-                      title="View full decision verdict"
-                    >
-                      <span>Verdict</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleEditAndRerun(item)}
-                      className="p-1.5 rounded hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink transition-colors cursor-pointer"
-                      title="Edit parameters and re-evaluate"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => deleteHistoryItem(item.id)}
-                      className="p-1.5 rounded hover:bg-safety-rustLight text-ink-faint hover:text-rust transition-colors cursor-pointer"
-                      title="Delete from session history"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Compare Modal / Drawer */}
-        {showCompareModal && compareItemA && compareItemB && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-            <div className="bg-white rounded-brand-lg border border-ink-border max-w-4xl w-full p-6 shadow-xl space-y-6 animate-fadeIn">
-              <div className="flex items-center justify-between pb-3 border-b border-ink-border">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded bg-action-amberLight text-action-amberHover">
-                    <ArrowLeftRight className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h2 className="font-heading font-bold text-xl text-ink">
-                      Side-by-Side Decision Comparison
-                    </h2>
-                    <p className="text-xs text-ink-muted">
-                      Direct trade-off breakdown between two evaluated items
+              {/* Draggable Demo Card for Empty State */}
+              <div className="max-w-md mx-auto pt-2 text-left">
+                <DataCard
+                  id={fallbackHistoryCard.id}
+                  type="history-card"
+                  title={fallbackHistoryCard.itemName}
+                  subtitle={`${fallbackHistoryCard.category} • Demo Card`}
+                  badge="Try Dragging Me"
+                  icon={Sparkles}
+                  data={fallbackHistoryCard}
+                  className="border-amber ring-2 ring-amber/30"
+                >
+                  <div className="text-xs space-y-1">
+                    <p className="text-[11px] text-ink-muted font-medium">
+                      {fallbackHistoryCard.faultName}
                     </p>
+                    <div className="flex justify-between pt-1 border-t border-ink-border/30 font-mono text-[10px]">
+                      <span>Expected: {fallbackHistoryCard.winner}</span>
+                      <span className="text-amber font-bold">Drag into Reopen ↑</span>
+                    </div>
                   </div>
+                </DataCard>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Side-by-Side History Comparison Modal */}
+        {showCompareModal && itemA && itemB && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Side-by-side history comparison"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+            onClick={() => setShowCompareModal(false)}
+          >
+            <div
+              className="bg-white rounded-brand-lg max-w-3xl w-full p-6 space-y-6 shadow-elevated border border-ink-border max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-ink-border/50 pb-3">
+                <div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber block">
+                    Comparative Inspection
+                  </span>
+                  <h3 className="font-heading font-extrabold text-2xl text-ink">
+                    Side-by-Side Evaluation Comparison
+                  </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowCompareModal(false)}
-                  className="p-1.5 rounded hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink transition-colors cursor-pointer"
+                  className="p-1.5 rounded hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink font-mono text-xs font-bold"
+                  aria-label="Close modal (Esc)"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Dual Column Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Item A */}
-                <div className="p-4 rounded-brand-lg bg-brand-surface/40 border border-ink-border/80 space-y-4">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-green tracking-wider block">
-                      Item A • {compareItemA.category}
-                    </span>
-                    <h3 className="font-heading font-bold text-lg text-ink">
-                      {compareItemA.itemName}
-                    </h3>
-                    <p className="text-xs text-ink-muted">{compareItemA.faultName}</p>
-                  </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[itemA, itemB].map((item, idx) => (
+                  <div
+                    key={item.id}
+                    className="p-4 rounded-brand border border-ink-border/80 bg-brand-surfaceAlt/20 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono uppercase font-bold text-amber">
+                        Case {idx === 0 ? 'A' : 'B'}
+                      </span>
+                      <span className="font-heading font-black text-lg text-deepGreen">
+                        {item.score}/100
+                      </span>
+                    </div>
 
-                  <div className="p-3 rounded bg-white border border-ink-border space-y-2">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Top Verdict:</span>
-                      <span className="font-bold text-deepGreen">{compareItemA.winner}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Overall Score:</span>
-                      <span className="font-mono font-bold text-ink">{compareItemA.score} / 100</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Repair vs Replace:</span>
-                      <span className="font-mono text-ink">
-                        ₹{compareItemA.assessment?.repairCost} vs ₹{compareItemA.assessment?.replaceCost}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Net Purchase Savings:</span>
-                      <span className="font-mono font-bold text-green">
-                        ₹{(compareItemA.savings || 0).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Carbon Avoided:</span>
-                      <span className="font-mono text-ink">
-                        {compareItemA.carbon || 0} kg CO₂
-                      </span>
-                    </div>
-                  </div>
+                    <h4 className="font-heading font-bold text-base text-ink">{item.itemName}</h4>
+                    <p className="text-[11px] text-ink-muted">{item.category}</p>
 
-                  <div className="flex gap-2">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="flex-1"
-                      onClick={() => {
-                        setShowCompareModal(false);
-                        handleOpenVerdict(compareItemA.id);
-                      }}
-                    >
-                      Open Verdict
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setShowCompareModal(false);
-                        handleEditAndRerun(compareItemA);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Item B */}
-                <div className="p-4 rounded-brand-lg bg-brand-surface/40 border border-ink-border/80 space-y-4">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-green tracking-wider block">
-                      Item B • {compareItemB.category}
-                    </span>
-                    <h3 className="font-heading font-bold text-lg text-ink">
-                      {compareItemB.itemName}
-                    </h3>
-                    <p className="text-xs text-ink-muted">{compareItemB.faultName}</p>
-                  </div>
-
-                  <div className="p-3 rounded bg-white border border-ink-border space-y-2">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Top Verdict:</span>
-                      <span className="font-bold text-deepGreen">{compareItemB.winner}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Overall Score:</span>
-                      <span className="font-mono font-bold text-ink">{compareItemB.score} / 100</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Repair vs Replace:</span>
-                      <span className="font-mono text-ink">
-                        ₹{compareItemB.assessment?.repairCost} vs ₹{compareItemB.assessment?.replaceCost}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Net Purchase Savings:</span>
-                      <span className="font-mono font-bold text-green">
-                        ₹{(compareItemB.savings || 0).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-ink-muted">Carbon Avoided:</span>
-                      <span className="font-mono text-ink">
-                        {compareItemB.carbon || 0} kg CO₂
-                      </span>
+                    <div className="space-y-1.5 text-xs pt-2 border-t border-ink-border/30">
+                      <div className="flex justify-between">
+                        <span className="text-ink-muted">Winner:</span>
+                        <span className="font-bold text-deepGreen">{item.winner}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-ink-muted">Savings:</span>
+                        <span className="font-mono font-bold text-ink">
+                          ₹{(item.savings || 0).toLocaleString('en-IN')}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-ink-muted">Carbon Avoided:</span>
+                        <span className="font-mono font-bold text-deepGreen">
+                          +{item.carbon || 0} kg
+                        </span>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="flex gap-2">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="flex-1"
-                      onClick={() => {
-                        setShowCompareModal(false);
-                        handleOpenVerdict(compareItemB.id);
-                      }}
-                    >
-                      Open Verdict
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setShowCompareModal(false);
-                        handleEditAndRerun(compareItemB);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </div>
+                ))}
               </div>
 
-              {/* Bottom footer */}
-              <div className="pt-2 flex justify-end">
-                <Button variant="ghost" size="sm" onClick={() => setShowCompareModal(false)}>
-                  Close Comparison
-                </Button>
+              <div className="flex justify-end pt-2 border-t border-ink-border/40 text-xs text-ink-muted font-mono">
+                Press Esc or click outside to close comparison.
               </div>
             </div>
           </div>
         )}
       </div>
-    </PageContainer>
+    </CanvasProvider>
   );
 }
