@@ -13,6 +13,8 @@ export default {
         amber: '#E39A2D',
         rust: '#C8553D',
         tint: '#EEF3EF',
+        workshopSidebar: '#16382E',
+        workshopPaper: '#F4EFE4',
         ink: {
           DEFAULT: '#17211C',
           muted: '#4A5B53',
@@ -22,12 +24,12 @@ export default {
         },
         // Semantic aliases
         brand: {
-          deep: '#1D4D3F',
+          deep: '#16382E',
           DEFAULT: '#2E7D5B',
           light: '#3E9871',
           tint: '#EEF3EF',
-          surface: '#F8FAF9',
-          surfaceAlt: '#E4ECE7',
+          surface: '#F4EFE4',
+          surfaceAlt: '#E8E2D5',
         },
         action: {
           amber: '#E39A2D',
@@ -49,6 +51,8 @@ export default {
         'brand': '10px',
         'brand-md': '14px',
         'brand-lg': '18px',
+        'brand-xl': '22px',
+        'brand-2xl': '26px',
         'brand-pill': '9999px',
       },
       spacing: {
@@ -56,13 +60,13 @@ export default {
         '22': '5.5rem',
       },
       boxShadow: {
-        'subtle': '0 1px 3px rgba(23, 33, 28, 0.06), 0 1px 2px rgba(23, 33, 28, 0.04)',
-        'card': '0 4px 12px rgba(23, 33, 28, 0.05)',
-        'elevated': '0 10px 25px -3px rgba(23, 33, 28, 0.08), 0 4px 6px -2px rgba(23, 33, 28, 0.04)',
+        'subtle': '0 1px 3px rgba(22, 56, 46, 0.05), 0 1px 2px rgba(22, 56, 46, 0.03)',
+        'card': '0 4px 16px rgba(22, 56, 46, 0.06), 0 1px 3px rgba(22, 56, 46, 0.04)',
+        'elevated': '0 12px 28px -4px rgba(22, 56, 46, 0.1), 0 4px 8px -2px rgba(22, 56, 46, 0.04)',
         'amber-glow': '0 4px 14px rgba(227, 154, 45, 0.35)',
       },
       transitionDuration: {
-        DEFAULT: '180ms',
+        DEFAULT: '200ms',
       },
     },
   },
