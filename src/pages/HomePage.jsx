@@ -14,10 +14,12 @@ import {
   CheckCircle2,
   Clock,
   AlertTriangle,
+  Compass,
 } from 'lucide-react';
 import { COPY } from '../copy/en.js';
 import { useAssessment } from '../state/AssessmentContext.jsx';
 import { JudgeDemosModal } from '../components/modals/JudgeDemosModal.jsx';
+import { Button, Card, Badge, PageContainer } from '../components/ui/index.js';
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -30,87 +32,164 @@ export function HomePage() {
 
   const handleRunDemo = (demoId) => {
     loadDemo(demoId);
-    navigate('/verdict');
+    navigate(`/verdict/${demoId}`);
   };
 
   return (
     <div className="space-y-16 py-8 sm:py-12">
       {/* Hero Section */}
       <section className="text-center max-w-4xl mx-auto px-4 space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-tint border border-brand/20 text-brand-deep text-xs font-semibold tracking-wide">
-          <Sparkles className="w-3.5 h-3.5 text-action-amber fill-action-amber" />
-          <span>{COPY.hero.eyebrow}</span>
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-tint border border-green/20 text-deepGreen text-xs font-semibold tracking-wide">
+          <Sparkles className="w-3.5 h-3.5 text-amber fill-amber" />
+          <span>Code Variant Build 01 • 12-Hour Live Round</span>
         </div>
 
-        <h1 className="font-heading font-black text-3xl sm:text-5xl lg:text-6xl text-ink tracking-tight leading-[1.12]">
-          {COPY.hero.title}
+        {/* Mandatory Heading: "Don't toss it. Decide it." */}
+        <h1 className="font-heading font-black text-4xl sm:text-6xl lg:text-7xl text-ink tracking-tight leading-[1.08]">
+          Don't toss it.<br />
+          <span className="text-deepGreen italic font-serif">Decide it.</span>
         </h1>
 
         <p className="text-base sm:text-lg text-ink-muted max-w-2xl mx-auto leading-relaxed">
-          {COPY.hero.subtitle}
+          Before you discard or replace a damaged item, see if it is truly worth fixing.
+          Get a transparent, unbiased comparison across <strong>Repair, Reuse, Repurpose, Replace, and Recycle</strong> with net costs, carbon impact, and zero sponsored nudges to buy new.
         </p>
 
-        {/* Primary and Secondary CTA */}
+        {/* Primary CTA: "Assess an item" */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="lg"
             onClick={handleStartFresh}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-brand font-bold text-sm bg-action-amber hover:bg-action-amberHover text-ink hover:text-white shadow-amber-glow transition-all flex items-center justify-center gap-2 group cursor-pointer"
+            className="w-full sm:w-auto"
           >
-            <span>{COPY.hero.ctaPrimary}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+            <span>Assess an item</span>
+            <ArrowRight className="w-4 h-4" />
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="lg"
             onClick={() => setShowDemoModal(true)}
-            className="w-full sm:w-auto px-5 py-3.5 rounded-brand font-semibold text-sm bg-white hover:bg-brand-surfaceAlt text-brand-deep border border-ink-border transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-subtle"
+            className="w-full sm:w-auto"
           >
-            <Sparkles className="w-4 h-4 text-action-amber fill-action-amber" />
-            <span>{COPY.hero.ctaSecondary}</span>
-          </button>
+            <Sparkles className="w-4 h-4 text-amber fill-amber" />
+            <span>Try a 30-Second Judge Demo</span>
+          </Button>
         </div>
 
-        {/* Stats strip */}
-        <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          {COPY.hero.stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="p-4 rounded-brand bg-white border border-ink-border/70 shadow-xs text-left"
-            >
-              <div className="font-heading font-extrabold text-2xl text-brand-deep">
-                {stat.value}
+        {/* Restrained Hand-Designed Stats Row */}
+        <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="p-4 rounded-brand bg-white border border-ink-border/80 shadow-xs text-left">
+            <span className="font-heading font-extrabold text-2xl text-deepGreen block">5-Way</span>
+            <span className="text-xs text-ink-muted mt-0.5 block leading-snug">Parallel circular evaluation (Repair, Reuse, Repurpose, Replace, Recycle)</span>
+          </div>
+          <div className="p-4 rounded-brand bg-white border border-ink-border/80 shadow-xs text-left">
+            <span className="font-heading font-extrabold text-2xl text-deepGreen block">100%</span>
+            <span className="text-xs text-ink-muted mt-0.5 block leading-snug">Transparent and user-tunable cost & lifespan estimates</span>
+          </div>
+          <div className="p-4 rounded-brand bg-white border border-ink-border/80 shadow-xs text-left">
+            <span className="font-heading font-extrabold text-2xl text-deepGreen block">0 sec</span>
+            <span className="text-xs text-ink-muted mt-0.5 block leading-snug">No login, zero telemetry, runs pure math in your browser</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 3-Step "How It Works" Row */}
+      <section className="max-w-5xl mx-auto px-4 space-y-6">
+        <div className="text-center space-y-1">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-green">
+            The Decision Workflow
+          </span>
+          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-ink">
+            How It Works
+          </h2>
+          <p className="text-xs sm:text-sm text-ink-muted">
+            Three simple steps to arrive at the most economical and sustainable choice:
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Step 1 */}
+          <div className="relative p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="w-8 h-8 rounded-full bg-tint text-deepGreen font-heading font-extrabold text-sm flex items-center justify-center">
+                  1
+                </span>
+                <span className="text-[11px] font-mono text-ink-faint uppercase font-semibold">Diagnosis</span>
               </div>
-              <div className="text-xs text-ink-muted mt-1 leading-snug">
-                {stat.label}
-              </div>
+              <h3 className="font-heading font-bold text-lg text-ink">
+                Identify & Diagnose
+              </h3>
+              <p className="text-xs text-ink-muted leading-relaxed">
+                Enter your item and observe the primary fault. The engine checks parts cost, repair difficulty, and runs a strict safety red-line test for electrical or battery hazards.
+              </p>
             </div>
-          ))}
+          </div>
+
+          {/* Step 2 */}
+          <div className="relative p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="w-8 h-8 rounded-full bg-tint text-deepGreen font-heading font-extrabold text-sm flex items-center justify-center">
+                  2
+                </span>
+                <span className="text-[11px] font-mono text-ink-faint uppercase font-semibold">Scoring</span>
+              </div>
+              <h3 className="font-heading font-bold text-lg text-ink">
+                Compare All 5 Paths
+              </h3>
+              <p className="text-xs text-ink-muted leading-relaxed">
+                The pure decision engine scores Repair (DIY vs Pro), Reuse, Repurpose, Replace, and Recycle against economic return, personal effort, and embodied CO₂e diverted.
+              </p>
+            </div>
+          </div>
+
+          {/* Step 3 */}
+          <div className="relative p-6 rounded-brand-lg bg-white border border-ink-border/80 shadow-subtle flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="w-8 h-8 rounded-full bg-tint text-deepGreen font-heading font-extrabold text-sm flex items-center justify-center">
+                  3
+                </span>
+                <span className="text-[11px] font-mono text-ink-faint uppercase font-semibold">Execution</span>
+              </div>
+              <h3 className="font-heading font-bold text-lg text-ink">
+                Action Playbook
+              </h3>
+              <p className="text-xs text-ink-muted leading-relaxed">
+                Follow actionable instructions tailored to your winner: DIY tool checklists, questions for local repair technicians, creative upcycling recipes, or safe recycling depot rules.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* 30-Second Judge Quick-Test Showcase */}
       <section className="max-w-5xl mx-auto px-4">
-        <div className="rounded-brand-lg border border-brand/30 bg-gradient-to-b from-brand-tint/60 to-white p-6 sm:p-8 space-y-6">
+        <div className="rounded-brand-lg border border-green/30 bg-gradient-to-b from-tint/60 to-white p-6 sm:p-8 space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase text-brand-deep tracking-wider block mb-1">
+              <span className="text-[11px] font-mono font-bold uppercase text-deepGreen tracking-wider block mb-1">
                 30-Second Judge Evaluation
               </span>
               <h2 className="font-heading font-extrabold text-2xl text-ink">
-                Instant Real-World Test Cases
+                Preloaded Real-World Scenarios
               </h2>
               <p className="text-sm text-ink-muted mt-1">
-                Click any preloaded scenario to evaluate the mathematical engine, safety flags, and actionable guidance in one click:
+                Click any scenario to see the complete mathematical engine, safety flags, and cost calculations instantly:
               </p>
             </div>
 
-            <button
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() => setShowDemoModal(true)}
-              className="px-3.5 py-1.5 rounded-brand text-xs font-semibold bg-brand-deep text-white hover:bg-brand transition-colors shrink-0"
+              className="shrink-0"
             >
               View All 4 Scenarios
-            </button>
+            </Button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -122,8 +201,8 @@ export function HomePage() {
                   onClick={() => handleRunDemo(demo.id)}
                   className={`cursor-pointer p-4 rounded-brand border transition-all text-left flex flex-col justify-between group ${
                     isSafety
-                      ? 'bg-safety-rustLight/30 border-safety-rustBorder/50 hover:border-safety-rust hover:shadow-subtle'
-                      : 'bg-white border-ink-border/80 hover:border-brand hover:shadow-subtle'
+                      ? 'bg-safety-rustLight/30 border-safety-rustBorder/50 hover:border-rust hover:shadow-subtle'
+                      : 'bg-white border-ink-border/80 hover:border-green hover:shadow-subtle'
                   }`}
                 >
                   <div className="space-y-1.5">
@@ -132,10 +211,10 @@ export function HomePage() {
                         {demo.category.replace('_', ' ')}
                       </span>
                       {isSafety && (
-                        <AlertTriangle className="w-3.5 h-3.5 text-safety-rust" />
+                        <AlertTriangle className="w-3.5 h-3.5 text-rust" />
                       )}
                     </div>
-                    <h3 className="font-heading font-bold text-sm text-ink group-hover:text-brand-deep transition-colors">
+                    <h3 className="font-heading font-bold text-sm text-ink group-hover:text-deepGreen transition-colors">
                       {demo.title}
                     </h3>
                     <p className="text-xs text-ink-muted line-clamp-2">
@@ -143,7 +222,7 @@ export function HomePage() {
                     </p>
                   </div>
 
-                  <div className="pt-3 mt-3 border-t border-ink-border/40 flex items-center justify-between text-xs font-semibold text-brand-deep">
+                  <div className="pt-3 mt-3 border-t border-ink-border/40 flex items-center justify-between text-xs font-semibold text-deepGreen">
                     <span className="group-hover:translate-x-0.5 transition-transform">
                       Run Engine →
                     </span>
@@ -151,89 +230,6 @@ export function HomePage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* The 5-R Framework Grid */}
-      <section className="max-w-5xl mx-auto px-4 space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-semibold text-brand uppercase tracking-wider">
-            The Product Is The Process
-          </span>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-ink">
-            5 Paths Evaluated In Parallel
-          </h2>
-          <p className="text-sm text-ink-muted">
-            Most apps nudge you straight to an affiliate link to buy something new. "Fix It First" puts all 5 circular options on an equal, rigorous footing.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* 1. Repair DIY */}
-          <div className="p-5 rounded-brand bg-white border border-ink-border/70 shadow-xs space-y-2">
-            <div className="w-8 h-8 rounded-brand bg-brand-tint text-brand-deep flex items-center justify-center">
-              <Wrench className="w-4 h-4" />
-            </div>
-            <h3 className="font-heading font-bold text-base text-ink">1. Repair (DIY)</h3>
-            <p className="text-xs text-ink-muted leading-relaxed">
-              Step-by-step disassembly guides, parts lookup, required tools, and estimated workbench minutes. Zero labor markup.
-            </p>
-          </div>
-
-          {/* 2. Repair Pro */}
-          <div className="p-5 rounded-brand bg-white border border-ink-border/70 shadow-xs space-y-2">
-            <div className="w-8 h-8 rounded-brand bg-brand-tint text-brand-deep flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-            <h3 className="font-heading font-bold text-base text-ink">2. Repair (Professional)</h3>
-            <p className="text-xs text-ink-muted leading-relaxed">
-              Benchmark labor rates against item replacement value. Includes warranty checklists for local independent repair technicians.
-            </p>
-          </div>
-
-          {/* 3. Reuse */}
-          <div className="p-5 rounded-brand bg-white border border-ink-border/70 shadow-xs space-y-2">
-            <div className="w-8 h-8 rounded-brand bg-brand-tint text-brand-deep flex items-center justify-center">
-              <Share2 className="w-4 h-4" />
-            </div>
-            <h3 className="font-heading font-bold text-base text-ink">3. Reuse & Pass Along</h3>
-            <p className="text-xs text-ink-muted leading-relaxed">
-              Secondary workarounds, maker space donations, and re-homing items that still have life left in them for zero dollars.
-            </p>
-          </div>
-
-          {/* 4. Repurpose */}
-          <div className="p-5 rounded-brand bg-white border border-ink-border/70 shadow-xs space-y-2">
-            <div className="w-8 h-8 rounded-brand bg-brand-tint text-brand-deep flex items-center justify-center">
-              <Layers className="w-4 h-4" />
-            </div>
-            <h3 className="font-heading font-bold text-base text-ink">4. Repurpose & Upcycle</h3>
-            <p className="text-xs text-ink-muted leading-relaxed">
-              Clever upcycling recipes tailored to each category. Turn broken denim into market totes, or tired tablets into wall screens.
-            </p>
-          </div>
-
-          {/* 5. Replace */}
-          <div className="p-5 rounded-brand bg-white border border-ink-border/70 shadow-xs space-y-2">
-            <div className="w-8 h-8 rounded-brand bg-brand-tint text-brand-deep flex items-center justify-center">
-              <ShoppingBag className="w-4 h-4" />
-            </div>
-            <h3 className="font-heading font-bold text-base text-ink">5. Replace (Honest Comparison)</h3>
-            <p className="text-xs text-ink-muted leading-relaxed">
-              Evaluated fairly: calculates the real total cost of ownership and new embodied carbon penalty before you pull the trigger.
-            </p>
-          </div>
-
-          {/* 6. Recycle */}
-          <div className="p-5 rounded-brand bg-white border border-ink-border/70 shadow-xs space-y-2">
-            <div className="w-8 h-8 rounded-brand bg-brand-tint text-brand-deep flex items-center justify-center">
-              <Recycle className="w-4 h-4" />
-            </div>
-            <h3 className="font-heading font-bold text-base text-ink">6. Safe Recycle & E-Waste</h3>
-            <p className="text-xs text-ink-muted leading-relaxed">
-              Safe decommissioning protocols: lithium battery isolation, data wipe guidance, and precious metal recovery drop-offs.
-            </p>
           </div>
         </div>
       </section>

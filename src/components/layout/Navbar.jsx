@@ -34,50 +34,41 @@ export function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-ink">
+          {/* Desktop Navigation: Assess, History, The Matrix */}
+          <nav className="flex items-center gap-1 text-sm font-medium text-ink">
             <Link
               to="/assess"
               className={`px-3 py-1.5 rounded-brand transition-colors ${
                 isActive('/assess')
-                  ? 'bg-brand-tint text-brand-deep font-semibold'
+                  ? 'bg-tint text-deepGreen font-bold'
                   : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
               }`}
             >
-              {COPY.nav.assess}
+              Assess
             </Link>
+
+            <Link
+              to="/history"
+              className={`px-3 py-1.5 rounded-brand transition-colors flex items-center gap-1.5 ${
+                isActive('/history')
+                  ? 'bg-tint text-deepGreen font-bold'
+                  : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
+              }`}
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-green" />
+              <span>History</span>
+            </Link>
+
             <Link
               to="/verdict"
-              className={`px-3 py-1.5 rounded-brand transition-colors flex items-center gap-1.5 ${
+              className={`hidden sm:flex px-3 py-1.5 rounded-brand transition-colors items-center gap-1.5 ${
                 isActive('/verdict')
-                  ? 'bg-brand-tint text-brand-deep font-semibold'
+                  ? 'bg-tint text-deepGreen font-bold'
                   : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
               }`}
             >
-              <Layers className="w-4 h-4 text-brand" />
+              <Layers className="w-4 h-4 text-green" />
               <span>The Matrix</span>
-            </Link>
-            <Link
-              to="/action"
-              className={`px-3 py-1.5 rounded-brand transition-colors flex items-center gap-1.5 ${
-                isActive('/action')
-                  ? 'bg-brand-tint text-brand-deep font-semibold'
-                  : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
-              }`}
-            >
-              <CheckCircle2 className="w-4 h-4 text-brand" />
-              <span>Action Plan</span>
-            </Link>
-            <Link
-              to="/explore"
-              className={`px-3 py-1.5 rounded-brand transition-colors flex items-center gap-1.5 ${
-                isActive('/explore')
-                  ? 'bg-brand-tint text-brand-deep font-semibold'
-                  : 'hover:bg-brand-surfaceAlt text-ink-muted hover:text-ink'
-              }`}
-            >
-              <BookOpen className="w-4 h-4 text-ink-faint" />
-              <span>{COPY.nav.explore}</span>
             </Link>
           </nav>
 

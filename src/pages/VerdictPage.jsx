@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import {
   Sparkles,
   Sliders,
@@ -23,10 +23,45 @@ import { TinkerModal } from '../components/modals/TinkerModal.jsx';
 
 export function VerdictPage() {
   const navigate = useNavigate();
-  const { assessment, decisionResult, setSelectedOptionId } = useAssessment();
+  const { id } = useParams();
+  const { assessment, decisionResult, setSelectedOptionId, loadDemo, rules } = useAssessment();
   const [showTinkerModal, setShowTinkerModal] = useState(false);
 
+  // If URL has :id parameter and it's a known demo, load it
+  useEffect(() => {
+    if (id && rules.judgeDemos?.some(d => d.id === id)) {
+      loadDemo(id);
+    }
+  }, [id]);
+
   const { item, fault, safety, options, winner, analytics } = decisionResult;
+
+  // Sync to history log
+  useEffect(() => {
+    if (item && winner) {
+      try {
+        const key = 'fix_it_first_history_v1';
+        const existing = JSON.parse(sessionStorage.getItem(key) || '[]');
+        const entry = {
+          id: id || item.id || 'assessment',
+          itemName: item.name,
+          category: assessment.category?.replace('_', ' ') || 'General',
+          faultName: fault?.name || 'Diagnosed fault',
+          winner: winner.name,
+          score: winner.score,
+          savings: analytics.netSavings,
+          carbon: winner.carbonSavedKg || 0,
+          date: 'Just now',
+        };
+        // Avoid duplicate top entry
+        if (!existing.length || existing[0].itemName !== entry.itemName || existing[0].faultName !== entry.faultName) {
+          sessionStorage.setItem(key, JSON.stringify([entry, ...existing.slice(0, 9)]));
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, [item?.name, fault?.name, winner?.score]);
 
   const handlePrint = () => {
     window.print();

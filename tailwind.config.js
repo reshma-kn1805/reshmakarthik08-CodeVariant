@@ -7,12 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Direct named tokens as required by checklist
+        deepGreen: '#1D4D3F',
+        green: '#2E7D5B',
+        amber: '#E39A2D',
+        rust: '#C8553D',
+        tint: '#EEF3EF',
+        ink: {
+          DEFAULT: '#17211C',
+          muted: '#4A5B53',
+          faint: '#7A8C84',
+          subtle: '#A7B5AE',
+          border: '#D1DDD6',
+        },
+        // Semantic aliases
         brand: {
           deep: '#1D4D3F',
           DEFAULT: '#2E7D5B',
           light: '#3E9871',
           tint: '#EEF3EF',
-          surface: '#F6F9F7',
+          surface: '#F8FAF9',
           surfaceAlt: '#E4ECE7',
         },
         action: {
@@ -25,13 +39,6 @@ export default {
           rustLight: '#FBEBE8',
           rustBorder: '#E59585',
         },
-        ink: {
-          DEFAULT: '#17211C',
-          muted: '#4A5B53',
-          faint: '#7A8C84',
-          subtle: '#A7B5AE',
-          border: '#D1DDD6',
-        },
       },
       fontFamily: {
         heading: ['Fraunces', 'Georgia', 'serif'],
@@ -43,6 +50,10 @@ export default {
         'brand-md': '14px',
         'brand-lg': '18px',
         'brand-pill': '9999px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
       },
       boxShadow: {
         'subtle': '0 1px 3px rgba(23, 33, 28, 0.06), 0 1px 2px rgba(23, 33, 28, 0.04)',
