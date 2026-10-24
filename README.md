@@ -1,5 +1,6 @@
 # Fix It First
 
+> 🌐 **Live Demo:** [https://reshma-kn1805.github.io/reshmakarthik08-CodeVariant/](https://reshma-kn1805.github.io/reshmakarthik08-CodeVariant/)  
 > **Code Variant Build 01 — Problem Statement 01**  
 > *12-Hour Live Round (24 Oct 2026, 12:00–23:59 IST)*  
 > Live Decision Engine: Help users decide what to do with broken or unwanted items without nudging them to buy new.

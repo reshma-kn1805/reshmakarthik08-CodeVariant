@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { AssessmentProvider } from './state/AssessmentContext.jsx';
 import { Navbar } from './components/layout/Navbar.jsx';
 import { Footer } from './components/layout/Footer.jsx';
@@ -14,7 +14,7 @@ import { NotFoundPage } from './pages/NotFoundPage.jsx';
 export default function App() {
   return (
     <AssessmentProvider>
-      <BrowserRouter>
+      <HashRouter>
         <div className="flex flex-col min-h-screen bg-brand-surface text-ink antialiased">
           <Navbar />
           <main className="flex-1" id="main-content">
@@ -36,7 +36,7 @@ export default function App() {
           </main>
           <Footer />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </AssessmentProvider>
   );
 }
